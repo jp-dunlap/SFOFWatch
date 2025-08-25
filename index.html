@@ -37,30 +37,15 @@
             box-shadow: 0 10px 20px rgba(0, 191, 255, 0.1), 0 6px 6px rgba(0, 191, 255, 0.1);
         }
 
-        /* Styling for the animated SVG path */
-        #timeline-path {
-            stroke-dasharray: 1;
-            stroke-dashoffset: 1;
-            transition: stroke-dashoffset 0.5s ease-out;
+        .info-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Styling for content nodes along the timeline */
-        .timeline-node {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 191, 255, 0.07);
         }
 
-        /* Class to trigger the fade-in animation */
-        .timeline-node.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Styling for the glowing effect on timeline markers */
-        .timeline-marker-glow {
-            filter: drop-shadow(0 0 8px rgba(0, 191, 255, 0.7));
-        }
     </style>
 </head>
 <body class="antialiased">
@@ -68,11 +53,11 @@
     <!-- Header Section -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-30 backdrop-blur-md border-b border-gray-800">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></h1>
+            <a href="index.html" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
             <nav class="hidden md:flex space-x-8">
-                <a href="#foundation" class="hover:text-cyan-400 transition-colors">The Foundation</a>
-                <a href="#network" class="hover:text-cyan-400 transition-colors">The Network</a>
-                <a href="#playbook" class="hover:text-cyan-400 transition-colors">The Playbook</a>
+                <a href="foundation.html" class="hover:text-cyan-400 transition-colors">The Foundation</a>
+                <a href="network.html" class="hover:text-cyan-400 transition-colors">The Network</a>
+                <a href="playbook.html" class="hover:text-cyan-400 transition-colors">The Playbook</a>
                 <a href="atlas.html" class="hover:text-cyan-400 transition-colors">The Atlas</a>
             </nav>
             <a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="hidden md:inline-block border border-cyan-400 text-cyan-400 px-4 py-2 rounded-lg hover:bg-cyan-400 hover:text-black transition-colors">
@@ -95,68 +80,35 @@
             </div>
         </section>
 
-        <!-- Narrative Timeline Section -->
-        <section class="relative container mx-auto px-6 py-24 md:py-32">
-            <!-- The SVG path that will be animated on scroll -->
-            <div class="absolute top-0 left-1/2 -translate-x-1/2 h-full w-px hidden md:block">
-                <svg width="2" height="100%" class="h-full">
-                    <path id="timeline-path" d="M 1 0 V 5000" stroke="url(#line-gradient)" stroke-width="2" fill="none"></path>
-                    <defs>
-                        <linearGradient id="line-gradient" x1="0" x2="0" y1="0" y2="1">
-                            <stop offset="0%" stop-color="#00BFFF" stop-opacity="0" />
-                            <stop offset="10%" stop-color="#00BFFF" />
-                            <stop offset="90%" stop-color="#00BFFF" />
-                            <stop offset="100%" stop-color="#00BFFF" stop-opacity="0" />
-                        </linearGradient>
-                    </defs>
-                </svg>
-            </div>
+        <!-- Content Cards Section -->
+        <section class="container mx-auto px-6 py-24 md:py-32">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-            <!-- Timeline Content Nodes -->
-            <div class="space-y-24 md:space-y-0">
-                
-                <!-- Node 1: The Foundation -->
-                <div id="foundation" class="timeline-node relative md:w-1/2 md:pr-12">
-                    <div class="md:hidden absolute top-4 -left-7 h-full w-px bg-cyan-600 opacity-30"></div>
-                    <div class="absolute -left-8 md:left-auto md:-right-2 top-5 h-4 w-4 rounded-full bg-cyan-400 timeline-marker-glow"></div>
-                    <h2 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">1. The Foundation</h2>
-                    <h3 class="text-xl font-semibold mb-4">A Dual-Entity Strategy</h3>
-                    <p class="text-gray-400">
-                        SFOF operates as a tax-exempt 501(c)(3) foundation for fundraising and a 501(c)(4) "social welfare" organization for direct lobbying and political action. This structure maximizes its financial intake and political influence while navigating U.S. tax law.
+                <!-- Card 1: The Foundation -->
+                <div class="info-card bg-[#111827] border border-gray-800 rounded-lg p-8 flex flex-col">
+                    <h2 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">The Foundation</h2>
+                    <p class="text-gray-400 flex-grow">
+                        Explore the organizational structure of SFOF, its dual 501(c)(3) and 501(c)(4) entities, and its evolution from a fiscal policy group into a national anti-ESG powerhouse.
                     </p>
+                    <a href="foundation.html" class="mt-6 inline-block text-cyan-400 font-semibold hover:underline">Learn More &rarr;</a>
                 </div>
 
-                <!-- Node 2: The Network -->
-                <div id="network" class="timeline-node relative md:w-1/2 md:ml-auto md:pl-12 text-left md:text-right">
-                    <div class="md:hidden absolute top-4 -left-7 h-full w-px bg-cyan-600 opacity-30"></div>
-                    <div class="absolute -left-8 md:right-auto md:-left-2 top-5 h-4 w-4 rounded-full bg-cyan-400 timeline-marker-glow"></div>
-                    <h2 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">2. The Network</h2>
-                    <h3 class="text-xl font-semibold mb-4">An Alliance of Influence</h3>
-                    <p class="text-gray-400">
-                        Deeply integrated with conservative powerhouses like the American Legislative Exchange Council (ALEC) and The Heritage Foundation, SFOF serves as the "finance ministry" of a coordinated movement, weaponizing state financial offices to advance a unified agenda.
+                <!-- Card 2: The Network -->
+                <div class="info-card bg-[#111827] border border-gray-800 rounded-lg p-8 flex flex-col">
+                    <h2 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">The Network</h2>
+                    <p class="text-gray-400 flex-grow">
+                        Investigate the web of influence surrounding SFOF, including its key partnerships with The Heritage Foundation, ALEC, and state Attorneys General that form a coordinated political machine.
                     </p>
+                    <a href="network.html" class="mt-6 inline-block text-cyan-400 font-semibold hover:underline">Learn More &rarr;</a>
                 </div>
 
-                <!-- Node 3: The Playbook -->
-                <div id="playbook" class="timeline-node relative md:w-1/2 md:pr-12">
-                    <div class="md:hidden absolute top-4 -left-7 h-full w-px bg-cyan-600 opacity-30"></div>
-                    <div class="absolute -left-8 md:left-auto md:-right-2 top-5 h-4 w-4 rounded-full bg-cyan-400 timeline-marker-glow"></div>
-                    <h2 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">3. The Playbook</h2>
-                    <h3 class="text-xl font-semibold mb-4">Inside-Outside Strategy</h3>
-                    <p class="text-gray-400">
-                        SFOF pressures corporations with national sign-on letters (the "outside game") while simultaneously promoting ALEC-drafted model legislation within statehouses (the "inside game"), creating a pincer movement to shape policy and corporate behavior.
+                <!-- Card 3: The Playbook -->
+                <div class="info-card bg-[#111827] border border-gray-800 rounded-lg p-8 flex flex-col">
+                    <h2 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">The Playbook</h2>
+                    <p class="text-gray-400 flex-grow">
+                        Deconstruct the specific tactics SFOF employs, from the "outside game" of public pressure to the "inside game" of legislative capture and administrative action that create the "fiduciary trap."
                     </p>
-                </div>
-
-                <!-- Node 4: The Frontlines -->
-                <div id="frontlines" class="timeline-node relative md:w-1/2 md:ml-auto md:pl-12 text-left md:text-right">
-                    <div class="md:hidden absolute top-4 -left-7 h-full w-px bg-cyan-600 opacity-30"></div>
-                    <div class="absolute -left-8 md:right-auto md:-left-2 top-5 h-4 w-4 rounded-full bg-cyan-400 timeline-marker-glow"></div>
-                    <h2 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">4. The Frontlines</h2>
-                    <h3 class="text-xl font-semibold mb-4">State-Level Operations</h3>
-                    <p class="text-gray-400">
-                        With affiliated officials in over half of U.S. states, SFOF's influence is widespread. From pushing anti-ESG legislation in Texas to coordinating divestment threats in West Virginia, their national agenda is executed through local power.
-                    </p>
+                    <a href="playbook.html" class="mt-6 inline-block text-cyan-400 font-semibold hover:underline">Learn More &rarr;</a>
                 </div>
 
             </div>
@@ -174,51 +126,6 @@
             </div>
         </div>
     </footer>
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const path = document.querySelector('#timeline-path');
-            const nodes = document.querySelectorAll('.timeline-node');
-
-            // Function to update the SVG path drawing on scroll
-            const updatePath = () => {
-                if (!path) return;
-                const pathLength = path.getTotalLength();
-                path.style.strokeDasharray = pathLength;
-                
-                // Calculate scroll progress
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-                const scrollPercentage = scrollTop / scrollHeight;
-
-                // Calculate draw length
-                const drawLength = pathLength * scrollPercentage * 2.5; // Multiplier to speed up drawing
-
-                // Apply the new dash offset
-                path.style.strokeDashoffset = Math.max(0, pathLength - drawLength);
-            };
-
-            // Intersection Observer to fade in timeline nodes
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                    }
-                });
-            }, {
-                threshold: 0.1 // Trigger when 10% of the element is visible
-            });
-
-            nodes.forEach(node => {
-                observer.observe(node);
-            });
-
-            // Initial call and event listener for scroll
-            updatePath();
-            window.addEventListener('scroll', updatePath);
-        });
-    </script>
 
 </body>
 </html>
