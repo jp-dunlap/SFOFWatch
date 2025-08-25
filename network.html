@@ -9,29 +9,85 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --background-dark: #0a0a0a;
+            --background-light: #111827;
+            --primary-cyan: #22d3ee;
+            --text-primary: #EAEAEA;
+            --text-secondary: #9ca3af;
+            --border-color: #374151;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            background-color: #0a0a0a;
-            color: #EAEAEA;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
             font-family: 'Inter', sans-serif;
         }
+
         h1, h2, h3, .font-lora {
             font-family: 'Lora', serif;
         }
+
         .hero-bg {
-            background-image: radial-gradient(circle at 50% 0%, rgba(22, 44, 78, 0.3), transparent 40%);
+            background-color: var(--background-dark);
+            background-image: 
+                radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
+                radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"><path fill="%23111827" fill-opacity="0.1" d="M0 0h40v40H0zM40 40h40v40H40z"></path></svg>');
+            z-index: 0;
+        }
+
+        .content-card {
+            background-color: var(--background-light);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .content-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-cyan);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.1);
+        }
+
+        /* Scroll animation styles */
+        .reveal {
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body class="antialiased">
 
     <!-- Header Section -->
-    <header class="sticky top-0 z-50 bg-black bg-opacity-30 backdrop-blur-md border-b border-gray-800">
+    <header class="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-gray-800">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="index.html" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
             <nav class="hidden md:flex space-x-8">
-                <a href="index.html#foundation" class="hover:text-cyan-400 transition-colors">The Foundation</a>
+                <a href="foundation.html" class="hover:text-cyan-400 transition-colors">The Foundation</a>
                 <a href="network.html" class="text-cyan-400 font-bold">The Network</a>
-                <a href="index.html#playbook" class="hover:text-cyan-400 transition-colors">The Playbook</a>
+                <a href="playbook.html" class="hover:text-cyan-400 transition-colors">The Playbook</a>
                 <a href="atlas.html" class="hover:text-cyan-400 transition-colors">The Atlas</a>
             </nav>
             <a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="hidden md:inline-block border border-cyan-400 text-cyan-400 px-4 py-2 rounded-lg hover:bg-cyan-400 hover:text-black transition-colors">
@@ -42,8 +98,8 @@
 
     <main>
         <!-- Hero Section -->
-        <section class="text-center px-6 pt-32 pb-16 hero-bg">
-            <div class="max-w-4xl mx-auto">
+        <section class="text-center px-6 pt-32 pb-24 hero-bg">
+            <div class="max-w-4xl mx-auto relative z-10">
                 <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Network</h1>
                 <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
                     SFOF does not operate in a vacuum. It is the central node in a sophisticated and well-funded network of conservative think tanks, corporate lobbyists, and legal organizations working in concert to achieve a unified political agenda.
@@ -53,68 +109,95 @@
 
         <!-- Network Partners Section -->
         <section class="container mx-auto px-6 py-16 md:py-24">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
                 <!-- Card 1: The Heritage Foundation -->
-                <div class="bg-[#111827] border border-gray-800 rounded-lg p-8 space-y-4">
-                    <h2 class="text-3xl font-lora font-semibold text-cyan-400">The Heritage Foundation</h2>
-                    <h3 class="text-xl font-semibold">The Policy Architect</h3>
+                <div class="content-card rounded-lg p-8 reveal">
+                    <div class="flex items-center mb-4">
+                        <div class="p-3 bg-cyan-400/10 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-lora font-semibold text-cyan-400">The Heritage Foundation</h2>
+                            <h3 class="text-lg font-semibold text-gray-400">The Policy Architect</h3>
+                        </div>
+                    </div>
                     <p class="text-gray-400 leading-relaxed">
-                        The Heritage Foundation serves as the brain trust of the anti-ESG movement, providing the intellectual and legal framework that underpins the entire campaign. It drafts comprehensive, detailed model legislation that is then distributed to the network's state-level allies.
+                        The brain trust of the anti-ESG movement, providing the intellectual and legal framework that underpins the campaign by drafting detailed model legislation for state-level allies.
                     </p>
-                    <div class="pt-4">
-                        <h4 class="font-semibold text-white mb-2">Key Contributions:</h4>
+                    <div class="mt-6 pt-6 border-t border-gray-700">
+                        <h4 class="font-semibold text-white mb-3">Key Contributions:</h4>
                         <ul class="list-disc list-inside text-gray-400 space-y-2">
-                            <li><strong class="text-white">"State Pension Fiduciary Duty Act":</strong> A model bill that legally redefines fiduciary duty to require fiduciaries to consider "only pecuniary factors," effectively outlawing the consideration of ESG goals. This model was directly implemented in states like Kentucky and South Carolina.</li>
-                            <li><strong class="text-white">"Eliminate Economic Boycotts Act":</strong> A comprehensive template designed to punish companies for "boycotting" politically favored industries like fossil fuels, firearms, and agriculture. This model was adopted nearly verbatim by Alabama.</li>
+                            <li><strong class="text-white">"State Pension Fiduciary Duty Act":</strong> Redefines fiduciary duty to require "pecuniary factors only," effectively outlawing ESG goals.</li>
+                            <li><strong class="text-white">"Eliminate Economic Boycotts Act":</strong> Punishes companies for "boycotting" politically favored industries like fossil fuels and firearms.</li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- Card 2: American Legislative Exchange Council (ALEC) -->
-                <div class="bg-[#111827] border border-gray-800 rounded-lg p-8 space-y-4">
-                    <h2 class="text-3xl font-lora font-semibold text-cyan-400">ALEC</h2>
-                    <h3 class="text-xl font-semibold">The Legislative Engine</h3>
+                <div class="content-card rounded-lg p-8 reveal" style="transition-delay: 150ms;">
+                    <div class="flex items-center mb-4">
+                        <div class="p-3 bg-cyan-400/10 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-lora font-semibold text-cyan-400">ALEC</h2>
+                            <h3 class="text-lg font-semibold text-gray-400">The Legislative Engine</h3>
+                        </div>
+                    </div>
                     <p class="text-gray-400 leading-relaxed">
-                        The American Legislative Exchange Council (ALEC) functions as the primary distribution channel for the network's legislative agenda. Through its "pay-to-play" meetings, corporate lobbyists and state legislators collaborate to adapt and vote on model bills, creating a highly efficient pipeline to introduce anti-ESG legislation across the country.
+                        Functions as the primary distribution channel for the network's agenda. Through "pay-to-play" meetings, corporate lobbyists and state legislators collaborate to adapt and vote on model bills.
                     </p>
-                    <div class="pt-4">
-                        <h4 class="font-semibold text-white mb-2">Key Contributions:</h4>
+                    <div class="mt-6 pt-6 border-t border-gray-700">
+                        <h4 class="font-semibold text-white mb-3">Key Contributions:</h4>
                         <ul class="list-disc list-inside text-gray-400 space-y-2">
-                            <li><strong class="text-white">"Energy Discrimination Elimination Act":</strong> A foundational model bill designed to prohibit state contracts with financial firms that limit business with the fossil fuel industry. This became the template for Texas's landmark SB 13.</li>
-                            <li><strong class="text-white">Direct Leadership Overlap:</strong> ALEC's CEO, Lisa B. Nelson, also serves as an At-Large member of the SFOF board, ensuring seamless strategic coordination between the legislative and executive-branch arms of the movement.</li>
+                            <li><strong class="text-white">"Energy Discrimination Elimination Act":</strong> The template for Texas's landmark SB 13, prohibiting state contracts with firms that limit business with the fossil fuel industry.</li>
+                            <li><strong class="text-white">Direct Leadership Overlap:</strong> ALEC's CEO, Lisa B. Nelson, also serves on the SFOF board, ensuring seamless strategic coordination.</li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- Card 3: State Attorneys General -->
-                <div class="bg-[#111827] border border-gray-800 rounded-lg p-8 space-y-4">
-                    <h2 class="text-3xl font-lora font-semibold text-cyan-400">State Attorneys General</h2>
-                    <h3 class="text-xl font-semibold">The Legal Enforcers</h3>
+                <div class="content-card rounded-lg p-8 reveal" style="transition-delay: 300ms;">
+                    <div class="flex items-center mb-4">
+                        <div class="p-3 bg-cyan-400/10 rounded-full mr-4">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-1.026.977-2.243.977-3.535a7.01 7.01 0 00-1.29-4.228M5 11a4 4 0 118 0 4 4 0 01-8 0z" /></svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-lora font-semibold text-cyan-400">State Attorneys General</h2>
+                            <h3 class="text-lg font-semibold text-gray-400">The Legal Enforcers</h3>
+                        </div>
+                    </div>
                     <p class="text-gray-400 leading-relaxed">
-                        A coordinated coalition of Republican state attorneys general provides the legal muscle for the network. This "lawfare" campaign uses the power of the state to launch multi-state lawsuits and investigations, creating a hostile legal environment for firms that engage in ESG.
+                        A coordinated coalition of Republican state attorneys general provides the legal muscle. This "lawfare" campaign uses the power of the state to launch multi-state lawsuits and investigations.
                     </p>
-                    <div class="pt-4">
-                        <h4 class="font-semibold text-white mb-2">Key Actions:</h4>
+                    <div class="mt-6 pt-6 border-t border-gray-700">
+                        <h4 class="font-semibold text-white mb-3">Key Actions:</h4>
                         <ul class="list-disc list-inside text-gray-400 space-y-2">
-                            <li><strong class="text-white">Antitrust Lawsuits:</strong> Filing lawsuits that frame corporate collaboration on climate change (e.g., Climate Action 100+) as an illegal "climate cartel" that violates antitrust laws.</li>
-                            <li><strong class="text-white">Targeting Proxy Advisors:</strong> Launching investigations into firms like ISS and Glass Lewis, alleging they mislead clients by promoting a "leftist worldview" under the guise of impartial advice.</li>
-                            <li><strong class="text-white">Federal Pushback:</strong> Challenging federal rules from the SEC and Department of Labor that allow or mandate ESG considerations.</li>
+                            <li><strong class="text-white">Antitrust Lawsuits:</strong> Framing corporate collaboration on climate change (e.g., Climate Action 100+) as an illegal "climate cartel."</li>
+                            <li><strong class="text-white">Targeting Proxy Advisors:</strong> Launching investigations into firms like ISS and Glass Lewis, alleging they mislead clients.</li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- Card 4: Corporate & Financial Partners -->
-                <div class="bg-[#111827] border border-gray-800 rounded-lg p-8 space-y-4">
-                    <h2 class="text-3xl font-lora font-semibold text-cyan-400">Corporate & Financial Partners</h2>
-                    <h3 class="text-xl font-semibold">A Contradiction in Terms</h3>
+                <div class="content-card rounded-lg p-8 reveal" style="transition-delay: 450ms;">
+                    <div class="flex items-center mb-4">
+                        <div class="p-3 bg-cyan-400/10 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-lora font-semibold text-cyan-400">Corporate Partners</h2>
+                            <h3 class="text-lg font-semibold text-gray-400">A Contradiction in Terms</h3>
+                        </div>
+                    </div>
                     <p class="text-gray-400 leading-relaxed">
-                        The network is sustained by conservative foundations and corporate sponsors. The actions of SFOF members reveal that the "pecuniary factors only" rule is not a neutral principle, but a political weapon deployed selectively.
+                        The network is sustained by conservative foundations and corporate sponsors. The actions of SFOF members reveal that the "pecuniary factors only" rule is a political weapon deployed selectively.
                     </p>
-                    <div class="pt-4">
-                        <h4 class="font-semibold text-white mb-2">The Israel Bonds Connection:</h4>
+                    <div class="mt-6 pt-6 border-t border-gray-700">
+                        <h4 class="font-semibold text-white mb-3">The Israel Bonds Connection:</h4>
                         <p class="text-gray-400">
-                            The Development Corporation for Israel, underwriter for Israel Bonds, is a documented SFOF sponsor. SFOF treasurers in states like Florida, Ohio, Texas, and Pennsylvania have directed hundreds of millions in public funds into these bonds, justifying the investments with explicitly political and ideological language—to "show our support" and "stand with our allies." This directly contradicts the legal standard they impose on others, exposing the campaign's goal not as depoliticizing investment, but repoliticizing it to serve a specific conservative agenda.
+                            The Development Corporation for Israel, underwriter for Israel Bonds, is a documented SFOF sponsor. SFOF treasurers in states like Florida, Ohio, and Texas have directed hundreds of millions in public funds into these bonds, justifying the investments with explicitly political language—to "show our support"—directly contradicting the legal standard they impose on others.
                         </p>
                     </div>
                 </div>
@@ -133,6 +216,24 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Scroll Reveal Animation
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            revealElements.forEach(el => {
+                revealObserver.observe(el);
+            });
+        });
+    </script>
 
 </body>
 </html>
