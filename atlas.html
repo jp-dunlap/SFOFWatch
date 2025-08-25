@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFOF Watch | The Atlas of Influence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+    <style>
+        /* Custom styles to complement Tailwind CSS */
+        body {
+            background-color: #0a0a0a;
+            color: #EAEAEA;
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1, h2, h3, .font-lora {
+            font-family: 'Lora', serif;
+        }
+
+        /* Styling for the map container */
+        #map-container {
+            width: 100%;
+            max-width: 1000px; /* Adjust max-width as needed */
+            margin: auto;
+        }
+
+        /* Styling for the states on the map */
+        .state {
+            stroke: #0a0a0a; /* Border color for states */
+            stroke-width: 1px;
+            transition: fill 0.2s ease-in-out;
+        }
+
+        /* Styling for SFOF member states */
+        .state.member {
+            fill: #22d3ee; /* Cyan accent color */
+        }
+
+        /* Styling for non-member states */
+        .state.non-member {
+            fill: #374151; /* A neutral dark gray */
+        }
+
+        /* Hover effect for all states */
+        .state:hover {
+            fill: #f59e0b; /* A bright amber for hover */
+        }
+
+        /* Styling for the tooltip */
+        #tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 8px 12px;
+            font-size: 0.875rem;
+            background: #1f2937;
+            border: 1px solid #4b5563;
+            border-radius: 8px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            color: #EAEAEA;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header Section -->
+    <header class="sticky top-0 z-50 bg-black bg-opacity-30 backdrop-blur-md border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="index.html#foundation" class="hover:text-cyan-400 transition-colors">The Foundation</a>
+                <a href="index.html#network" class="hover:text-cyan-400 transition-colors">The Network</a>
+                <a href="index.html#playbook" class="hover:text-cyan-400 transition-colors">The Playbook</a>
+                <a href="atlas.html" class="text-cyan-400 font-bold">The Atlas</a>
+            </nav>
+            <a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="hidden md:inline-block border border-cyan-400 text-cyan-400 px-4 py-2 rounded-lg hover:bg-cyan-400 hover:text-black transition-colors">
+                GitHub
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16 md:py-24">
+        <!-- Page Title -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Atlas of Influence</h1>
+            <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+                A map of the State Financial Officers Foundation's operational footprint across the United States. Highlighted states have publicly affiliated officials who are members of SFOF.
+            </p>
+        </div>
+
+        <!-- Map and Legend -->
+        <div id="map-container">
+            <!-- D3.js will render the SVG map here -->
+        </div>
+        <div class="flex justify-center items-center space-x-6 mt-8">
+            <div class="flex items-center space-x-2">
+                <div class="w-5 h-5 rounded-full bg-cyan-400"></div>
+                <span class="text-gray-300">SFOF Member State</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="w-5 h-5 rounded-full bg-gray-700"></div>
+                <span class="text-gray-300">Non-Member State</span>
+            </div>
+        </div>
+
+    </main>
+    
+    <!-- Tooltip element -->
+    <div id="tooltip"></div>
+
+    <!-- Footer Section -->
+    <footer class="border-t border-gray-800 py-12 px-6 mt-16">
+        <div class="container mx-auto text-center text-gray-500">
+            <p>&copy; 2025 SFOFWatch.org. This is an open-source intelligence project.</p>
+            <p class="mt-2">Content is provided for research and informational purposes under the AGPL-3.0 license.</p>
+            <div class="mt-4">
+                <a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="text-cyan-400 hover:underline">Contribute on GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Define the list of SFOF member states based on the research dossier.
+            // This list should be updated as new information becomes available.
+            const sfofMemberStates = [
+                "Alabama", "Alaska", "Arizona", "Arkansas", "Florida", "Georgia", "Idaho",
+                "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Mississippi",
+                "Missouri", "Montana", "Nebraska", "Nevada", "North Carolina",
+                "North Dakota", "Ohio", "Oklahoma", "Pennsylvania", "South Carolina",
+                "South Dakota", "Texas", "Utah", "Wisconsin", "Wyoming"
+            ];
+
+            // Set up map dimensions
+            const container = document.getElementById('map-container');
+            const width = container.offsetWidth;
+            const height = width * 0.6; // Maintain aspect ratio
+
+            // Create SVG element
+            const svg = d3.select("#map-container").append("svg")
+                .attr("viewBox", `0 0 975 610`) // Standard D3 US map viewbox
+                .attr("width", "100%")
+                .attr("height", "auto");
+
+            // Define map projection
+            const projection = d3.geoAlbersUsa()
+                .scale(1300)
+                .translate([487.5, 305]);
+
+            // Define path generator
+            const path = d3.geoPath().projection(projection);
+
+            // Tooltip element
+            const tooltip = d3.select("#tooltip");
+
+            // Load the US map TopoJSON data
+            d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json").then(us => {
+                // Convert TopoJSON to GeoJSON
+                const states = topojson.feature(us, us.objects.states);
+
+                // Draw the states
+                svg.append("g")
+                    .selectAll("path")
+                    .data(states.features)
+                    .enter().append("path")
+                    .attr("d", path)
+                    .attr("class", d => {
+                        // Check if the state name is in our member list
+                        const isMember = sfofMemberStates.includes(d.properties.name);
+                        return `state ${isMember ? 'member' : 'non-member'}`;
+                    })
+                    // Tooltip mouse events
+                    .on("mouseover", (event, d) => {
+                        tooltip.transition().duration(200).style("opacity", .9);
+                        tooltip.html(d.properties.name)
+                            .style("left", (event.pageX + 15) + "px")
+                            .style("top", (event.pageY - 28) + "px");
+                    })
+                    .on("mouseout", () => {
+                        tooltip.transition().duration(500).style("opacity", 0);
+                    })
+                    .on("mousemove", (event) => {
+                        tooltip.style("left", (event.pageX + 15) + "px")
+                               .style("top", (event.pageY - 28) + "px");
+                    });
+            }).catch(error => {
+                console.error("Error loading or processing map data:", error);
+                container.innerHTML = `<p class="text-center text-red-400">Could not load map data. Please try again later.</p>`;
+            });
+            
+            // Handle window resizing
+            window.addEventListener('resize', () => {
+                // The SVG with viewBox will resize automatically, so no complex JS needed here.
+                // This is just a placeholder if more complex resize logic is needed later.
+            });
+        });
+    </script>
+
+</body>
+</html>
