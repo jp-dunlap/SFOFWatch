@@ -1,2 +1,2 @@
-# sfof-state-intelligence
-Counter-intelligence repository mapping State Financial Officers Foundation (SFOF) influence operations across member states. Tracks state capture campaigns, key operatives, coordinated strategies, and institutional vulnerabilities. Tactical intelligence for researchers, journalists, and oversight organizations.
+# SFOFWatch
+An open-source dossier mapping the State Financial Officers Foundation (SFOF). We track their funders, legislative influence, and network operations to expose state capture campaigns. A tactical intelligence tool for researchers and journalists.
