@@ -34,6 +34,11 @@
             font-family: 'Lora', serif;
         }
         
+        main {
+            /* Performance optimization for blur effect */
+            will-change: transform;
+        }
+        
         .hero-bg {
             background-color: var(--background-dark);
             background-image: 
@@ -87,7 +92,12 @@
         #report-modal { transition: opacity 0.3s ease-out; }
         #report-modal.is-visible { opacity: 1; pointer-events: auto; }
         #report-modal.is-visible .modal-transform { transform: scale(1); }
-        .modal-transform { transition: transform 0.3s ease-out; transform: scale(0.95); }
+        .modal-transform { 
+            transition: transform 0.3s ease-out; 
+            transform: scale(0.95); 
+            /* Performance optimization */
+            will-change: transform;
+        }
         .modal-content-area { max-height: 70vh; overflow-y: auto; }
         .modal-content-area::-webkit-scrollbar { width: 8px; }
         .modal-content-area::-webkit-scrollbar-track { background: #1f2937; }
@@ -170,7 +180,6 @@
     </header>
 
     <main>
-        <!-- Hero Section -->
         <section class="text-center px-6 pt-32 pb-24 hero-bg">
             <div class="max-w-4xl mx-auto relative z-10">
                 <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Atlas of Influence</h1>
@@ -180,7 +189,6 @@
             </div>
         </section>
 
-        <!-- Map Section -->
         <section class="container mx-auto px-6 py-16">
             <div id="map-container"></div>
             <div class="flex justify-center items-center space-x-6 mt-8">
@@ -192,7 +200,6 @@
     
     <div id="tooltip"></div>
 
-    <!-- MODAL -->
     <div id="report-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none">
         <div id="modal-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
         <div class="relative bg-background-light border border-border-color rounded-lg shadow-2xl w-full max-w-4xl modal-transform">
@@ -203,8 +210,7 @@
                 </button>
             </div>
             <div id="modal-content" class="p-6 md:p-8 modal-content-area text-gray-300">
-                <!-- Fetched content goes here -->
-            </div>
+                </div>
         </div>
     </div>
 
@@ -213,8 +219,7 @@
             <p>&copy; 2025 SFOFWatch.org. This is an open-source intelligence project.</p>
             <p class="mt-2">Content is provided for research and informational purposes under the AGPL-3.0 license.</p>
             <div class="mt-4"><a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="text-cyan-400 hover:underline">Contribute on GitHub</a></div>
-        </div>
-    </footer>
+        </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -236,6 +241,7 @@
             const modalContent = document.getElementById('modal-content');
             const closeModalBtn = document.getElementById('close-modal-btn');
             const modalOverlay = document.getElementById('modal-overlay');
+            const mainContent = document.querySelector('main');
 
             function showModal(stateName) {
                 const reportPath = `reports/${stateName.toLowerCase().replace(/\s+/g, '-')}.html`;
@@ -249,17 +255,20 @@
                         modalTitle.textContent = `State Dossier: ${stateName}`;
                         modalContent.innerHTML = html;
                         modal.classList.add('is-visible');
+                        mainContent.style.filter = 'blur(4px)'; // Apply blur to main content
                     })
                     .catch(error => {
                         console.error("Error fetching report:", error);
                         modalTitle.textContent = `State Dossier: ${stateName}`;
                         modalContent.innerHTML = `<p class="text-gray-400">No detailed report is available for this state at this time. It has been identified as a member state, but the full dossier has not yet been compiled.</p>`;
                         modal.classList.add('is-visible');
+                        mainContent.style.filter = 'blur(4px)'; // Apply blur to main content
                     });
             }
 
             function hideModal() {
                 modal.classList.remove('is-visible');
+                mainContent.style.filter = 'none'; // Remove blur from main content
             }
 
             closeModalBtn.addEventListener('click', hideModal);
