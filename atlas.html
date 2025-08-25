@@ -52,10 +52,22 @@
             border-radius: 0.5rem;
             padding: 1rem;
         }
-        .state { stroke: #0a0a0a; stroke-width: 1px; transition: fill 0.2s ease-in-out; }
-        .state.member { fill: #22d3ee; cursor: pointer; }
-        .state.non-member { fill: #374151; }
-        .state.member:hover { fill: #f59e0b; }
+        .state { 
+            stroke: #0a0a0a; 
+            stroke-width: 1px; 
+            transition: fill 0.2s ease-in-out, filter 0.2s ease-in-out; 
+        }
+        .state.member { 
+            fill: var(--primary-cyan); 
+            cursor: pointer; 
+        }
+        .state.non-member { 
+            fill: #374151; 
+        }
+        .state.member:hover { 
+            fill: #FFFFFF; 
+            filter: drop-shadow(0 0 6px var(--primary-cyan));
+        }
         
         #tooltip { 
             position: absolute; 
@@ -158,6 +170,7 @@
     </header>
 
     <main>
+        <!-- Hero Section -->
         <section class="text-center px-6 pt-32 pb-24 hero-bg">
             <div class="max-w-4xl mx-auto relative z-10">
                 <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Atlas of Influence</h1>
@@ -167,6 +180,7 @@
             </div>
         </section>
 
+        <!-- Map Section -->
         <section class="container mx-auto px-6 py-16">
             <div id="map-container"></div>
             <div class="flex justify-center items-center space-x-6 mt-8">
@@ -178,6 +192,7 @@
     
     <div id="tooltip"></div>
 
+    <!-- MODAL -->
     <div id="report-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none">
         <div id="modal-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
         <div class="relative bg-background-light border border-border-color rounded-lg shadow-2xl w-full max-w-4xl modal-transform">
@@ -188,7 +203,8 @@
                 </button>
             </div>
             <div id="modal-content" class="p-6 md:p-8 modal-content-area text-gray-300">
-                </div>
+                <!-- Fetched content goes here -->
+            </div>
         </div>
     </div>
 
