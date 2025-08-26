@@ -107,7 +107,6 @@
 </head>
 <body class="antialiased">
 
-    <!-- Header Section -->
     <header class="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-gray-800">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="index.html" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
@@ -116,7 +115,7 @@
                 <a href="network.html" class="hover:text-cyan-400 transition-colors">The Network</a>
                 <a href="playbook.html" class="hover:text-cyan-400 transition-colors">The Playbook</a>
                 <a href="atlas.html" class="hover:text-cyan-400 transition-colors">The Atlas</a>
-                <!-- Link to this page will be added in the final step -->
+                <a href="data.html" class="text-cyan-400 font-bold">Data & Methodology</a>
             </nav>
             <a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="hidden md:inline-block border border-cyan-400 text-cyan-400 px-4 py-2 rounded-lg hover:bg-cyan-400 hover:text-black transition-colors">
                 GitHub
@@ -125,7 +124,6 @@
     </header>
 
     <main>
-        <!-- Hero Section -->
         <section class="text-center px-6 pt-32 pb-24 hero-bg">
             <div class="max-w-4xl mx-auto relative z-10">
                 <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">Data & Methodology</h1>
@@ -135,10 +133,8 @@
             </div>
         </section>
 
-        <!-- Data Tables Section -->
         <section class="container mx-auto px-6 py-16 md:py-24 space-y-20">
 
-            <!-- Table 1: Foundation Grants -->
             <div class="reveal">
                 <h2 class="text-3xl md:text-4xl font-lora font-semibold text-center mb-4">Known Foundation Grants to SFOF</h2>
                 <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">This table details major grants from conservative foundations to the State Financial Officers Foundation (501c3) between 2021 and 2023, as disclosed in public tax filings.</p>
@@ -185,12 +181,11 @@
                 </div>
             </div>
 
-            <!-- Table 2: Member States -->
             <div class="reveal">
                 <h2 class="text-3xl md:text-4xl font-lora font-semibold text-center mb-4">SFOF Member States & Key Officials</h2>
                 <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">This table lists states with publicly documented SFOF-affiliated financial officers. Affiliation is determined by membership lists, conference attendance records, and participation in SFOF-led initiatives.</p>
                 <div class="table-container rounded-lg p-4 md:p-6 overflow-x-auto">
-                    <table class="min-w-full text-left">
+                    <table id="member-states-table" class="min-w-full text-left">
                         <thead class="border-b border-gray-700">
                             <tr>
                                 <th class="p-4 text-sm font-semibold text-cyan-400 uppercase">State</th>
@@ -198,18 +193,16 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-800">
-                            <!-- Data rows will be inserted here by the script -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Table 3: Anti-ESG Legislation -->
             <div class="reveal">
                 <h2 class="text-3xl md:text-4xl font-lora font-semibold text-center mb-4">States with Passed Anti-ESG Legislation</h2>
                 <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">This table identifies states that have enacted significant anti-ESG legislation, often based on model bills from the SFOF network's partners like ALEC and The Heritage Foundation.</p>
                 <div class="table-container rounded-lg p-4 md:p-6 overflow-x-auto">
-                    <table class="min-w-full text-left">
+                    <table id="legislation-table" class="min-w-full text-left">
                         <thead class="border-b border-gray-700">
                             <tr>
                                 <th class="p-4 text-sm font-semibold text-cyan-400 uppercase">State</th>
@@ -218,8 +211,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-800">
-                            <!-- Data rows will be inserted here by the script -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
@@ -227,7 +219,6 @@
         </section>
     </main>
 
-    <!-- Source Viewer Modal -->
     <div id="source-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none">
         <div id="modal-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
         <div class="relative bg-background-dark border border-border-color rounded-lg shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col modal-transform">
@@ -246,7 +237,6 @@
         </div>
     </div>
 
-    <!-- Footer Section -->
     <footer class="border-t border-gray-800 py-12 px-6 mt-16">
         <div class="container mx-auto text-center text-gray-500">
             <p>&copy; 2025 SFOFWatch.org. This is an open-source intelligence project.</p>
@@ -259,7 +249,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Data for the tables
+            // --- DATA ---
             const memberStatesData = [
                 { state: "Alabama", officials: "Young Boozer (Treasurer), Steve Marshall (AG), Andrew Sorrell (Auditor)" },
                 { state: "Alaska", officials: "Adam Crum (Former Commissioner of Revenue)" },
@@ -314,87 +304,82 @@
                 { state: "West Virginia", bill: "SB 262 (2022), HB 2862 (2023)", url: "https://www.wvlegislature.gov/bill_status/bills_text.cfm?billdoc=SB262%20SUB2%20ENR.htm&yr=2022&sesstype=RS&i=262" }
             ];
 
-            // Populate Member States Table
-            const memberStatesTbody = document.querySelector('table:nth-of-type(2) tbody');
+            // --- TABLE POPULATION ---
+            const memberStatesTbody = document.querySelector('#member-states-table tbody');
             memberStatesData.forEach(item => {
-                const row = `<tr>
-                                <td class="p-4 align-middle">${item.state}</td>
-                                <td class="p-4 align-middle">${item.officials}</td>
-                             </tr>`;
-                memberStatesTbody.innerHTML += row;
+                const row = document.createElement('tr');
+                row.innerHTML = `<td class="p-4 align-middle">${item.state}</td>
+                                 <td class="p-4 align-middle">${item.officials}</td>`;
+                memberStatesTbody.appendChild(row);
             });
 
-            // Populate Legislation Table
-            const legislationTbody = document.querySelector('table:nth-of-type(3) tbody');
+            const legislationTbody = document.querySelector('#legislation-table tbody');
             legislationData.forEach(item => {
-                const row = `<tr>
-                                <td class="p-4 align-middle">${item.state}</td>
-                                <td class="p-4 align-middle">${item.bill}</td>
-                                <td class="p-4 align-middle text-center">
-                                    <a href="${item.url}" class="view-source-btn inline-block border border-gray-600 text-gray-300 px-4 py-2 rounded-md text-sm font-medium">View Source</a>
-                                </td>
-                             </tr>`;
-                legislationTbody.innerHTML += row;
+                const row = document.createElement('tr');
+                row.innerHTML = `<td class="p-4 align-middle">${item.state}</td>
+                                 <td class="p-4 align-middle">${item.bill}</td>
+                                 <td class="p-4 align-middle text-center">
+                                     <a href="${item.url}" class="view-source-btn inline-block border border-gray-600 text-gray-300 px-4 py-2 rounded-md text-sm font-medium">View Source</a>
+                                 </td>`;
+                legislationTbody.appendChild(row);
             });
 
-            // Modal functionality
+            // --- MODAL LOGIC ---
             const modal = document.getElementById('source-modal');
             const modalTitle = document.getElementById('modal-title');
             const closeModalBtn = document.getElementById('close-modal-btn');
             const modalOverlay = document.getElementById('modal-overlay');
             const sourceIframe = document.getElementById('source-iframe');
             const loaderContainer = document.getElementById('iframe-loader-container');
-            const viewSourceButtons = document.querySelectorAll('.view-source-btn');
             const mainContent = document.querySelector('main');
 
             function showModal(url) {
                 modalTitle.textContent = 'Loading Source...';
-                sourceIframe.style.visibility = 'hidden'; // Hide iframe until loaded
-                loaderContainer.style.display = 'flex'; // Show loader
+                sourceIframe.style.visibility = 'hidden';
+                loaderContainer.style.display = 'flex';
                 modal.classList.add('is-visible');
                 mainContent.style.filter = 'blur(4px)';
 
                 sourceIframe.src = url;
-                
+
                 let iframeLoadTimeout = setTimeout(() => {
-                    // If iframe hasn't loaded in 5 seconds, assume it's blocked
                     console.warn("Iframe load timed out. Opening in new tab.");
                     hideModal();
-                    window.open(url, '_blank');
+                    window.open(url, '_blank', 'noopener,noreferrer');
                 }, 5000);
 
                 sourceIframe.onload = () => {
                     clearTimeout(iframeLoadTimeout);
                     try {
-                        // This will throw a cross-origin error if the page is blocked
                         const iframeTitle = sourceIframe.contentWindow.document.title;
                         modalTitle.textContent = iframeTitle || url;
                     } catch (e) {
                         modalTitle.textContent = url;
-                        console.log("Cross-origin frame error, using URL as title.");
                     }
-                    loaderContainer.style.display = 'none'; // Hide loader
-                    sourceIframe.style.visibility = 'visible'; // Show iframe
+                    loaderContainer.style.display = 'none';
+                    sourceIframe.style.visibility = 'visible';
                 };
                 
                 sourceIframe.onerror = () => {
                     clearTimeout(iframeLoadTimeout);
                     console.error("Iframe failed to load. Opening in new tab.");
                     hideModal();
-                    window.open(url, '_blank');
+                    window.open(url, '_blank', 'noopener,noreferrer');
                 };
             }
 
             function hideModal() {
                 modal.classList.remove('is-visible');
                 mainContent.style.filter = 'none';
-                sourceIframe.src = 'about:blank'; // Clear iframe to stop loading
+                sourceIframe.src = 'about:blank';
             }
-
+            
+            // Re-query buttons after dynamic creation
+            const viewSourceButtons = document.querySelectorAll('.view-source-btn');
             viewSourceButtons.forEach(button => {
                 button.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const url = e.target.href;
+                    const url = e.currentTarget.href;
                     showModal(url);
                 });
             });
@@ -407,7 +392,7 @@
                 }
             });
 
-            // Scroll Reveal Animation
+            // --- SCROLL REVEAL LOGIC ---
             const revealElements = document.querySelectorAll('.reveal');
             const revealObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
