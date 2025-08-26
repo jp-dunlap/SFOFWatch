@@ -2,8 +2,8 @@ backend:
   name: git-gateway
   branch: main # Or master, depending on your default branch name
 
-# This line can be commented out to enable a publication workflow (drafts, etc.)
-# publish_mode: editorial_workflow
+# This line enables the draft -> review -> approve workflow
+publish_mode: editorial_workflow
 
 media_folder: "assets/images"
 public_folder: "/assets/images"
@@ -15,10 +15,8 @@ collections:
     create: true
     slug: "{{slug}}"
     extension: "html"
-    format: "html-frontmatter" # This tells the CMS to look for HTML with a body
+    format: "html-frontmatter"
     fields:
-      # We don't need title or date fields, as they are part of the HTML file itself.
-      # The "body" field will target the main content of your HTML files.
       - {label: "Report Content", name: "body", widget: "html"}
     editor:
       preview: false
