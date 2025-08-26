@@ -1,3 +1,6 @@
+[build]
+  command = "npm run build"
+
 [functions]
   directory = "netlify/functions/"
   node_bundler = "esbuild"
@@ -5,4 +8,29 @@
 [[redirects]]
   from = "/proxy"
   to = "/.netlify/functions/proxy"
+  status = 200
+
+[[redirects]]
+  from = "/foundation"
+  to = "/foundation.html"
+  status = 200
+
+[[redirects]]
+  from = "/network"
+  to = "/network.html"
+  status = 200
+
+[[redirects]]
+  from = "/playbook"
+  to = "/playbook.html"
+  status = 200
+
+[[redirects]]
+  from = "/atlas"
+  to = "/atlas.html"
+  status = 200
+
+[[redirects]]
+  from = "/data"
+  to = "/data.html"
   status = 200
