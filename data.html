@@ -107,7 +107,6 @@
 </head>
 <body class="antialiased">
 
-    <!-- Header Section -->
     <header class="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-gray-800">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="index.html" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
@@ -125,7 +124,6 @@
     </header>
 
     <main>
-        <!-- Hero Section -->
         <section class="text-center px-6 pt-32 pb-24 hero-bg">
             <div class="max-w-4xl mx-auto relative z-10">
                 <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">Data & Methodology</h1>
@@ -135,10 +133,8 @@
             </div>
         </section>
 
-        <!-- Main Content -->
         <section class="container mx-auto px-6 py-16 md:py-24 space-y-20">
 
-            <!-- Foundation Grants Table -->
             <div class="reveal">
                 <h2 class="text-3xl md:text-4xl font-lora font-semibold text-center mb-4">Known Foundation Grants to SFOF</h2>
                 <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">This table details major grants from conservative foundations to the State Financial Officers Foundation (501c3) between 2021 and 2023, as disclosed in public tax filings.</p>
@@ -185,7 +181,6 @@
                 </div>
             </div>
 
-            <!-- Member States Table -->
             <div class="reveal">
                 <h2 class="text-3xl md:text-4xl font-lora font-semibold text-center mb-4">SFOF Member States & Key Officials</h2>
                 <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">This table lists states with publicly documented SFOF-affiliated financial officers. Affiliation is determined by membership lists, conference attendance records, and participation in SFOF-led initiatives.</p>
@@ -198,13 +193,11 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-800">
-                            <!-- Data will be populated by script -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Legislation Table -->
             <div class="reveal">
                 <h2 class="text-3xl md:text-4xl font-lora font-semibold text-center mb-4">States with Passed Anti-ESG Legislation</h2>
                 <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">This table identifies states that have enacted significant anti-ESG legislation, often based on model bills from the SFOF network's partners like ALEC and The Heritage Foundation.</p>
@@ -218,8 +211,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-800">
-                            <!-- Data will be populated by script -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
@@ -227,7 +219,6 @@
         </section>
     </main>
 
-    <!-- Modal for viewing source documents -->
     <div id="source-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none">
         <div id="modal-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
         <div class="relative bg-background-dark border border-border-color rounded-lg shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col modal-transform">
@@ -246,7 +237,6 @@
         </div>
     </div>
 
-    <!-- Footer Section -->
     <footer class="border-t border-gray-800 py-12 px-6 mt-16">
         <div class="container mx-auto text-center text-gray-500">
             <p>&copy; 2025 SFOFWatch.org. This is an open-source intelligence project.</p>
@@ -294,7 +284,7 @@
 
             const legislationData = [
                 { state: "Alabama", bill: "SB 261 (2023)", url: "https://alison.legislature.state.al.us/files/pdf/SearchableInstruments/2023RS/SB261-enr.pdf" },
-                { state: "Arkansas", bill: "Act 498 (2023)", url: "https://www.arkleg.state.ar.us/Acts/FTP/IDX/2023/Public/498.pdf" },
+                { state: "Arkansas", bill: "Act 498 (2023)", url: "https://arkleg.state.ar.us/Acts/FTPDocument?path=%2FACTS%2F2023R%2FPublic%2F&file=498.pdf&ddBienniumSession=2023%2F2023R" },
                 { state: "Florida", bill: "HB 3 (2023)", url: "https://www.flsenate.gov/Session/Bill/2023/3/BillText/er/PDF" },
                 { state: "Georgia", bill: "HB 481 (2024)", url: "https://www.legis.ga.gov/api/legislation/document/20232024/223187" },
                 { state: "Idaho", bill: "SB 1405 (2022), HB 191 (2023)", url: "https://legislature.idaho.gov/sessioninfo/2022/legislation/s1405/" },
@@ -305,10 +295,12 @@
                 { state: "Missouri", bill: "RSMo 105.688 (2025 Amnd.)", url: "https://revisor.mo.gov/main/OneSection.aspx?section=105.688" },
                 { state: "Montana", bill: "HB 228 (2023)", url: "https://legiscan.com/MT/text/HB228/id/2762632" },
                 { state: "North Carolina", bill: "HB 750 (2023)", url: "https://www.ncleg.gov/Sessions/2023/Bills/House/PDF/H750v4.pdf" },
-                { state: "North Dakota", bill: "SB 2291 (2021), HB 1429 (2023)", url: "https://www.ndlegis.gov/assembly/67-2021/regular/bill-text/2291S.pdf" },
+                // **UPDATED NORTH DAKOTA LINK**
+                { state: "North Dakota", bill: "SB 2291 (2021), HB 1429 (2023)", url: "https://ndlegis.gov/assembly/67-2021/documents/21-0717-04000.pdf" },
                 { state: "Ohio", bill: "SB 6 (2025)", url: "https://search-prod.lis.state.oh.us/solarapi/v1/general_assembly_135/bills/sb6/EN/05?format=pdf" },
                 { state: "Oklahoma", bill: "HB 2034 (2022)", url: "http://webserver1.lsb.state.ok.us/cf_pdf/2021-22%20ENR/hB/HB2034%20ENR.PDF" },
-                { state: "South Carolina", bill: "HB 3690 (2024)", url: "https://www.scstatehouse.gov/sess125_2023-2024/prever/3690_20240130.htm" },
+                // **UPDATED SOUTH CAROLINA LINK**
+                { state: "South Carolina", bill: "HB 3690 (2024)", url: "https://www.scstatehouse.gov/sess125_2023-2024/bills/3690.htm" },
                 { state: "Texas", bill: "SB 13 (2021), SB 19 (2021)", url: "https://capitol.texas.gov/tlodocs/87R/billtext/html/SB00013F.HTM" },
                 { state: "Utah", bill: "SB 96 (2023)", url: "https://le.utah.gov/~2023/bills/static/SB0096.html" },
                 { state: "West Virginia", bill: "SB 262 (2022), HB 2862 (2023)", url: "https://www.wvlegislature.gov/bill_status/bills_text.cfm?billdoc=SB262%20SUB2%20ENR.htm&yr=2022&sesstype=RS&i=262" }
@@ -350,7 +342,6 @@
                 modal.classList.add('is-visible');
                 mainContent.style.filter = 'blur(4px)';
                 
-                // Use the relative /proxy endpoint
                 const proxyUrl = `/proxy?url=${encodeURIComponent(url)}`;
                 sourceIframe.src = proxyUrl;
 
@@ -363,7 +354,6 @@
                 sourceIframe.onerror = () => {
                     console.error("Iframe failed to load via proxy.");
                     hideModal();
-                    // Use a simple, non-blocking message instead of alert()
                     const errorMsg = document.createElement('div');
                     errorMsg.textContent = 'Could not load the source content.';
                     errorMsg.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #ef4444; color: white; padding: 10px 20px; border-radius: 5px; z-index: 9999;';
