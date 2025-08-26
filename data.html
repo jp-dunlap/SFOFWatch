@@ -57,6 +57,7 @@
             border: 1px solid var(--border-color);
         }
 
+        /* Make all links in tables styled consistently */
         .table-container a {
             color: var(--primary-cyan);
             text-decoration: none;
@@ -66,14 +67,23 @@
             color: white;
             text-decoration: underline;
         }
-
-        .view-source-btn {
+        
+        /* Specific button style for grant/legislation tables */
+        .view-source-btn-styled {
+            display: inline-block;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
             transition: all 0.2s ease-in-out;
         }
-        .view-source-btn:hover {
+        .view-source-btn-styled:hover {
             background-color: var(--primary-cyan);
             color: var(--background-dark);
             border-color: var(--primary-cyan);
+            text-decoration: none;
         }
 
         /* MODAL STYLES */
@@ -162,28 +172,28 @@
                                 <td class="p-4 align-middle">Bradley Foundation</td>
                                 <td class="p-4 align-middle font-mono text-lg">$750,000</td>
                                 <td class="p-4 align-middle text-center">
-                                    <a href="https://www.bradleyimpactfund.org/blog/state-financial-officers-foundation-interview-with-derek-kreifels" class="view-source-btn inline-block border border-gray-600 text-gray-300 px-4 py-2 rounded-md text-sm font-medium">View Source</a>
+                                    <a href="https://www.bradleyimpactfund.org/blog/state-financial-officers-foundation-interview-with-derek-kreifels" class="view-source-btn view-source-btn-styled">View Source</a>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="p-4 align-middle">DonorsTrust & Bradley Impact Fund</td>
                                 <td class="p-4 align-middle font-mono text-lg">$677,813</td>
                                 <td class="p-4 align-middle text-center">
-                                    <a href="https://projects.propublica.org/nonprofits/organizations/462604771/202413209349318001/full" class="view-source-btn inline-block border border-gray-600 text-gray-300 px-4 py-2 rounded-md text-sm font-medium">View Source</a>
+                                    <a href="https://projects.propublica.org/nonprofits/organizations/462604771/202413209349318001/full" class="view-source-btn view-source-btn-styled">View Source</a>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="p-4 align-middle">Consumers' Research</td>
                                 <td class="p-4 align-middle font-mono text-lg">$617,500</td>
                                 <td class="p-4 align-middle text-center">
-                                    <a href="https://projects.propublica.org/nonprofits/organizations/462604771/202413209349318001/full" class="view-source-btn inline-block border border-gray-600 text-gray-300 px-4 py-2 rounded-md text-sm font-medium">View Source</a>
+                                    <a href="https://projects.propublica.org/nonprofits/organizations/462604771/202413209349318001/full" class="view-source-btn view-source-btn-styled">View Source</a>
                                 </td>
                             </tr>
                              <tr>
                                 <td class="p-4 align-middle">Sarah Scaife Foundation</td>
                                 <td class="p-4 align-middle font-mono text-lg">$245,000</td>
                                 <td class="p-4 align-middle text-center">
-                                    <a href="https://projects.propublica.org/nonprofits/organizations/462604771/202413209349318001/full" class="view-source-btn inline-block border border-gray-600 text-gray-300 px-4 py-2 rounded-md text-sm font-medium">View Source</a>
+                                    <a href="https://projects.propublica.org/nonprofits/organizations/462604771/202413209349318001/full" class="view-source-btn view-source-btn-styled">View Source</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -288,35 +298,35 @@
         document.addEventListener('DOMContentLoaded', () => {
             // --- DATA ---
             const memberStatesData = [
-                { state: "Alabama", officials: `<a href="https://treasury.alabama.gov/about-young-boozer/" target="_blank">Young Boozer</a> (Treasurer), <a href="https://www.alabamaag.gov/about/" target="_blank">Steve Marshall</a> (AG), <a href="https://auditor.alabama.gov/about/andrew-sorrell-biography/" target="_blank">Andrew Sorrell</a> (Auditor)` },
-                { state: "Alaska", officials: `<a href="https://dor.alaska.gov/commissioner" target="_blank">Adam Crum</a> (Former Commissioner of Revenue)` },
-                { state: "Arizona", officials: `<a href="https://www.aztreasurer.gov/" target="_blank">Kimberly Yee</a> (Treasurer)` },
-                { state: "Arkansas", officials: `<a href="https://auditor.ar.gov/" target="_blank">Dennis Milligan</a> (Auditor)` },
-                { state: "Florida", officials: `<a href="https://www.myfloridacfo.com/" target="_blank">Jimmy Patronis</a> (Former CFO), <a href="https://www.flgov.com/" target="_blank">Ron DeSantis</a> (Governor)` },
-                { state: "Georgia", officials: `<a href="https://ost.georgia.gov/" target="_blank">Steve McCoy</a> (Treasurer)` },
-                { state: "Idaho", officials: `<a href="https://sto.idaho.gov/" target="_blank">Julie Ellsworth</a> (Treasurer), Ron Crane (Former Treasurer)` },
-                { state: "Indiana", officials: `<a href="https://www.in.gov/tos/about-the-office/about-the-treasurer/" target="_blank">Daniel Elliott</a> (Treasurer), <a href="https://www.in.gov/attorneygeneral/" target="_blank">Todd Rokita</a> (AG), <a href="https://www.in.gov/comptroller/about-the-comptroller/" target="_blank">Elise Nieshalla</a> (Comptroller)` },
-                { state: "Iowa", officials: `<a href="https://www.iowatreasurer.gov/" target="_blank">Roby Smith</a> (Treasurer), <a href="https://www.iowaattorneygeneral.gov/" target="_blank">Brenna Bird</a> (AG)` },
-                { state: "Kansas", officials: `<a href="https://kansascash.ks.gov/" target="_blank">Steven Johnson</a> (Treasurer), <a href="https://sfof.com/our-team/derek-kreifels/" target="_blank">Derek Kreifels</a> (SFOF CEO, former KPERS Trustee)` },
-                { state: "Kentucky", officials: `<a href="https://treasury.ky.gov/" target="_blank">Mark Metcalf</a> (Treasurer), <a href="https://www.auditor.ky.gov/About/Pages/default.aspx" target="_blank">Allison Ball</a> (Former Treasurer)` },
-                { state: "Louisiana", officials: `<a href="https://www.treasury.la.gov/about" target="_blank">John Fleming</a> (Treasurer), <a href="https://en.wikipedia.org/wiki/John_Schroder" target="_blank">John Schroder</a> (Former Treasurer)` },
-                { state: "Mississippi", officials: `<a href="https://treasury.ms.gov/" target="_blank">David McRae</a> (Treasurer), <a href="https://www.osa.ms.gov/" target="_blank">Shad White</a> (Auditor), <a href="https://www.ago.state.ms.us/" target="_blank">Lynn Fitch</a> (AG)` },
-                { state: "Missouri", officials: `<a href="https://treasurer.mo.gov/" target="_blank">Vivek Malek</a> (Treasurer), <a href="https://auditor.mo.gov/" target="_blank">Scott Fitzpatrick</a> (Former Treasurer)` },
-                { state: "Montana", officials: `<a href="https://csimt.gov/" target="_blank">James Brown</a> (Auditor)` },
-                { state: "Nebraska", officials: `<a href="https://treasurer.nebraska.gov/" target="_blank">Tom Briese</a> (Treasurer), <a href="https://npers.ne.gov/" target="_blank">John Murante</a> (Former Treasurer)` },
-                { state: "Nevada", officials: `<a href="https://andyfornevada.com/about-andy/" target="_blank">Andy Matthews</a> (Controller)` },
-                { state: "North Carolina", officials: `<a href="https://www.nctreasurer.com/about/history-north-carolina-treasurers" target="_blank">Dale Folwell</a> (Former Treasurer)` },
-                { state: "North Dakota", officials: `<a href="https://www.nd.gov/treasurer/" target="_blank">Thomas Beadle</a> (Treasurer)` },
-                { state: "Ohio", officials: `<a href="https://www.tos.ohio.gov/" target="_blank">Robert Sprague</a> (Treasurer)` },
-                { state: "Oklahoma", officials: `<a href="https://www.ok.gov/treasurer/" target="_blank">Todd Russ</a> (Treasurer)` },
-                { state: "Pennsylvania", officials: `<a href="https://www.patreasury.gov/" target="_blank">Stacy Garrity</a> (Treasurer)` },
-                { state: "South Carolina", officials: `<a href="https://treasurer.sc.gov/about-us/meet-the-treasurer/" target="_blank">Curtis Loftis</a> (Treasurer)` },
-                { state: "South Dakota", officials: `<a href="https://sdtreasurer.gov/" target="_blank">Josh Haeder</a> (Treasurer)` },
-                { state: "Texas", officials: `<a href="https://web.archive.org/web/20240101235431/https://comptroller.texas.gov/about/" target="_blank">Glenn Hegar</a> (Comptroller)` },
-                { state: "Utah", officials: `<a href="https://treasurer.utah.gov/" target="_blank">Marlo Oaks</a> (Treasurer)` },
-                { state: "West Virginia", officials: `<a href="https://rileymoore.house.gov/about" target="_blank">Riley Moore</a> (Former Treasurer)` },
-                { state: "Wisconsin", officials: `<a href="https://statetreasurer.wi.gov/Pages/About/Treasurer.aspx" target="_blank">John Leiber</a> (Treasurer)` },
-                { state: "Wyoming", officials: `<a href="https://statetreasurer.wyo.gov/" target="_blank">Curt Meier</a> (Treasurer)` }
+                { state: "Alabama", officials: `<a href="https://treasury.alabama.gov/about-young-boozer/" class="view-source-btn">Young Boozer</a> (Treasurer), <a href="https://www.alabamaag.gov/about/" class="view-source-btn">Steve Marshall</a> (AG), <a href="https://auditor.alabama.gov/about/andrew-sorrell-biography/" class="view-source-btn">Andrew Sorrell</a> (Auditor)` },
+                { state: "Alaska", officials: `<a href="https://dor.alaska.gov/commissioner" class="view-source-btn">Adam Crum</a> (Former Commissioner of Revenue)` },
+                { state: "Arizona", officials: `<a href="https://www.aztreasurer.gov/" class="view-source-btn">Kimberly Yee</a> (Treasurer)` },
+                { state: "Arkansas", officials: `<a href="https://auditor.ar.gov/" class="view-source-btn">Dennis Milligan</a> (Auditor)` },
+                { state: "Florida", officials: `<a href="https://www.myfloridacfo.com/" class="view-source-btn">Jimmy Patronis</a> (Former CFO), <a href="https://www.flgov.com/" class="view-source-btn">Ron DeSantis</a> (Governor)` },
+                { state: "Georgia", officials: `<a href="https://ost.georgia.gov/" class="view-source-btn">Steve McCoy</a> (Treasurer)` },
+                { state: "Idaho", officials: `<a href="https://sto.idaho.gov/" class="view-source-btn">Julie Ellsworth</a> (Treasurer), Ron Crane (Former Treasurer)` },
+                { state: "Indiana", officials: `<a href="https://www.in.gov/tos/about-the-office/about-the-treasurer/" class="view-source-btn">Daniel Elliott</a> (Treasurer), <a href="https://www.in.gov/attorneygeneral/" class="view-source-btn">Todd Rokita</a> (AG), <a href="https://www.in.gov/comptroller/about-the-comptroller/" class="view-source-btn">Elise Nieshalla</a> (Comptroller)` },
+                { state: "Iowa", officials: `<a href="https://www.iowatreasurer.gov/" class="view-source-btn">Roby Smith</a> (Treasurer), <a href="https://www.iowaattorneygeneral.gov/" class="view-source-btn">Brenna Bird</a> (AG)` },
+                { state: "Kansas", officials: `<a href="https://kansascash.ks.gov/" class="view-source-btn">Steven Johnson</a> (Treasurer), <a href="https://sfof.com/our-team/derek-kreifels/" class="view-source-btn">Derek Kreifels</a> (SFOF CEO, former KPERS Trustee)` },
+                { state: "Kentucky", officials: `<a href="https://treasury.ky.gov/" class="view-source-btn">Mark Metcalf</a> (Treasurer), <a href="https://www.auditor.ky.gov/About/Pages/default.aspx" class="view-source-btn">Allison Ball</a> (Former Treasurer)` },
+                { state: "Louisiana", officials: `<a href="https://www.treasury.la.gov/about" class="view-source-btn">John Fleming</a> (Treasurer), <a href="https://en.wikipedia.org/wiki/John_Schroder" class="view-source-btn">John Schroder</a> (Former Treasurer)` },
+                { state: "Mississippi", officials: `<a href="https://treasury.ms.gov/" class="view-source-btn">David McRae</a> (Treasurer), <a href="https://www.osa.ms.gov/" class="view-source-btn">Shad White</a> (Auditor), <a href="https://www.ago.state.ms.us/" class="view-source-btn">Lynn Fitch</a> (AG)` },
+                { state: "Missouri", officials: `<a href="https://treasurer.mo.gov/" class="view-source-btn">Vivek Malek</a> (Treasurer), <a href="https://auditor.mo.gov/" class="view-source-btn">Scott Fitzpatrick</a> (Former Treasurer)` },
+                { state: "Montana", officials: `<a href="https://csimt.gov/" class="view-source-btn">James Brown</a> (Auditor)` },
+                { state: "Nebraska", officials: `<a href="https://treasurer.nebraska.gov/" class="view-source-btn">Tom Briese</a> (Treasurer), <a href="https://npers.ne.gov/" class="view-source-btn">John Murante</a> (Former Treasurer)` },
+                { state: "Nevada", officials: `<a href="https://andyfornevada.com/about-andy/" class="view-source-btn">Andy Matthews</a> (Controller)` },
+                { state: "North Carolina", officials: `<a href="https://www.nctreasurer.com/about/history-north-carolina-treasurers" class="view-source-btn">Dale Folwell</a> (Former Treasurer)` },
+                { state: "North Dakota", officials: `<a href="https://www.nd.gov/treasurer/" class="view-source-btn">Thomas Beadle</a> (Treasurer)` },
+                { state: "Ohio", officials: `<a href="https://www.tos.ohio.gov/" class="view-source-btn">Robert Sprague</a> (Treasurer)` },
+                { state: "Oklahoma", officials: `<a href="https://www.ok.gov/treasurer/" class="view-source-btn">Todd Russ</a> (Treasurer)` },
+                { state: "Pennsylvania", officials: `<a href="https://www.patreasury.gov/" class="view-source-btn">Stacy Garrity</a> (Treasurer)` },
+                { state: "South Carolina", officials: `<a href="https://treasurer.sc.gov/about-us/meet-the-treasurer/" class="view-source-btn">Curtis Loftis</a> (Treasurer)` },
+                { state: "South Dakota", officials: `<a href="https://sdtreasurer.gov/" class="view-source-btn">Josh Haeder</a> (Treasurer)` },
+                { state: "Texas", officials: `<a href="https://web.archive.org/web/20240101235431/https://comptroller.texas.gov/about/" class="view-source-btn">Glenn Hegar</a> (Comptroller)` },
+                { state: "Utah", officials: `<a href="https://treasurer.utah.gov/" class="view-source-btn">Marlo Oaks</a> (Treasurer)` },
+                { state: "West Virginia", officials: `<a href="https://rileymoore.house.gov/about" class="view-source-btn">Riley Moore</a> (Former Treasurer)` },
+                { state: "Wisconsin", officials: `<a href="https://statetreasurer.wi.gov/Pages/About/Treasurer.aspx" class="view-source-btn">John Leiber</a> (Treasurer)` },
+                { state: "Wyoming", officials: `<a href="https://statetreasurer.wyo.gov/" class="view-source-btn">Curt Meier</a> (Treasurer)` }
             ];
 
             const legislationData = [
@@ -356,7 +366,7 @@
                 row.innerHTML = `<td class="p-4 align-middle">${item.state}</td>
                                  <td class="p-4 align-middle">${item.bill}</td>
                                  <td class="p-4 align-middle text-center">
-                                     <a href="${item.url}" class="view-source-btn inline-block border border-gray-600 text-gray-300 px-4 py-2 rounded-md text-sm font-medium">View Source</a>
+                                     <a href="${item.url}" class="view-source-btn view-source-btn-styled">View Source</a>
                                  </td>`;
                 legislationTbody.appendChild(row);
             });
@@ -403,13 +413,13 @@
                 sourceIframe.src = 'about:blank';
             }
             
-            const viewSourceButtons = document.querySelectorAll('.view-source-btn');
-            viewSourceButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
+            // Use event delegation for dynamically created links
+            document.body.addEventListener('click', function(e) {
+                if (e.target.classList.contains('view-source-btn')) {
                     e.preventDefault();
-                    const url = e.currentTarget.href;
+                    const url = e.target.href;
                     showModal(url);
-                });
+                }
             });
 
             closeModalBtn.addEventListener('click', hideModal);
