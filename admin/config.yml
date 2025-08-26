@@ -15,7 +15,7 @@ collections:
     create: true
     slug: "{{slug}}"
     extension: "html"
-    format: "html-frontmatter"
+    format: "html" # This is the corrected value
     fields:
       - {label: "Report Content", name: "body", widget: "html"}
     editor:
