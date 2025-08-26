@@ -80,23 +80,29 @@
 </head>
 <body class="antialiased">
 
+    <!-- Header Section -->
     <header class="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-gray-800">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="index.html" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
-            <nav class="hidden md:flex space-x-8">
+            <nav class="hidden md:flex items-center space-x-8">
                 <a href="foundation.html" class="hover:text-cyan-400 transition-colors">The Foundation</a>
                 <a href="network.html" class="hover:text-cyan-400 transition-colors">The Network</a>
                 <a href="playbook.html" class="text-cyan-400 font-bold">The Playbook</a>
                 <a href="atlas.html" class="hover:text-cyan-400 transition-colors">The Atlas</a>
                 <a href="data.html" class="hover:text-cyan-400 transition-colors">Data & Methodology</a>
+                <!-- Search Form -->
+                <form action="search.html" method="get" class="relative">
+                    <input type="search" name="q" placeholder="Search..." class="bg-gray-800 border border-gray-700 rounded-full py-1 px-4 text-sm text-white focus:outline-none focus:border-cyan-400" />
+                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </button>
+                </form>
             </nav>
-            <a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="hidden md:inline-block border border-cyan-400 text-cyan-400 px-4 py-2 rounded-lg hover:bg-cyan-400 hover:text-black transition-colors">
-                GitHub
-            </a>
         </div>
     </header>
 
     <main>
+        <!-- Hero Section -->
         <section class="text-center px-6 pt-32 pb-24 hero-bg">
             <div class="max-w-4xl mx-auto relative z-10">
                 <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Playbook</h1>
@@ -106,8 +112,10 @@
             </div>
         </section>
 
+        <!-- Playbook Section -->
         <section class="container mx-auto px-6 py-16 md:py-24 space-y-24">
 
+            <!-- "Outside Game" Section -->
             <div class="reveal">
                 <h2 class="text-4xl font-lora font-semibold text-center mb-4">Phase I: The "Outside Game"</h2>
                 <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">Manufacturing public and corporate pressure to create a pretext for government intervention.</p>
@@ -132,6 +140,7 @@
                 </div>
             </div>
 
+            <!-- "Inside Game" Section -->
             <div class="reveal">
                 <h2 class="text-4xl font-lora font-semibold text-center mb-4">Phase II: The "Inside Game"</h2>
                 <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">Weaponizing the levers of state power to translate manufactured pressure into binding policy.</p>
@@ -169,6 +178,7 @@
                 </div>
             </div>
             
+            <!-- Endgame Section -->
             <div class="reveal">
                 <h2 class="text-4xl font-lora font-semibold text-center mb-4">The Endgame: The "Fiduciary Trap"</h2>
                 <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">The ultimate goal is to create a new legal reality where prudent risk management becomes a fiduciary liability.</p>
@@ -199,6 +209,7 @@
                 <a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="text-cyan-400 hover:underline">Contribute on GitHub</a>
             </div>
 
+            <!-- ===== START: NETLIFY FORM ===== -->
             <div class="max-w-xl mx-auto mt-12 text-left">
                 <h3 class="text-2xl font-lora font-semibold text-center mb-3 text-cyan-400">Contact the Project</h3>
                 <p class="text-gray-400 mb-6 text-center">
@@ -222,7 +233,9 @@
                     </div>
                 </form>
             </div>
-            </div>
+            <!-- ===== END: NETLIFY FORM ===== -->
+
+        </div>
     </footer>
 
     <script>
