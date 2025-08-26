@@ -107,6 +107,7 @@
 </head>
 <body class="antialiased">
 
+    <!-- Header Section -->
     <header class="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-gray-800">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="index.html" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
@@ -124,6 +125,7 @@
     </header>
 
     <main>
+        <!-- Hero Section -->
         <section class="text-center px-6 pt-32 pb-24 hero-bg">
             <div class="max-w-4xl mx-auto relative z-10">
                 <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">Data & Methodology</h1>
@@ -133,8 +135,10 @@
             </div>
         </section>
 
+        <!-- Main Content -->
         <section class="container mx-auto px-6 py-16 md:py-24 space-y-20">
 
+            <!-- Foundation Grants Table -->
             <div class="reveal">
                 <h2 class="text-3xl md:text-4xl font-lora font-semibold text-center mb-4">Known Foundation Grants to SFOF</h2>
                 <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">This table details major grants from conservative foundations to the State Financial Officers Foundation (501c3) between 2021 and 2023, as disclosed in public tax filings.</p>
@@ -181,6 +185,7 @@
                 </div>
             </div>
 
+            <!-- Member States Table -->
             <div class="reveal">
                 <h2 class="text-3xl md:text-4xl font-lora font-semibold text-center mb-4">SFOF Member States & Key Officials</h2>
                 <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">This table lists states with publicly documented SFOF-affiliated financial officers. Affiliation is determined by membership lists, conference attendance records, and participation in SFOF-led initiatives.</p>
@@ -193,11 +198,13 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-800">
-                            </tbody>
+                            <!-- Data will be populated by script -->
+                        </tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Legislation Table -->
             <div class="reveal">
                 <h2 class="text-3xl md:text-4xl font-lora font-semibold text-center mb-4">States with Passed Anti-ESG Legislation</h2>
                 <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">This table identifies states that have enacted significant anti-ESG legislation, often based on model bills from the SFOF network's partners like ALEC and The Heritage Foundation.</p>
@@ -211,7 +218,8 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-800">
-                            </tbody>
+                            <!-- Data will be populated by script -->
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -219,6 +227,7 @@
         </section>
     </main>
 
+    <!-- Modal for viewing source documents -->
     <div id="source-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none">
         <div id="modal-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
         <div class="relative bg-background-dark border border-border-color rounded-lg shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col modal-transform">
@@ -237,6 +246,7 @@
         </div>
     </div>
 
+    <!-- Footer Section -->
     <footer class="border-t border-gray-800 py-12 px-6 mt-16">
         <div class="container mx-auto text-center text-gray-500">
             <p>&copy; 2025 SFOFWatch.org. This is an open-source intelligence project.</p>
@@ -339,32 +349,26 @@
                 loaderContainer.style.display = 'flex';
                 modal.classList.add('is-visible');
                 mainContent.style.filter = 'blur(4px)';
-
-                sourceIframe.src = url;
-
-                let iframeLoadTimeout = setTimeout(() => {
-                    console.warn("Iframe load timed out. Opening in new tab.");
-                    hideModal();
-                    window.open(url, '_blank', 'noopener,noreferrer');
-                }, 5000);
+                
+                // Use the relative /proxy endpoint
+                const proxyUrl = `/proxy?url=${encodeURIComponent(url)}`;
+                sourceIframe.src = proxyUrl;
 
                 sourceIframe.onload = () => {
-                    clearTimeout(iframeLoadTimeout);
-                    try {
-                        const iframeTitle = sourceIframe.contentWindow.document.title;
-                        modalTitle.textContent = iframeTitle || url;
-                    } catch (e) {
-                        modalTitle.textContent = url;
-                    }
+                    modalTitle.textContent = `Source: ${url}`;
                     loaderContainer.style.display = 'none';
                     sourceIframe.style.visibility = 'visible';
                 };
                 
                 sourceIframe.onerror = () => {
-                    clearTimeout(iframeLoadTimeout);
-                    console.error("Iframe failed to load. Opening in new tab.");
+                    console.error("Iframe failed to load via proxy.");
                     hideModal();
-                    window.open(url, '_blank', 'noopener,noreferrer');
+                    // Use a simple, non-blocking message instead of alert()
+                    const errorMsg = document.createElement('div');
+                    errorMsg.textContent = 'Could not load the source content.';
+                    errorMsg.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #ef4444; color: white; padding: 10px 20px; border-radius: 5px; z-index: 9999;';
+                    document.body.appendChild(errorMsg);
+                    setTimeout(() => errorMsg.remove(), 3000);
                 };
             }
 
@@ -374,7 +378,6 @@
                 sourceIframe.src = 'about:blank';
             }
             
-            // Re-query buttons after dynamic creation
             const viewSourceButtons = document.querySelectorAll('.view-source-btn');
             viewSourceButtons.forEach(button => {
                 button.addEventListener('click', (e) => {
