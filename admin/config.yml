@@ -2,19 +2,23 @@ backend:
   name: git-gateway
   branch: main # Or master, depending on your default branch name
 
-# This line should be commented out when you are finished testing
+# This line can be commented out to enable a publication workflow (drafts, etc.)
 # publish_mode: editorial_workflow
 
-media_folder: "assets/images" # Location where images will be stored
-public_folder: "/assets/images" # The src attribute for uploaded media
+media_folder: "assets/images"
+public_folder: "/assets/images"
 
 collections:
-  - name: "reports" # Used in routes, e.g., /admin/collections/reports
-    label: "State Reports" # Used in the UI
-    folder: "reports" # The path to the folder where the documents are stored
-    create: true # Allow users to create new documents in this collection
-    slug: "{{slug}}" # Filename template, e.g., YYYY-MM-DD-title.md
-    fields: # The fields for each document, usually in front matter
-      - {label: "Title", name: "title", widget: "string"}
-      - {label: "Publish Date", name: "date", widget: "datetime"}
-      - {label: "Body", name: "body", widget: "markdown"}
+  - name: "reports"
+    label: "State Reports"
+    folder: "reports"
+    create: true
+    slug: "{{slug}}"
+    extension: "html"
+    format: "html-frontmatter" # This tells the CMS to look for HTML with a body
+    fields:
+      # We don't need title or date fields, as they are part of the HTML file itself.
+      # The "body" field will target the main content of your HTML files.
+      - {label: "Report Content", name: "body", widget: "html"}
+    editor:
+      preview: false
