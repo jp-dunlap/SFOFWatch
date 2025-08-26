@@ -57,6 +57,16 @@
             border: 1px solid var(--border-color);
         }
 
+        .table-container a {
+            color: var(--primary-cyan);
+            text-decoration: none;
+            transition: color 0.2s ease-in-out;
+        }
+        .table-container a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
         .view-source-btn {
             transition: all 0.2s ease-in-out;
         }
@@ -245,6 +255,7 @@
                 <a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="text-cyan-400 hover:underline">Contribute on GitHub</a>
             </div>
 
+            <!-- ===== START: NETLIFY FORM ===== -->
             <div class="max-w-xl mx-auto mt-12 text-left">
                 <h3 class="text-2xl font-lora font-semibold text-center mb-3 text-cyan-400">Contact the Project</h3>
                 <p class="text-gray-400 mb-6 text-center">
@@ -268,42 +279,44 @@
                     </div>
                 </form>
             </div>
-            </div>
+            <!-- ===== END: NETLIFY FORM ===== -->
+
+        </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- DATA ---
             const memberStatesData = [
-                { state: "Alabama", officials: "Young Boozer (Treasurer), Steve Marshall (AG), Andrew Sorrell (Auditor)" },
-                { state: "Alaska", officials: "Adam Crum (Former Commissioner of Revenue)" },
-                { state: "Arizona", officials: "Kimberly Yee (Treasurer)" },
-                { state: "Arkansas", officials: "Dennis Milligan (Auditor)" },
-                { state: "Florida", officials: "Jimmy Patronis (Former CFO), Ron DeSantis (Governor)" },
-                { state: "Georgia", officials: "Steve McCoy (Treasurer)" },
-                { state: "Idaho", officials: "Julie Ellsworth (Treasurer), Ron Crane (Former Treasurer)" },
-                { state: "Indiana", officials: "Daniel Elliott (Treasurer), Todd Rokita (AG), Elise Nieshalla (Comptroller)" },
-                { state: "Iowa", officials: "Roby Smith (Treasurer), Brenna Bird (AG)" },
-                { state: "Kansas", officials: "Steven Johnson (Treasurer), Derek Kreifels (SFOF CEO, former KPERS Trustee)" },
-                { state: "Kentucky", officials: "Mark Metcalf (Treasurer), Allison Ball (Former Treasurer)" },
-                { state: "Louisiana", officials: "John Fleming (Treasurer), John Schroder (Former Treasurer)" },
-                { state: "Mississippi", officials: "David McRae (Treasurer), Shad White (Auditor), Lynn Fitch (AG)" },
-                { state: "Missouri", officials: "Vivek Malek (Treasurer), Scott Fitzpatrick (Former Treasurer)" },
-                { state: "Montana", officials: "James Brown (Auditor)" },
-                { state: "Nebraska", officials: "Tom Briese (Treasurer), John Murante (Former Treasurer)" },
-                { state: "Nevada", officials: "Andy Matthews (Controller)" },
-                { state: "North Carolina", officials: "Dale Folwell (Former Treasurer)" },
-                { state: "North Dakota", officials: "Thomas Beadle (Treasurer)" },
-                { state: "Ohio", officials: "Robert Sprague (Treasurer)" },
-                { state: "Oklahoma", officials: "Todd Russ (Treasurer)" },
-                { state: "Pennsylvania", officials: "Stacy Garrity (Treasurer)" },
-                { state: "South Carolina", officials: "Curtis Loftis (Treasurer)" },
-                { state: "South Dakota", officials: "Josh Haeder (Treasurer)" },
-                { state: "Texas", officials: "Glenn Hegar (Comptroller)" },
-                { state: "Utah", officials: "Marlo Oaks (Treasurer)" },
-                { state: "West Virginia", officials: "Riley Moore (Former Treasurer)" },
-                { state: "Wisconsin", officials: "John Leiber (Treasurer)" },
-                { state: "Wyoming", officials: "Curt Meier (Treasurer)" }
+                { state: "Alabama", officials: `<a href="https://treasury.alabama.gov/about-young-boozer/" target="_blank">Young Boozer</a> (Treasurer), <a href="https://www.alabamaag.gov/about/" target="_blank">Steve Marshall</a> (AG), <a href="https://auditor.alabama.gov/about/andrew-sorrell-biography/" target="_blank">Andrew Sorrell</a> (Auditor)` },
+                { state: "Alaska", officials: `<a href="https://dor.alaska.gov/commissioner" target="_blank">Adam Crum</a> (Former Commissioner of Revenue)` },
+                { state: "Arizona", officials: `<a href="https://www.aztreasurer.gov/" target="_blank">Kimberly Yee</a> (Treasurer)` },
+                { state: "Arkansas", officials: `<a href="https://auditor.ar.gov/" target="_blank">Dennis Milligan</a> (Auditor)` },
+                { state: "Florida", officials: `<a href="https://www.myfloridacfo.com/" target="_blank">Jimmy Patronis</a> (Former CFO), <a href="https://www.flgov.com/" target="_blank">Ron DeSantis</a> (Governor)` },
+                { state: "Georgia", officials: `<a href="https://ost.georgia.gov/" target="_blank">Steve McCoy</a> (Treasurer)` },
+                { state: "Idaho", officials: `<a href="https://sto.idaho.gov/" target="_blank">Julie Ellsworth</a> (Treasurer), Ron Crane (Former Treasurer)` },
+                { state: "Indiana", officials: `<a href="https://www.in.gov/tos/about-the-office/about-the-treasurer/" target="_blank">Daniel Elliott</a> (Treasurer), <a href="https://www.in.gov/attorneygeneral/" target="_blank">Todd Rokita</a> (AG), <a href="https://www.in.gov/comptroller/about-the-comptroller/" target="_blank">Elise Nieshalla</a> (Comptroller)` },
+                { state: "Iowa", officials: `<a href="https://www.iowatreasurer.gov/" target="_blank">Roby Smith</a> (Treasurer), <a href="https://www.iowaattorneygeneral.gov/" target="_blank">Brenna Bird</a> (AG)` },
+                { state: "Kansas", officials: `<a href="https://kansascash.ks.gov/" target="_blank">Steven Johnson</a> (Treasurer), <a href="https://sfof.com/our-team/derek-kreifels/" target="_blank">Derek Kreifels</a> (SFOF CEO, former KPERS Trustee)` },
+                { state: "Kentucky", officials: `<a href="https://treasury.ky.gov/" target="_blank">Mark Metcalf</a> (Treasurer), <a href="https://www.auditor.ky.gov/About/Pages/default.aspx" target="_blank">Allison Ball</a> (Former Treasurer)` },
+                { state: "Louisiana", officials: `<a href="https://www.treasury.la.gov/about" target="_blank">John Fleming</a> (Treasurer), <a href="https://en.wikipedia.org/wiki/John_Schroder" target="_blank">John Schroder</a> (Former Treasurer)` },
+                { state: "Mississippi", officials: `<a href="https://treasury.ms.gov/" target="_blank">David McRae</a> (Treasurer), <a href="https://www.osa.ms.gov/" target="_blank">Shad White</a> (Auditor), <a href="https://www.ago.state.ms.us/" target="_blank">Lynn Fitch</a> (AG)` },
+                { state: "Missouri", officials: `<a href="https://treasurer.mo.gov/" target="_blank">Vivek Malek</a> (Treasurer), <a href="https://auditor.mo.gov/" target="_blank">Scott Fitzpatrick</a> (Former Treasurer)` },
+                { state: "Montana", officials: `<a href="https://csimt.gov/" target="_blank">James Brown</a> (Auditor)` },
+                { state: "Nebraska", officials: `<a href="https://treasurer.nebraska.gov/" target="_blank">Tom Briese</a> (Treasurer), <a href="https://npers.ne.gov/" target="_blank">John Murante</a> (Former Treasurer)` },
+                { state: "Nevada", officials: `<a href="https://andyfornevada.com/about-andy/" target="_blank">Andy Matthews</a> (Controller)` },
+                { state: "North Carolina", officials: `<a href="https://www.nctreasurer.com/about/history-north-carolina-treasurers" target="_blank">Dale Folwell</a> (Former Treasurer)` },
+                { state: "North Dakota", officials: `<a href="https://www.nd.gov/treasurer/" target="_blank">Thomas Beadle</a> (Treasurer)` },
+                { state: "Ohio", officials: `<a href="https://www.tos.ohio.gov/" target="_blank">Robert Sprague</a> (Treasurer)` },
+                { state: "Oklahoma", officials: `<a href="https://www.ok.gov/treasurer/" target="_blank">Todd Russ</a> (Treasurer)` },
+                { state: "Pennsylvania", officials: `<a href="https://www.patreasury.gov/" target="_blank">Stacy Garrity</a> (Treasurer)` },
+                { state: "South Carolina", officials: `<a href="https://treasurer.sc.gov/about-us/meet-the-treasurer/" target="_blank">Curtis Loftis</a> (Treasurer)` },
+                { state: "South Dakota", officials: `<a href="https://sdtreasurer.gov/" target="_blank">Josh Haeder</a> (Treasurer)` },
+                { state: "Texas", officials: `<a href="https://web.archive.org/web/20240101235431/https://comptroller.texas.gov/about/" target="_blank">Glenn Hegar</a> (Comptroller)` },
+                { state: "Utah", officials: `<a href="https://treasurer.utah.gov/" target="_blank">Marlo Oaks</a> (Treasurer)` },
+                { state: "West Virginia", officials: `<a href="https://rileymoore.house.gov/about" target="_blank">Riley Moore</a> (Former Treasurer)` },
+                { state: "Wisconsin", officials: `<a href="https://statetreasurer.wi.gov/Pages/About/Treasurer.aspx" target="_blank">John Leiber</a> (Treasurer)` },
+                { state: "Wyoming", officials: `<a href="https://statetreasurer.wyo.gov/" target="_blank">Curt Meier</a> (Treasurer)` }
             ];
 
             const legislationData = [
