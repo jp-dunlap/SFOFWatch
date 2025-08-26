@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SFOF Watch | Uncovering State Capture</title>
     
-    <!-- Open Graph Meta Tags for Social Sharing -->
     <meta property="og:title" content="SFOFWatch | Uncovering State Capture" />
     <meta property="og:description" content="An open-source dossier mapping the State Financial Officers Foundation (SFOF). Track their funders, legislative influence, and network operations." />
     <meta property="og:image" content="https://sfofwatch.org/ce368b5f-0df8-44aa-9f0c-4495a46fa783.png" />
@@ -128,7 +127,6 @@
     </header>
 
     <main>
-        <!-- Hero Section -->
         <section class="min-h-screen flex items-center justify-center text-center px-6 pt-24 hero-bg">
             <div class="max-w-4xl mx-auto relative z-10">
                 <h1 class="text-5xl md:text-7xl font-bold font-lora leading-tight mb-4 animate-fade-in-down">Uncovering State Capture</h1>
@@ -154,14 +152,12 @@
             </div>
         </section>
 
-        <!-- Key Findings Section -->
         <section class="py-24 bg-background-dark">
             <div class="container mx-auto px-6 text-center">
                 <h2 class="text-4xl font-lora font-semibold mb-4 reveal">Key Findings at a Glance</h2>
                 <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-4 reveal" style="transition-delay: 100ms;">A data-driven overview of the SFOF network's scale and impact.</p>
                 <p class="text-sm text-gray-500 mb-12 reveal" style="transition-delay: 150ms;"><em>Data current as of <span id="current-date"></span></em></p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Stat Card 1 -->
                     <div class="stat-card p-8 rounded-lg reveal" style="transition-delay: 200ms;">
                         <div class="text-cyan-400 mb-4">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -171,7 +167,6 @@
                         <h3 class="text-4xl font-bold mb-2" data-target="2200000" data-prefix="$" data-suffix="+">0</h3>
                         <p class="text-gray-400">In Known Foundation Grants (2021-2023)</p>
                     </div>
-                    <!-- Stat Card 2 -->
                     <div class="stat-card p-8 rounded-lg reveal" style="transition-delay: 300ms;">
                         <div class="text-cyan-400 mb-4">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -181,7 +176,6 @@
                         <h3 class="text-4xl font-bold mb-2" data-target="29">0</h3>
                         <p class="text-gray-400">Member States in the SFOF Network</p>
                     </div>
-                    <!-- Stat Card 3 -->
                     <div class="stat-card p-8 rounded-lg reveal" style="transition-delay: 400ms;">
                         <div class="text-cyan-400 mb-4">
                              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -195,10 +189,8 @@
             </div>
         </section>
 
-        <!-- Content Cards Section -->
         <section class="container mx-auto px-6 py-24 md:py-32">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Card 1: The Foundation -->
                 <div class="info-card p-8 flex flex-col text-center reveal">
                     <div class="card-icon text-cyan-400 mb-6">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -212,7 +204,6 @@
                     </p>
                     <a href="foundation.html" class="mt-6 inline-block text-cyan-400 font-semibold hover:underline">Learn More &rarr;</a>
                 </div>
-                <!-- Card 2: The Network -->
                 <div class="info-card p-8 flex flex-col text-center reveal" style="transition-delay: 150ms;">
                     <div class="card-icon text-cyan-400 mb-6">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -225,7 +216,6 @@
                     </p>
                     <a href="network.html" class="mt-6 inline-block text-cyan-400 font-semibold hover:underline">Learn More &rarr;</a>
                 </div>
-                <!-- Card 3: The Playbook -->
                 <div class="info-card p-8 flex flex-col text-center reveal" style="transition-delay: 300ms;">
                     <div class="card-icon text-cyan-400 mb-6">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -249,7 +239,31 @@
             <div class="mt-4">
                 <a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="text-cyan-400 hover:underline">Contribute on GitHub</a>
             </div>
-        </div>
+
+            <div class="max-w-xl mx-auto mt-12 text-left">
+                <h3 class="text-2xl font-lora font-semibold text-center mb-3 text-cyan-400">Contact the Project</h3>
+                <p class="text-gray-400 mb-6 text-center">
+                    Have a tip, correction, or question? All submissions are secure and confidential.
+                </p>
+                <form name="contact" method="POST" data-netlify="true">
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="name">Name (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="text" name="name" id="name" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="email">Email (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="email" name="email" id="email" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="message">Message</label>
+                        <textarea class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" name="message" id="message" rows="4" required></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button class="inline-block bg-cyan-400 text-black font-bold px-8 py-3 rounded-lg hover:bg-cyan-300 transition-colors" type="submit">Send Message</button>
+                    </div>
+                </form>
+            </div>
+            </div>
     </footer>
 
     <script>
