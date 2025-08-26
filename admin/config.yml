@@ -1,8 +1,7 @@
 backend:
   name: git-gateway
-  branch: main # Or master, depending on your default branch name
+  branch: main
 
-# This line enables the draft -> review -> approve workflow
 publish_mode: editorial_workflow
 
 media_folder: "assets/images"
@@ -11,12 +10,149 @@ public_folder: "/assets/images"
 collections:
   - name: "reports"
     label: "State Reports"
-    folder: "reports"
-    create: true
-    slug: "{{slug}}"
-    extension: "html"
-    format: "html" # This is the corrected value
-    fields:
-      - {label: "Report Content", name: "body", widget: "html"}
-    editor:
-      preview: false
+    files:
+      - file: "reports/alabama.html"
+        label: "Alabama Report"
+        name: "alabama"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/alaska.html"
+        label: "Alaska Report"
+        name: "alaska"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/arizona.html"
+        label: "Arizona Report"
+        name: "arizona"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/arkansas.html"
+        label: "Arkansas Report"
+        name: "arkansas"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/florida.html"
+        label: "Florida Report"
+        name: "florida"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/georgia.html"
+        label: "Georgia Report"
+        name: "georgia"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/idaho.html"
+        label: "Idaho Report"
+        name: "idaho"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/indiana.html"
+        label: "Indiana Report"
+        name: "indiana"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/iowa.html"
+        label: "Iowa Report"
+        name: "iowa"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/kansas.html"
+        label: "Kansas Report"
+        name: "kansas"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/kentucky.html"
+        label: "Kentucky Report"
+        name: "kentucky"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/louisiana.html"
+        label: "Louisiana Report"
+        name: "louisiana"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/mississippi.html"
+        label: "Mississippi Report"
+        name: "mississippi"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/missouri.html"
+        label: "Missouri Report"
+        name: "missouri"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/montana.html"
+        label: "Montana Report"
+        name: "montana"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/nebraska.html"
+        label: "Nebraska Report"
+        name: "nebraska"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/nevada.html"
+        label: "Nevada Report"
+        name: "nevada"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/north-carolina.html"
+        label: "North Carolina Report"
+        name: "north-carolina"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/north-dakota.html"
+        label: "North Dakota Report"
+        name: "north-dakota"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/ohio.html"
+        label: "Ohio Report"
+        name: "ohio"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/oklahoma.html"
+        label: "Oklahoma Report"
+        name: "oklahoma"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/pennsylvania.html"
+        label: "Pennsylvania Report"
+        name: "pennsylvania"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/south-carolina.html"
+        label: "South Carolina Report"
+        name: "south-carolina"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/south-dakota.html"
+        label: "South Dakota Report"
+        name: "south-dakota"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/texas.html"
+        label: "Texas Report"
+        name: "texas"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/utah.html"
+        label: "Utah Report"
+        name: "utah"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/west-virginia.html"
+        label: "West Virginia Report"
+        name: "west-virginia"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/wisconsin.html"
+        label: "Wisconsin Report"
+        name: "wisconsin"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
+      - file: "reports/wyoming.html"
+        label: "Wyoming Report"
+        name: "wyoming"
+        fields:
+          - {label: "Report Content", name: "body", widget: "html"}
