@@ -244,7 +244,31 @@
             <div class="mt-4">
                 <a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="text-cyan-400 hover:underline">Contribute on GitHub</a>
             </div>
-        </div>
+
+            <div class="max-w-xl mx-auto mt-12 text-left">
+                <h3 class="text-2xl font-lora font-semibold text-center mb-3 text-cyan-400">Contact the Project</h3>
+                <p class="text-gray-400 mb-6 text-center">
+                    Have a tip, correction, or question? All submissions are secure and confidential.
+                </p>
+                <form name="contact" method="POST" data-netlify="true">
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="name">Name (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="text" name="name" id="name" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="email">Email (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="email" name="email" id="email" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="message">Message</label>
+                        <textarea class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" name="message" id="message" rows="4" required></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button class="inline-block bg-cyan-400 text-black font-bold px-8 py-3 rounded-lg hover:bg-cyan-300 transition-colors" type="submit">Send Message</button>
+                    </div>
+                </form>
+            </div>
+            </div>
     </footer>
 
     <script>
@@ -295,11 +319,9 @@
                 { state: "Missouri", bill: "RSMo 105.688 (2025 Amnd.)", url: "https://revisor.mo.gov/main/OneSection.aspx?section=105.688" },
                 { state: "Montana", bill: "HB 228 (2023)", url: "https://legiscan.com/MT/text/HB228/id/2762632" },
                 { state: "North Carolina", bill: "HB 750 (2023)", url: "https://www.ncleg.gov/Sessions/2023/Bills/House/PDF/H750v4.pdf" },
-                // **UPDATED NORTH DAKOTA LINK**
                 { state: "North Dakota", bill: "SB 2291 (2021), HB 1429 (2023)", url: "https://ndlegis.gov/assembly/67-2021/documents/21-0717-04000.pdf" },
                 { state: "Ohio", bill: "SB 6 (2025)", url: "https://search-prod.lis.state.oh.us/solarapi/v1/general_assembly_135/bills/sb6/EN/05?format=pdf" },
                 { state: "Oklahoma", bill: "HB 2034 (2022)", url: "http://webserver1.lsb.state.ok.us/cf_pdf/2021-22%20ENR/hB/HB2034%20ENR.PDF" },
-                // **UPDATED SOUTH CAROLINA LINK**
                 { state: "South Carolina", bill: "HB 3690 (2024)", url: "https://www.scstatehouse.gov/sess125_2023-2024/bills/3690.htm" },
                 { state: "Texas", bill: "SB 13 (2021), SB 19 (2021)", url: "https://capitol.texas.gov/tlodocs/87R/billtext/html/SB00013F.HTM" },
                 { state: "Utah", bill: "SB 96 (2023)", url: "https://le.utah.gov/~2023/bills/static/SB0096.html" },
