@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 The campaign to oppose ESG in Texas was not a spontaneous policy development but the systematic implementation of a national strategy orchestrated by the SFOF network. This network leveraged its deep connections within the Texas executive branch to transform the state into a primary battleground and a model for the rest of the country. The coordinated actions of the Comptroller, Governor, and Attorney General reveal a unified political front that effectively captured the state's financial and legal machinery to serve a national ideological agenda. This "whole-of-government" approach created a powerful and self-reinforcing apparatus for executing the SFOF playbook.
