@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The SFOF-Kentucky Nexus: An Architecture of Influence
 
 Kentucky serves as a critical "blueprint" state for the execution of the SFOF anti-ESG playbook. The relationship between the Commonwealth and SFOF is uniquely symbiotic, highlighted by the career of SFOF's current CEO, **Dr. OJ Oleka**, who previously served as Kentucky's Deputy Treasurer. This "revolving door" establishes a direct link between the national network and the state it has sought to influence, positioning Kentucky not just as a participant but as a crucial incubator for the movement's national leadership.

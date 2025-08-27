@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 The anti-ESG campaign in Louisiana demonstrates a successful institutional capture of the State Treasurer's Office across multiple administrations, ensuring the durability of the SFOF network's agenda. This campaign has been executed through a coordinated "whole-of-government" approach, with the Treasurer's Office and the Attorney General's Office operating in a "pincer movement" of financial and legal pressure to execute a national playbook. The state serves as an active and important outpost for the anti-ESG movement, with its actions framed as a necessary defense of Louisiana's cornerstone fossil fuel industry.

@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 The anti-ESG campaign in South Carolina is the direct outcome of a coordinated alignment between the state's most powerful financial and legal officers and the national SFOF network. The Treasurer's Office served as the primary conduit for the network's ideology, reinforced by the legal apparatus of the Attorney General's Office. This unified front successfully implemented a pre-packaged agenda, moving from punitive administrative actions to the ultimate goal of the movement: the legislative redefinition of fiduciary duty itself.

@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 The anti-ESG campaign in North Carolina represents a textbook execution of the SFOF playbook, successfully weaponizing the concept of fiduciary duty to codify a political ideology into state law. During his tenure from 2017-2025, former State Treasurer **Dale Folwell**, a Republican with deep ties to both SFOF and ALEC, served as the primary conduit for this agenda. He was one of the movement's most active and high-profile operatives, positioning North Carolina as a key battleground for the implementation of the national strategy.

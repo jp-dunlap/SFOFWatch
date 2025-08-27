@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 North Dakota, a key energy-producing state, serves as a critical case study in the nuanced implementation of the SFOF playbook. The campaign is characterized by the successful legislative redefinition of fiduciary duty, driven by a State Treasurer deeply integrated into the national SFOF network. However, this campaign has also been met with significant institutional and political resistance, particularly from the state's own financial and business community. This opposition resulted in the overwhelming defeat of more extreme measures, such as a Texas-style anti-boycott law, creating an ongoing conflict between a national political ideology and the principles of prudent financial stewardship.

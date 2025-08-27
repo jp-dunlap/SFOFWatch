@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 Indiana represents a successful implementation of the national anti-ESG blueprint. The campaign was built upon a foundation of direct, operational links between the SFOF network and key officials in the state's executive branch. The Treasurer's Office and the Attorney General's Office have operated in a coordinated fashion to execute a national playbook, positioning Indiana as an active and important outpost for the movement. This "whole-of-government" approach culminated in the successful legislative redefinition of fiduciary duty itself, creating a profound conflict with the duties owed to the beneficiaries of the Indiana Public Retirement System (INPRS).

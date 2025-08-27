@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The SFOF-Florida Nexus
 
 Florida serves as both a primary battleground and a model blueprint for the national anti-ESG campaign. The state's unique governance structure for its public pension fund—the Florida Retirement System (FRS)—proved to be the ideal entry point. The FRS is overseen by the State Board of Administration (SBA), whose trustees are the state's three highest elected officials: the Governor, Chief Financial Officer (CFO), and Attorney General.

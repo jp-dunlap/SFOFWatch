@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 The anti-ESG campaign in Montana is not a homegrown phenomenon but the direct result of a coordinated political strategy orchestrated by the State Financial Officers Foundation (SFOF) and its allies. This campaign, executed by key state officials including the State Auditor and Attorney General, leveraged a national playbook of political pressure and model legislation. The ultimate goal was achieved with the passage of legislation that redefined the fiduciary duties of public investment managers to serve a partisan agenda, creating a significant conflict with the traditional governance of the state's public pension funds.

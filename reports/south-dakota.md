@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Mount Rushmore Front
 
 South Dakota presents a significant paradox in the national anti-ESG campaign. While its State Treasurer is a deeply integrated and active participant in the SFOF network, the legislative and institutional objectives of the movement have been consistently and decisively thwarted. The state serves as a crucial case study on the limits of SFOF's influence, revealing a landscape where the political activism of a key state official has created a profound conflict with the state's existing fiduciary laws and the apolitical governance of its public pension system.

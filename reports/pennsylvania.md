@@ -1,4 +1,7 @@
-### I. The Architecture of Influence
+---
+layout: report.njk
+---
+|### I. The Architecture of Influence
 
 Pennsylvania serves as a critical case study in how the SFOF agenda is advanced in a state with a divided government. With sweeping anti-ESG legislation largely blocked, the campaign has been advanced primarily through the executive authority of the State Treasurer's office. This has created a direct conflict with the established governance and legally mandated fiduciary duties of the state's two largest public pension funds: the Public School Employees' Retirement System (PSERS) and the State Employees' Retirement System (SERS).
 

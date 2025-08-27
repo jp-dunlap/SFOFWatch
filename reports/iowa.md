@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 The anti-ESG campaign in Iowa is a direct extension of the national SFOF strategy, with the State Treasurer's office and the Attorney General's office serving as the primary conduits for this agenda. These offices have operated in a coordinated "pincer movement," with the Treasurer applying financial pressure and the Attorney General applying legal pressure, both framing their actions as a defense of Iowa's cornerstone agriculture industry.

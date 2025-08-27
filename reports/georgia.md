@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 Georgia provides a textbook case study of the successful implementation of the national anti-ESG blueprint. The campaign was not a homegrown phenomenon but the direct result of a coordinated political alignment between the state's most powerful executive officers and the national SFOF network. The parallel and mutually reinforcing actions of the Governor, State Treasurer, and Attorney General created a "whole-of-government" pincer movement that effectively captured the state's financial and legal machinery to serve a national ideological agenda.

@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 Missouri serves as a quintessential "blueprint" state for the SFOF network, demonstrating a successful, multi-year institutional capture of the State Treasurer's office. This deep integration, which has persisted across administrations, has positioned the state not merely as a participant but as a critical leadership hub for the national anti-ESG movement. The Treasurer's Office and Attorney General's Office have operated in a coordinated "pincer movement" of financial and legal pressure, culminating in the successful legislative redefinition of fiduciary duty itself.

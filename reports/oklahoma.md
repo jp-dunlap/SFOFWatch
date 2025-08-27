@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Sooner State Stalemate
 
 As a key energy-producing state, Oklahoma is a critical battleground for the anti-ESG campaign. While the SFOF network successfully captured the State Treasurer's office to implement its national blueprint, the campaign was met with significant and effective resistance from the state's largest public pension fund and, ultimately, its judiciary. The result is a high-stakes legal and political stalemate that has, for now, neutralized the state's anti-ESG law, making Oklahoma a crucial case study on the limits of SFOF's influence and the resilience of institutional fiduciary duties.

@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 The anti-ESG campaign in Utah is a direct implementation of the national SFOF strategy, with State Treasurer Marlo Oaks serving not just as a member, but as a key national leader and architect of the movement. His high-level involvement, including his role as SFOF National Chair, means his actions as Treasurer are a direct extension of a broader, centrally-directed political campaign. This alignment has had a tangible impact on the state's largest public fund, the Utah Retirement Systems (URS), raising significant questions about the conflict between the Treasurer's political activism and his statutory fiduciary obligations.

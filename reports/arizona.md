@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The SFOF-Arizona Relationship
 
 The anti-ESG agenda in Arizona is the direct outcome of a coordinated alignment between the state's most powerful financial officer and the national SFOF network. State Treasurer Kimberly Yee, an active SFOF member with a long history in the ALEC ecosystem, serves as the primary conduit for the network's ideology and objectives. However, this campaign has not gone uncontested. The state's divided government, particularly the Attorney General's office, represents a significant point of political friction, preventing the "whole-of-government" capture seen in other states.

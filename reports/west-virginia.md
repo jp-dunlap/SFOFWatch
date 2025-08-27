@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Mountain State Blueprint
 
 West Virginia serves as a quintessential "blueprint" state for the SFOF network. The anti-ESG campaign was not the result of isolated policy decisions but the direct outcome of a coordinated alignment between the State Treasurer's Office and the national SFOF network. Under the leadership of a key SFOF operative, West Virginia was positioned as a national vanguard, pioneering the legislative and administrative tactics—including creating one of the nation's first statutory blacklists of financial firms—that would be replicated across the country. This campaign culminated in the legislative redefinition of fiduciary duty itself.
