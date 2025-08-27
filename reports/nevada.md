@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. A Model of Institutional Resistance
 
 Nevada serves as a critical and unique case study in the limits of the SFOF network's influence. The state's status as a politically competitive "purple state" with a divided government has created a model of institutional resistance to the SFOF playbook. The central conflict is an internal schism pitting the pro-SFOF activism of the State Controller against the opposing political stances of the State Treasurer and Attorney General. This dynamic, combined with the deep-rooted institutional independence of the Public Employees' Retirement System of Nevada (NVPERS), has created a powerful firewall against the anti-ESG agenda.
