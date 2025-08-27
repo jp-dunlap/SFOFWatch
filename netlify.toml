@@ -1,11 +1,26 @@
+# The build command and publish directory
 [build]
   command = "npx @11ty/eleventy"
   publish = "_site"
 
+# Functions configuration
 [functions]
   directory = "netlify/functions/"
   node_bundler = "esbuild"
 
+# Caching policy for static assets (e.g., images, CSS)
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Caching policy for HTML pages
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Redirects for the proxy and clean URLs
 [[redirects]]
   from = "/proxy"
   to = "/.netlify/functions/proxy"
