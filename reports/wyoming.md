@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Cowboy State Crossroads
 
 Wyoming presents a unique case study on the limits of the SFOF network's influence. While the State Treasurer is a deeply integrated SFOF operative, the full implementation of the anti-ESG playbook has been thwarted by a "fractured blueprint." The national agenda has collided with Wyoming's unique political culture of pragmatic, libertarian-inflected conservatism. The result is not a successful political capture, but a state of unresolved tension between a national political movement and the state's own institutional and legal firewalls, making it a story of persistent but largely unsuccessful political pressure.
