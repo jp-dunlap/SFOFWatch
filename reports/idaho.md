@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 Idaho represents a unique case study in the SFOF network's national campaign. The state is not merely a recipient of a pre-packaged agenda but a key architect and exporter of anti-ESG policy. This is the result of a deep, multi-generational integration of the Idaho State Treasurer's office within the SFOF network's highest echelons. This influence has been translated into a coordinated "whole-of-government" approach, culminating in the legislative redefinition of fiduciary duty and creating a profound conflict with the independent governance of the Public Employee Retirement System of Idaho (PERSI).
