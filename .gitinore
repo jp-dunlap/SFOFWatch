@@ -1,0 +1,5 @@
+# Eleventy build output
+_site
+
+# Dependencies
+node_modules
