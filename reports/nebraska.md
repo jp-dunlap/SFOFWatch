@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 Nebraska presents a uniquely nuanced case study of the SFOF network's influence. Despite the failure to pass signature anti-ESG legislation, the movement achieved a significant partial capture of the state's financial governance. This was accomplished through a coordinated pressure campaign led by top state officials deeply integrated into the SFOF network, culminating in a pivotal administrative shift in the state's proxy voting policy and the placement of a key anti-ESG operative at the head of the state's retirement agency.
