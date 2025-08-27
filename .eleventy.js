@@ -1,4 +1,5 @@
 const markdownIt = require("markdown-it");
+const htmlmin = require("html-minifier-terser");
 
 module.exports = function(eleventyConfig) {
   // Initialize markdown-it with HTML support to allow tags in your tables
@@ -12,6 +13,20 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("admin");
   eleventyConfig.addPassthroughCopy("pagefind");
   eleventyConfig.addPassthroughCopy("*.html"); // Copies top-level pages like index.html
+
+  // Add a transform to minify HTML
+  eleventyConfig.addTransform("htmlmin", function(content, outputPath) {
+    if (outputPath && outputPath.endsWith(".html")) {
+      let minified = htmlmin.minify(content, {
+        useShortDoctype: true,
+        removeComments: true,
+        collapseWhitespace: true
+      });
+      return minified;
+    }
+
+    return content;
+  });
 
   // Define the project structure
   return {
