@@ -22,7 +22,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     
     <!-- Netlify Identity Widget Script -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" async></script>
 
     <style>
         :root {
@@ -137,9 +137,9 @@
 
     <main>
         <!-- Hero Section -->
-        <section class="min-h-screen flex items-center justify-center text-center px-6 pt-24 hero-bg">
+        <section class="min-h-screen flex items-center justify-center text-center px-6 pt-24 hero-bg" aria-labelledby="hero-heading">
             <div class="max-w-4xl mx-auto relative z-10">
-                <h1 class="text-5xl md:text-7xl font-bold font-lora leading-tight mb-4 animate-fade-in-down">Uncovering State Capture</h1>
+                <h1 id="hero-heading" class="text-5xl md:text-7xl font-bold font-lora leading-tight mb-4 animate-fade-in-down">Uncovering State Capture</h1>
                 <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-8 animate-fade-in-up">
                     An open-source dossier mapping the State Financial Officers Foundation (SFOF). We track their funders, legislative influence, and network operations to expose state capture campaigns.
                 </p>
@@ -149,11 +149,11 @@
                 <div class="mt-12">
                     <p class="text-sm text-gray-500 mb-4">Share this research</p>
                     <div class="flex justify-center items-center space-x-4">
-                        <a href="#" id="share-facebook" class="share-button">
+                        <a href="#" id="share-facebook" class="share-button" role="button" aria-label="Share on Facebook">
                             <svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" /></svg>
                             Facebook
                         </a>
-                        <a href="#" id="share-twitter" class="share-button">
+                        <a href="#" id="share-twitter" class="share-button" role="button" aria-label="Share on X/Twitter">
                             <svg fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616v.064c0 2.295 1.613 4.212 3.753 4.649-.65.177-1.354.23-2.064.193.606 1.956 2.356 3.379 4.444 3.42-1.717 1.34-3.863 2.068-6.19 1.954-2.24-.13-4.339-.77-6.096-1.89 2.186 1.398 4.793 2.218 7.568 2.218 9.054 0 14.01-7.502 14.01-14.01v-.633c.96-.69 1.798-1.56 2.457-2.54z" /></svg>
                             X / Twitter
                         </a>
@@ -163,9 +163,9 @@
         </section>
 
         <!-- Key Findings Section -->
-        <section class="py-24 bg-background-dark">
+        <section class="py-24 bg-background-dark" aria-labelledby="key-findings-heading">
             <div class="container mx-auto px-6 text-center">
-                <h2 class="text-4xl font-lora font-semibold mb-4 reveal">Key Findings at a Glance</h2>
+                <h2 id="key-findings-heading" class="text-4xl font-lora font-semibold mb-4 reveal">Key Findings at a Glance</h2>
                 <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-4 reveal" style="transition-delay: 100ms;">A data-driven overview of the SFOF network's scale and impact.</p>
                 <p class="text-sm text-gray-500 mb-12 reveal" style="transition-delay: 150ms;"><em>Data current as of <span id="current-date"></span></em></p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -204,7 +204,8 @@
         </section>
 
         <!-- Content Cards Section -->
-        <section class="container mx-auto px-6 py-24 md:py-32">
+        <section class="container mx-auto px-6 py-24 md:py-32" aria-labelledby="content-cards-heading">
+            <h2 id="content-cards-heading" class="sr-only">Project Sections</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Card 1: The Foundation -->
                 <div class="info-card p-8 flex flex-col text-center reveal">
@@ -214,7 +215,7 @@
                           <path stroke-linecap="round" stroke-linejoin="round" d="M4.872 14.81C4.305 15.253 4 15.865 4 16.519c0 1.218.991 2.209 2.209 2.209h11.582A2.209 2.209 0 0020 16.519c0-.654-.305-1.266-.872-1.71m-14.256 0A2.209 2.209 0 017.291 12.5h9.418a2.209 2.209 0 012.118 2.31" />
                         </svg>
                     </div>
-                    <h2 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">The Foundation</h2>
+                    <h3 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">The Foundation</h3>
                     <p class="text-gray-400 flex-grow">
                         Explore SFOF's dual-entity structure and its evolution from a niche group into a national anti-ESG powerhouse.
                     </p>
@@ -227,7 +228,7 @@
                           <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
-                    <h2 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">The Network</h2>
+                    <h3 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">The Network</h3>
                     <p class="text-gray-400 flex-grow">
                         Investigate the web of influence surrounding SFOF, including key partnerships with The Heritage Foundation, ALEC, and state Attorneys General.
                     </p>
@@ -240,7 +241,7 @@
                           <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
                         </svg>
                     </div>
-                    <h2 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">The Playbook</h2>
+                    <h3 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">The Playbook</h3>
                     <p class="text-gray-400 flex-grow">
                         Deconstruct the specific tactics SFOF employs, from public pressure to legislative capture and the creation of the "fiduciary trap."
                     </p>
