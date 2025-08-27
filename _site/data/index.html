@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFOF Watch | Data & Methodology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background-dark: #0a0a0a;
+            --background-light: #111827;
+            --primary-cyan: #22d3ee;
+            --text-primary: #EAEAEA;
+            --text-secondary: #9ca3af;
+            --border-color: #374151;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1, h2, h3, .font-lora {
+            font-family: 'Lora', serif;
+        }
+
+        .hero-bg {
+            background-color: var(--background-dark);
+            background-image: 
+                radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
+                radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"><path fill="%23111827" fill-opacity="0.1" d="M0 0h40v40H0zM40 40h40v40H40z"></path></svg>');
+            z-index: 0;
+        }
+
+        .table-container {
+            background-color: var(--background-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .table-container a {
+            color: var(--primary-cyan);
+            text-decoration: none;
+            transition: color 0.2s ease-in-out;
+        }
+        .table-container a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .view-source-btn-styled {
+            display: inline-block;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+        }
+        .view-source-btn-styled:hover {
+            background-color: var(--primary-cyan);
+            color: var(--background-dark);
+            border-color: var(--primary-cyan);
+            text-decoration: none;
+        }
+
+        /* MODAL STYLES */
+        #source-modal { transition: opacity 0.3s ease-out; }
+        #source-modal.is-visible { opacity: 1; pointer-events: auto; }
+        #source-modal.is-visible .modal-transform { transform: scale(1); }
+        .modal-transform { 
+            transition: transform 0.3s ease-out; 
+            transform: scale(0.95); 
+            will-change: transform;
+        }
+        .modal-content-area { max-height: 80vh; }
+        
+        /* Loader for iframe */
+        .iframe-loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-cyan);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Scroll animation styles */
+        .reveal {
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="foundation.html" class="hover:text-cyan-400 transition-colors">The Foundation</a>
+                <a href="network.html" class="hover:text-cyan-400 transition-colors">The Network</a>
+                <a href="playbook.html" class="hover:text-cyan-400 transition-colors">The Playbook</a>
+                <a href="atlas.html" class="hover:text-cyan-400 transition-colors">The Atlas</a>
+                <a href="data.html" class="text-cyan-400 font-bold">Data & Methodology</a>
+                <!-- Search Form -->
+                <form action="search.html" method="get" class="relative">
+                    <input type="search" name="q" placeholder="Search..." class="bg-gray-800 border border-gray-700 rounded-full py-1 px-4 text-sm text-white focus:outline-none focus:border-cyan-400" />
+                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </button>
+                </form>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="text-center px-6 pt-32 pb-24 hero-bg">
+            <div class="max-w-4xl mx-auto relative z-10">
+                <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">Data & Methodology</h1>
+                <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+                    This page provides the core data underpinning the SFOFWatch project. All information is compiled from publicly available documents, including tax filings, official state websites, legislative records, and investigative reporting.
+                </p>
+            </div>
+        </section>
+
+        <section class="container mx-auto px-6 py-16 md:py-24 space-y-20">
+
+            <div class="reveal">
+                <h2 class="text-3xl md:text-4xl font-lora font-semibold text-center mb-4">Known Foundation Grants to SFOF</h2>
+                <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">This table details major grants from conservative foundations to the State Financial Officers Foundation (501c3) between 2021 and 2023, as disclosed in public tax filings.</p>
+                <div class="table-container rounded-lg p-4 md:p-6 overflow-x-auto">
+                    <table class="min-w-full text-left">
+                        <thead class="border-b border-gray-700">
+                            <tr>
+                                <th class="p-4 text-sm font-semibold text-cyan-400 uppercase">Granting Foundation</th>
+                                <th class="p-4 text-sm font-semibold text-cyan-400 uppercase">Contribution Amount</th>
+                                <th class="p-4 text-sm font-semibold text-cyan-400 uppercase text-center">Source Document</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-800">
+                            <tr>
+                                <td class="p-4 align-middle">Bradley Foundation</td>
+                                <td class="p-4 align-middle font-mono text-lg">$750,000</td>
+                                <td class="p-4 align-middle text-center">
+                                    <a href="https://www.bradleyimpactfund.org/blog/state-financial-officers-foundation-interview-with-derek-kreifels" class="view-source-btn view-source-btn-styled">View Source</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 align-middle">DonorsTrust & Bradley Impact Fund</td>
+                                <td class="p-4 align-middle font-mono text-lg">$677,813</td>
+                                <td class="p-4 align-middle text-center">
+                                    <a href="https://projects.propublica.org/nonprofits/organizations/462604771/202413209349318001/full" class="view-source-btn view-source-btn-styled">View Source</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 align-middle">Consumers' Research</td>
+                                <td class="p-4 align-middle font-mono text-lg">$617,500</td>
+                                <td class="p-4 align-middle text-center">
+                                    <a href="https://projects.propublica.org/nonprofits/organizations/462604771/202413209349318001/full" class="view-source-btn view-source-btn-styled">View Source</a>
+                                </td>
+                            </tr>
+                             <tr>
+                                <td class="p-4 align-middle">Sarah Scaife Foundation</td>
+                                <td class="p-4 align-middle font-mono text-lg">$245,000</td>
+                                <td class="p-4 align-middle text-center">
+                                    <a href="https://projects.propublica.org/nonprofits/organizations/462604771/202413209349318001/full" class="view-source-btn view-source-btn-styled">View Source</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <h2 class="text-3xl md:text-4xl font-lora font-semibold text-center mb-4">SFOF Member States & Key Officials</h2>
+                <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">This table lists states with publicly documented SFOF-affiliated financial officers. Affiliation is determined by membership lists, conference attendance records, and participation in SFOF-led initiatives.</p>
+                <div class="table-container rounded-lg p-4 md:p-6 overflow-x-auto">
+                    <table id="member-states-table" class="min-w-full text-left">
+                        <thead class="border-b border-gray-700">
+                            <tr>
+                                <th class="p-4 text-sm font-semibold text-cyan-400 uppercase">State</th>
+                                <th class="p-4 text-sm font-semibold text-cyan-400 uppercase">SFOF-Affiliated Official(s)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-800">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <h2 class="text-3xl md:text-4xl font-lora font-semibold text-center mb-4">States with Passed Anti-ESG Legislation</h2>
+                <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">This table identifies states that have enacted significant anti-ESG legislation, often based on model bills from the SFOF network's partners like ALEC and The Heritage Foundation.</p>
+                <div class="table-container rounded-lg p-4 md:p-6 overflow-x-auto">
+                    <table id="legislation-table" class="min-w-full text-left">
+                        <thead class="border-b border-gray-700">
+                            <tr>
+                                <th class="p-4 text-sm font-semibold text-cyan-400 uppercase">State</th>
+                                <th class="p-4 text-sm font-semibold text-cyan-400 uppercase">Bill Number(s)</th>
+                                <th class="p-4 text-sm font-semibold text-cyan-400 uppercase text-center">Link to Full Text</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-800">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <div id="source-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none">
+        <div id="modal-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="relative bg-background-dark border border-border-color rounded-lg shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col modal-transform">
+            <div class="px-6 py-4 border-b border-border-color flex justify-between items-center flex-shrink-0">
+                <h2 id="modal-title" class="text-lg font-lora text-white truncate">Loading Source...</h2>
+                <button id="close-modal-btn" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-2 flex-grow relative">
+                <div id="iframe-loader-container" class="absolute inset-0 flex items-center justify-center bg-background-light">
+                    <div class="iframe-loader"></div>
+                </div>
+                <iframe id="source-iframe" class="w-full h-full border-0 rounded-b-lg bg-white" sandbox="allow-scripts allow-same-origin"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <footer class="border-t border-gray-800 py-12 px-6 mt-16">
+        <div class="container mx-auto text-center text-gray-500">
+            <p>&copy; 2025 SFOFWatch.org. This is an open-source intelligence project.</p>
+            <p class="mt-2">Content is provided for research and informational purposes under the AGPL-3.0 license.</p>
+            <div class="mt-4">
+                <a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="text-cyan-400 hover:underline">Contribute on GitHub</a>
+            </div>
+
+            <!-- ===== START: NETLIFY FORM ===== -->
+            <div class="max-w-xl mx-auto mt-12 text-left">
+                <h3 class="text-2xl font-lora font-semibold text-center mb-3 text-cyan-400">Contact the Project</h3>
+                <p class="text-gray-400 mb-6 text-center">
+                    Have a tip, correction, or question? All submissions are secure and confidential.
+                </p>
+                <form name="contact" method="POST" data-netlify="true">
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="name">Name (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="text" name="name" id="name" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="email">Email (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="email" name="email" id="email" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="message">Message</label>
+                        <textarea class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" name="message" id="message" rows="4" required></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button class="inline-block bg-cyan-400 text-black font-bold px-8 py-3 rounded-lg hover:bg-cyan-300 transition-colors" type="submit">Send Message</button>
+                    </div>
+                </form>
+            </div>
+            <!-- ===== END: NETLIFY FORM ===== -->
+
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DATA ---
+            const memberStatesData = [
+                { state: "Alabama", officials: `<a href="https://treasury.alabama.gov/about-young-boozer/" class="view-source-btn">Young Boozer</a> (Treasurer), <a href="https://www.alabamaag.gov/about/" class="view-source-btn">Steve Marshall</a> (AG), <a href="https://auditor.alabama.gov/about/andrew-sorrell-biography/" class="view-source-btn">Andrew Sorrell</a> (Auditor)` },
+                { state: "Alaska", officials: `<a href="https://dor.alaska.gov/commissioner" class="view-source-btn">Adam Crum</a> (Former Commissioner of Revenue)` },
+                { state: "Arizona", officials: `<a href="https://www.aztreasurer.gov/" class="view-source-btn">Kimberly Yee</a> (Treasurer)` },
+                { state: "Arkansas", officials: `<a href="https://auditor.ar.gov/" class="view-source-btn">Dennis Milligan</a> (Auditor)` },
+                { state: "Florida", officials: `<a href="https://www.myfloridacfo.com/" class="view-source-btn">Jimmy Patronis</a> (Former CFO), <a href="https://www.flgov.com/" class="view-source-btn">Ron DeSantis</a> (Governor)` },
+                { state: "Georgia", officials: `<a href="https://ost.georgia.gov/" class="view-source-btn">Steve McCoy</a> (Treasurer)` },
+                { state: "Idaho", officials: `<a href="https://sto.idaho.gov/" class="view-source-btn">Julie Ellsworth</a> (Treasurer), Ron Crane (Former Treasurer)` },
+                { state: "Indiana", officials: `<a href="https://www.in.gov/tos/about-the-office/about-the-treasurer/" class="view-source-btn">Daniel Elliott</a> (Treasurer), <a href="https://www.in.gov/attorneygeneral/" class="view-source-btn">Todd Rokita</a> (AG), <a href="https://www.in.gov/comptroller/about-the-comptroller/" class="view-source-btn">Elise Nieshalla</a> (Comptroller)` },
+                { state: "Iowa", officials: `<a href="https://www.iowatreasurer.gov/" class="view-source-btn">Roby Smith</a> (Treasurer), <a href="https://www.iowaattorneygeneral.gov/" class="view-source-btn">Brenna Bird</a> (AG)` },
+                { state: "Kansas", officials: `<a href="https://kansascash.ks.gov/" class="view-source-btn">Steven Johnson</a> (Treasurer), <a href="https://sfof.com/our-team/derek-kreifels/" class="view-source-btn">Derek Kreifels</a> (SFOF CEO, former KPERS Trustee)` },
+                { state: "Kentucky", officials: `<a href="https://treasury.ky.gov/" class="view-source-btn">Mark Metcalf</a> (Treasurer), <a href="https://www.auditor.ky.gov/About/Pages/default.aspx" class="view-source-btn">Allison Ball</a> (Former Treasurer)` },
+                { state: "Louisiana", officials: `<a href="https://www.treasury.la.gov/about" class="view-source-btn">John Fleming</a> (Treasurer), <a href="https://en.wikipedia.org/wiki/John_Schroder" class="view-source-btn">John Schroder</a> (Former Treasurer)` },
+                { state: "Mississippi", officials: `<a href="https://treasury.ms.gov/" class="view-source-btn">David McRae</a> (Treasurer), <a href="https://www.osa.ms.gov/" class="view-source-btn">Shad White</a> (Auditor), <a href="https://www.ago.state.ms.us/" class="view-source-btn">Lynn Fitch</a> (AG)` },
+                { state: "Missouri", officials: `<a href="https://treasurer.mo.gov/" class="view-source-btn">Vivek Malek</a> (Treasurer), <a href="https://auditor.mo.gov/" class="view-source-btn">Scott Fitzpatrick</a> (Former Treasurer)` },
+                { state: "Montana", officials: `<a href="https://csimt.gov/" class="view-source-btn">James Brown</a> (Auditor)` },
+                { state: "Nebraska", officials: `<a href="https://treasurer.nebraska.gov/" class="view-source-btn">Tom Briese</a> (Treasurer), <a href="https://npers.ne.gov/" class="view-source-btn">John Murante</a> (Former Treasurer)` },
+                { state: "Nevada", officials: `<a href="https://andyfornevada.com/about-andy/" class="view-source-btn">Andy Matthews</a> (Controller)` },
+                { state: "North Carolina", officials: `<a href="https://www.nctreasurer.com/about/history-north-carolina-treasurers" class="view-source-btn">Dale Folwell</a> (Former Treasurer)` },
+                { state: "North Dakota", officials: `<a href="https://www.nd.gov/treasurer/" class="view-source-btn">Thomas Beadle</a> (Treasurer)` },
+                { state: "Ohio", officials: `<a href="https://www.tos.ohio.gov/" class="view-source-btn">Robert Sprague</a> (Treasurer)` },
+                { state: "Oklahoma", officials: `<a href="https://www.ok.gov/treasurer/" class="view-source-btn">Todd Russ</a> (Treasurer)` },
+                { state: "Pennsylvania", officials: `<a href="https://www.patreasury.gov/" class="view-source-btn">Stacy Garrity</a> (Treasurer)` },
+                { state: "South Carolina", officials: `<a href="https://treasurer.sc.gov/about-us/meet-the-treasurer/" class="view-source-btn">Curtis Loftis</a> (Treasurer)` },
+                { state: "South Dakota", officials: `<a href="https://sdtreasurer.gov/" class="view-source-btn">Josh Haeder</a> (Treasurer)` },
+                { state: "Texas", officials: `<a href="https://web.archive.org/web/20240101235431/https://comptroller.texas.gov/about/" class="view-source-btn">Glenn Hegar</a> (Comptroller)` },
+                { state: "Utah", officials: `<a href="https://treasurer.utah.gov/" class="view-source-btn">Marlo Oaks</a> (Treasurer)` },
+                { state: "West Virginia", officials: `<a href="https://rileymoore.house.gov/about" class="view-source-btn">Riley Moore</a> (Former Treasurer)` },
+                { state: "Wisconsin", officials: `<a href="https://statetreasurer.wi.gov/Pages/About/Treasurer.aspx" class="view-source-btn">John Leiber</a> (Treasurer)` },
+                { state: "Wyoming", officials: `<a href="https://statetreasurer.wyo.gov/" class="view-source-btn">Curt Meier</a> (Treasurer)` }
+            ];
+
+            const legislationData = [
+                { state: "Alabama", bill: "SB 261 (2023)", url: "https://alison.legislature.state.al.us/files/pdf/SearchableInstruments/2023RS/SB261-enr.pdf" },
+                { state: "Arkansas", bill: "Act 498 (2023)", url: "https://arkleg.state.ar.us/Acts/FTPDocument?path=%2FACTS%2F2023R%2FPublic%2F&file=498.pdf&ddBienniumSession=2023%2F2023R" },
+                { state: "Florida", bill: "HB 3 (2023)", url: "https://www.flsenate.gov/Session/Bill/2023/3/BillText/er/PDF" },
+                { state: "Georgia", bill: "HB 481 (2024)", url: "https://www.legis.ga.gov/api/legislation/document/20232024/223187" },
+                { state: "Idaho", bill: "SB 1405 (2022), HB 191 (2023)", url: "https://legislature.idaho.gov/sessioninfo/2022/legislation/s1405/" },
+                { state: "Indiana", bill: "HB 1008 (2023)", url: "https://legiscan.com/IN/text/HB1008/id/2789932/Indiana-2023-HB1008-Enrolled.pdf" },
+                { state: "Kansas", bill: "HB 2100 (2023)", url: "https://www.kslegislature.gov/li_2024/b2023_24/measures/documents/hb2100_enrolled.pdf" },
+                { state: "Kentucky", bill: "HB 236 (2023)", url: "https://apps.legislature.ky.gov/law/acts/23RS/documents/0094.pdf" },
+                { state: "Louisiana", bill: "SB 234 (2024)", url: "https://www.legis.la.gov/Legis/ViewDocument.aspx?d=1379044" },
+                { state: "Missouri", bill: "RSMo 105.688 (2025 Amnd.)", url: "https://revisor.mo.gov/main/OneSection.aspx?section=105.688" },
+                { state: "Montana", bill: "HB 228 (2023)", url: "https://legiscan.com/MT/text/HB228/id/2762632" },
+                { state: "North Carolina", bill: "HB 750 (2023)", url: "https://www.ncleg.gov/Sessions/2023/Bills/House/PDF/H750v4.pdf" },
+                { state: "North Dakota", bill: "SB 2291 (2021), HB 1429 (2023)", url: "https://ndlegis.gov/assembly/67-2021/documents/21-0717-04000.pdf" },
+                { state: "Ohio", bill: "SB 6 (2025)", url: "https://search-prod.lis.state.oh.us/solarapi/v1/general_assembly_135/bills/sb6/EN/05?format=pdf" },
+                { state: "Oklahoma", bill: "HB 2034 (2022)", url: "http://webserver1.lsb.state.ok.us/cf_pdf/2021-22%20ENR/hB/HB2034%20ENR.PDF" },
+                { state: "South Carolina", bill: "HB 3690 (2024)", url: "https://www.scstatehouse.gov/sess125_2023-2024/bills/3690.htm" },
+                { state: "Texas", bill: "SB 13 (2021), SB 19 (2021)", url: "https://capitol.texas.gov/tlodocs/87R/billtext/html/SB00013F.HTM" },
+                { state: "Utah", bill: "SB 96 (2023)", url: "https://le.utah.gov/~2023/bills/static/SB0096.html" },
+                { state: "West Virginia", bill: "SB 262 (2022), HB 2862 (2023)", url: "https://www.wvlegislature.gov/bill_status/bills_text.cfm?billdoc=SB262%20SUB2%20ENR.htm&yr=2022&sesstype=RS&i=262" }
+            ];
+
+            // --- TABLE POPULATION ---
+            const memberStatesTbody = document.querySelector('#member-states-table tbody');
+            memberStatesData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td class="p-4 align-middle">${item.state}</td>
+                                 <td class="p-4 align-middle">${item.officials}</td>`;
+                memberStatesTbody.appendChild(row);
+            });
+
+            const legislationTbody = document.querySelector('#legislation-table tbody');
+            legislationData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td class="p-4 align-middle">${item.state}</td>
+                                 <td class="p-4 align-middle">${item.bill}</td>
+                                 <td class="p-4 align-middle text-center">
+                                     <a href="${item.url}" class="view-source-btn view-source-btn-styled">View Source</a>
+                                 </td>`;
+                legislationTbody.appendChild(row);
+            });
+
+            // --- MODAL LOGIC ---
+            const modal = document.getElementById('source-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const sourceIframe = document.getElementById('source-iframe');
+            const loaderContainer = document.getElementById('iframe-loader-container');
+            const mainContent = document.querySelector('main');
+
+            function showModal(url) {
+                modalTitle.textContent = 'Loading Source...';
+                sourceIframe.style.visibility = 'hidden';
+                loaderContainer.style.display = 'flex';
+                modal.classList.add('is-visible');
+                mainContent.style.filter = 'blur(4px)';
+                
+                const proxyUrl = `/proxy?url=${encodeURIComponent(url)}`;
+                sourceIframe.src = proxyUrl;
+
+                sourceIframe.onload = () => {
+                    modalTitle.textContent = `Source: ${url}`;
+                    loaderContainer.style.display = 'none';
+                    sourceIframe.style.visibility = 'visible';
+                };
+                
+                sourceIframe.onerror = () => {
+                    console.error("Iframe failed to load via proxy.");
+                    hideModal();
+                    const errorMsg = document.createElement('div');
+                    errorMsg.textContent = 'Could not load the source content.';
+                    errorMsg.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #ef4444; color: white; padding: 10px 20px; border-radius: 5px; z-index: 9999;';
+                    document.body.appendChild(errorMsg);
+                    setTimeout(() => errorMsg.remove(), 3000);
+                };
+            }
+
+            function hideModal() {
+                modal.classList.remove('is-visible');
+                mainContent.style.filter = 'none';
+                sourceIframe.src = 'about:blank';
+            }
+            
+            // Use event delegation for dynamically created links
+            document.body.addEventListener('click', function(e) {
+                if (e.target.classList.contains('view-source-btn')) {
+                    e.preventDefault();
+                    const url = e.target.href;
+                    showModal(url);
+                }
+            });
+
+            closeModalBtn.addEventListener('click', hideModal);
+            modalOverlay.addEventListener('click', hideModal);
+            document.addEventListener('keydown', (e) => {
+                if (e.key === "Escape") {
+                    hideModal();
+                }
+            });
+
+            // --- SCROLL REVEAL LOGIC ---
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            revealElements.forEach(el => {
+                revealObserver.observe(el);
+            });
+        });
+    </script>
+
+</body>
+</html>

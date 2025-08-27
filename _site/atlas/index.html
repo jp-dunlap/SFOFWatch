@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFOF Watch | The Atlas of Influence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+    <style>
+        :root {
+            --background-dark: #0a0a0a;
+            --background-light: #111827;
+            --primary-cyan: #22d3ee;
+            --text-primary: #EAEAEA;
+            --text-secondary: #9ca3af;
+            --border-color: #374151;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1, h2, h3, .font-lora {
+            font-family: 'Lora', serif;
+        }
+        
+        main {
+            /* Performance optimization for blur effect */
+            will-change: transform;
+        }
+        
+        .hero-bg {
+            background-color: var(--background-dark);
+            background-image: 
+                radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
+                radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #map-container { 
+            width: 100%; 
+            max-width: 1000px; 
+            margin: auto; 
+            background-color: #111827;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+        .state { 
+            stroke: #0a0a0a; 
+            stroke-width: 1px; 
+            transition: fill 0.2s ease-in-out, filter 0.2s ease-in-out; 
+        }
+        .state.member { 
+            fill: var(--primary-cyan); 
+            cursor: pointer; 
+        }
+        .state.non-member { 
+            fill: #374151; 
+        }
+        .state.member:hover { 
+            fill: #FFFFFF; 
+            filter: drop-shadow(0 0 6px var(--primary-cyan));
+        }
+        
+        #tooltip { 
+            position: absolute; 
+            text-align: center; 
+            padding: 8px 12px; 
+            font-size: 0.875rem; 
+            background: #1f2937; 
+            border: 1px solid #4b5563; 
+            border-radius: 8px; 
+            pointer-events: none; 
+            opacity: 0; 
+            transition: opacity 0.2s; 
+            color: #EAEAEA; 
+        }
+
+        /* MODAL STYLES */
+        #report-modal { transition: opacity 0.3s ease-out; }
+        #report-modal.is-visible { opacity: 1; pointer-events: auto; }
+        #report-modal.is-visible .modal-transform { transform: scale(1); }
+        .modal-transform { 
+            transition: transform 0.3s ease-out; 
+            transform: scale(0.95); 
+            /* Performance optimization */
+            will-change: transform;
+        }
+        .modal-content-area { max-height: 70vh; overflow-y: auto; }
+        .modal-content-area::-webkit-scrollbar { width: 8px; }
+        .modal-content-area::-webkit-scrollbar-track { background: #1f2937; }
+        .modal-content-area::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        .modal-content-area::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+
+        /* DYNAMIC CONTENT STYLES (for fetched reports) */
+        #modal-content h3 {
+            font-family: 'Lora', serif;
+            font-size: 1.5rem;
+            line-height: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--primary-cyan);
+        }
+        #modal-content h4 {
+            font-family: 'Lora', serif;
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+            color: var(--primary-cyan);
+            margin-bottom: 0.5rem;
+        }
+        #modal-content p {
+            margin-bottom: 1rem;
+        }
+        #modal-content strong {
+            color: white;
+        }
+        #modal-content blockquote {
+            border-left: 4px solid var(--primary-cyan);
+            padding-left: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+        #modal-content cite {
+            display: block;
+            margin-top: 0.5rem;
+            font-style: normal;
+            font-size: 0.875rem;
+        }
+        #modal-content table {
+            width: 100%;
+            min-width: 600px;
+            margin-top: 1rem;
+            border-collapse: collapse;
+        }
+        #modal-content th, #modal-content td {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        #modal-content th {
+            background-color: rgba(34, 211, 238, 0.1);
+            color: var(--primary-cyan);
+            font-weight: 600;
+        }
+        #modal-content ul {
+            list-style-position: inside;
+            list-style-type: disc;
+            margin-bottom: 1rem;
+            padding-left: 0.5rem;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="foundation.html" class="hover:text-cyan-400 transition-colors">The Foundation</a>
+                <a href="network.html" class="hover:text-cyan-400 transition-colors">The Network</a>
+                <a href="playbook.html" class="hover:text-cyan-400 transition-colors">The Playbook</a>
+                <a href="atlas.html" class="text-cyan-400 font-bold">The Atlas</a>
+                <a href="data.html" class="hover:text-cyan-400 transition-colors">Data & Methodology</a>
+                <!-- Search Form -->
+                <form action="search.html" method="get" class="relative">
+                    <input type="search" name="q" placeholder="Search..." class="bg-gray-800 border border-gray-700 rounded-full py-1 px-4 text-sm text-white focus:outline-none focus:border-cyan-400" />
+                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </button>
+                </form>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="text-center px-6 pt-32 pb-24 hero-bg">
+            <div class="max-w-4xl mx-auto relative z-10">
+                <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Atlas of Influence</h1>
+                <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+                    An interactive map of the State Financial Officers Foundation's operational footprint. Click a highlighted state to view its intelligence dossier.
+                </p>
+            </div>
+        </section>
+
+        <section class="container mx-auto px-6 py-16">
+            <div id="map-container"></div>
+            <div class="flex justify-center items-center space-x-6 mt-8">
+                <div class="flex items-center space-x-2"><div class="w-5 h-5 rounded-full bg-cyan-400"></div><span class="text-gray-300">SFOF Member State</span></div>
+                <div class="flex items-center space-x-2"><div class="w-5 h-5 rounded-full bg-gray-700"></div><span class="text-gray-300">Non-Member State</span></div>
+            </div>
+        </section>
+    </main>
+    
+    <div id="tooltip"></div>
+
+    <div id="report-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none">
+        <div id="modal-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="relative bg-background-light border border-border-color rounded-lg shadow-2xl w-full max-w-4xl modal-transform">
+            <div class="px-6 py-4 border-b border-border-color flex justify-between items-center">
+                <h2 id="modal-title" class="text-2xl font-lora text-white"></h2>
+                <button id="close-modal-btn" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="modal-content" class="p-6 md:p-8 modal-content-area text-gray-300">
+                </div>
+        </div>
+    </div>
+
+    <footer class="border-t border-gray-800 py-12 px-6 mt-16">
+        <div class="container mx-auto text-center text-gray-500">
+            <p>&copy; 2025 SFOFWatch.org. This is an open-source intelligence project.</p>
+            <p class="mt-2">Content is provided for research and informational purposes under the AGPL-3.0 license.</p>
+            <div class="mt-4"><a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="text-cyan-400 hover:underline">Contribute on GitHub</a></div>
+
+            <!-- ===== START: NETLIFY FORM ===== -->
+            <div class="max-w-xl mx-auto mt-12 text-left">
+                <h3 class="text-2xl font-lora font-semibold text-center mb-3 text-cyan-400">Contact the Project</h3>
+                <p class="text-gray-400 mb-6 text-center">
+                    Have a tip, correction, or question? All submissions are secure and confidential.
+                </p>
+                <form name="contact" method="POST" data-netlify="true">
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="name">Name (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="text" name="name" id="name" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="email">Email (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="email" name="email" id="email" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="message">Message</label>
+                        <textarea class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" name="message" id="message" rows="4" required></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button class="inline-block bg-cyan-400 text-black font-bold px-8 py-3 rounded-lg hover:bg-cyan-300 transition-colors" type="submit">Send Message</button>
+                    </div>
+                </form>
+            </div>
+            <!-- ===== END: NETLIFY FORM ===== -->
+
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sfofMemberStates = [
+                "Alabama", "Alaska", "Arizona", "Arkansas", "Florida", "Georgia", "Idaho", "Indiana", "Iowa", "Kansas",
+                "Kentucky", "Louisiana", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "North Carolina",
+                "North Dakota", "Ohio", "Oklahoma", "Pennsylvania", "South Carolina", "South Dakota", "Texas", "Utah",
+                "Wisconsin", "Wyoming", "West Virginia" 
+            ];
+
+            const container = document.getElementById('map-container');
+            const svg = d3.select("#map-container").append("svg").attr("viewBox", `0 0 975 610`).attr("width", "100%").attr("height", "auto");
+            const projection = d3.geoAlbersUsa().scale(1300).translate([487.5, 305]);
+            const path = d3.geoPath().projection(projection);
+            const tooltip = d3.select("#tooltip");
+
+            const modal = document.getElementById('report-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalContent = document.getElementById('modal-content');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const mainContent = document.querySelector('main');
+
+            function showModal(stateName) {
+                const reportPath = `reports/${stateName.toLowerCase().replace(/\s+/g, '-')}.html`;
+
+                fetch(reportPath)
+                    .then(response => {
+                        if (!response.ok) { throw new Error('Report not found'); }
+                        return response.text();
+                    })
+                    .then(html => {
+                        modalTitle.textContent = `State Dossier: ${stateName}`;
+                        modalContent.innerHTML = html;
+                        modal.classList.add('is-visible');
+                        mainContent.style.filter = 'blur(4px)'; // Apply blur to main content
+                    })
+                    .catch(error => {
+                        console.error("Error fetching report:", error);
+                        modalTitle.textContent = `State Dossier: ${stateName}`;
+                        modalContent.innerHTML = `<p class="text-gray-400">No detailed report is available for this state at this time. It has been identified as a member state, but the full dossier has not yet been compiled.</p>`;
+                        modal.classList.add('is-visible');
+                        mainContent.style.filter = 'blur(4px)'; // Apply blur to main content
+                    });
+            }
+
+            function hideModal() {
+                modal.classList.remove('is-visible');
+                mainContent.style.filter = 'none'; // Remove blur from main content
+            }
+
+            closeModalBtn.addEventListener('click', hideModal);
+            modalOverlay.addEventListener('click', hideModal);
+            
+            document.addEventListener('keydown', (event) => {
+                if (event.key === "Escape") {
+                    hideModal();
+                }
+            });
+
+            d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json").then(us => {
+                const states = topojson.feature(us, us.objects.states);
+                svg.append("g")
+                    .selectAll("path")
+                    .data(states.features)
+                    .enter().append("path")
+                    .attr("d", path)
+                    .attr("class", d => `state ${sfofMemberStates.includes(d.properties.name) ? 'member' : 'non-member'}`)
+                    .on("mouseover", (event, d) => {
+                        tooltip.transition().duration(200).style("opacity", .9);
+                        tooltip.html(d.properties.name).style("left", `${event.pageX + 15}px`).style("top", `${event.pageY - 28}px`);
+                    })
+                    .on("mouseout", () => tooltip.transition().duration(500).style("opacity", 0))
+                    .on("mousemove", (event) => tooltip.style("left", `${event.pageX + 15}px`).style("top", `${event.pageY - 28}px`))
+                    .on("click", (event, d) => {
+                        if (sfofMemberStates.includes(d.properties.name)) {
+                            showModal(d.properties.name);
+                        }
+                    });
+            }).catch(error => {
+                console.error("Error loading map data:", error);
+                container.innerHTML = `<p class="text-center text-red-400">Could not load map data.</p>`;
+            });
+        });
+    </script>
+</body>
+</html>

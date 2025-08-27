@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFOF Watch | Uncovering State Capture</title>
+    
+    <!-- Open Graph Meta Tags for Social Sharing -->
+    <meta property="og:title" content="SFOFWatch | Uncovering State Capture" />
+    <meta property="og:description" content="An open-source dossier mapping the State Financial Officers Foundation (SFOF). Track their funders, legislative influence, and network operations." />
+    <meta property="og:image" content="https://sfofwatch.org/ce368b5f-0df8-44aa-9f0c-4495a46fa783.png" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
+    <meta property="og:url" content="https://sfofwatch.org" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="fb:app_id" content="1821608298788821" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Netlify Identity Widget Script -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+    <style>
+        :root {
+            --background-dark: #0a0a0a;
+            --background-light: #111827;
+            --primary-cyan: #22d3ee;
+            --text-primary: #EAEAEA;
+            --text-secondary: #9ca3af;
+            --border-color: #374151;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, .font-lora { font-family: 'Lora', serif; }
+        .hero-bg {
+            background-color: var(--background-dark);
+            background-image: 
+                radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
+                radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"><path fill="%23111827" fill-opacity="0.1" d="M0 0h40v40H0zM40 40h40v40H40z"></path></svg>');
+            z-index: 0;
+        }
+        .cta-button {
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+        }
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 25px rgba(34, 211, 238, 0.5);
+        }
+        .info-card {
+            background-color: var(--background-light);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .info-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-cyan);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.1);
+        }
+        .info-card .card-icon { transition: transform 0.3s ease; }
+        .info-card:hover .card-icon { transform: scale(1.1); }
+        .reveal {
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .stat-card {
+             background-color: rgba(17, 24, 39, 0.5);
+             border: 1px solid var(--border-color);
+             backdrop-filter: blur(10px);
+        }
+        .share-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+        }
+        .share-button:hover {
+            border-color: var(--primary-cyan);
+            color: var(--primary-cyan);
+            transform: translateY(-2px);
+        }
+        .share-button svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="foundation.html" class="hover:text-cyan-400 transition-colors">The Foundation</a>
+                <a href="network.html" class="hover:text-cyan-400 transition-colors">The Network</a>
+                <a href="playbook.html" class="hover:text-cyan-400 transition-colors">The Playbook</a>
+                <a href="atlas.html" class="hover:text-cyan-400 transition-colors">The Atlas</a>
+                <a href="data.html" class="hover:text-cyan-400 transition-colors">Data & Methodology</a>
+                <!-- Search Form -->
+                <form action="search.html" method="get" class="relative">
+                    <input type="search" name="q" placeholder="Search..." class="bg-gray-800 border border-gray-700 rounded-full py-1 px-4 text-sm text-white focus:outline-none focus:border-cyan-400" />
+                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </button>
+                </form>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="min-h-screen flex items-center justify-center text-center px-6 pt-24 hero-bg">
+            <div class="max-w-4xl mx-auto relative z-10">
+                <h1 class="text-5xl md:text-7xl font-bold font-lora leading-tight mb-4 animate-fade-in-down">Uncovering State Capture</h1>
+                <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-8 animate-fade-in-up">
+                    An open-source dossier mapping the State Financial Officers Foundation (SFOF). We track their funders, legislative influence, and network operations to expose state capture campaigns.
+                </p>
+                <a href="atlas.html" class="cta-button inline-block bg-cyan-400 text-black font-bold text-lg px-10 py-4 rounded-lg">
+                    Explore the Influence Atlas
+                </a>
+                <div class="mt-12">
+                    <p class="text-sm text-gray-500 mb-4">Share this research</p>
+                    <div class="flex justify-center items-center space-x-4">
+                        <a href="#" id="share-facebook" class="share-button">
+                            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" /></svg>
+                            Facebook
+                        </a>
+                        <a href="#" id="share-twitter" class="share-button">
+                            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616v.064c0 2.295 1.613 4.212 3.753 4.649-.65.177-1.354.23-2.064.193.606 1.956 2.356 3.379 4.444 3.42-1.717 1.34-3.863 2.068-6.19 1.954-2.24-.13-4.339-.77-6.096-1.89 2.186 1.398 4.793 2.218 7.568 2.218 9.054 0 14.01-7.502 14.01-14.01v-.633c.96-.69 1.798-1.56 2.457-2.54z" /></svg>
+                            X / Twitter
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Findings Section -->
+        <section class="py-24 bg-background-dark">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl font-lora font-semibold mb-4 reveal">Key Findings at a Glance</h2>
+                <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-4 reveal" style="transition-delay: 100ms;">A data-driven overview of the SFOF network's scale and impact.</p>
+                <p class="text-sm text-gray-500 mb-12 reveal" style="transition-delay: 150ms;"><em>Data current as of <span id="current-date"></span></em></p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Stat Card 1 -->
+                    <div class="stat-card p-8 rounded-lg reveal" style="transition-delay: 200ms;">
+                        <div class="text-cyan-400 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-4xl font-bold mb-2" data-target="2200000" data-prefix="$" data-suffix="+">0</h3>
+                        <p class="text-gray-400">In Known Foundation Grants (2021-2023)</p>
+                    </div>
+                    <!-- Stat Card 2 -->
+                    <div class="stat-card p-8 rounded-lg reveal" style="transition-delay: 300ms;">
+                        <div class="text-cyan-400 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                        </div>
+                        <h3 class="text-4xl font-bold mb-2" data-target="29">0</h3>
+                        <p class="text-gray-400">Member States in the SFOF Network</p>
+                    </div>
+                    <!-- Stat Card 3 -->
+                    <div class="stat-card p-8 rounded-lg reveal" style="transition-delay: 400ms;">
+                        <div class="text-cyan-400 mb-4">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                            </svg>
+                        </div>
+                        <h3 class="text-4xl font-bold mb-2" data-target="18" data-suffix="+">0</h3>
+                        <p class="text-gray-400">States with SFOF-backed Anti-ESG Laws</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Cards Section -->
+        <section class="container mx-auto px-6 py-24 md:py-32">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1: The Foundation -->
+                <div class="info-card p-8 flex flex-col text-center reveal">
+                    <div class="card-icon text-cyan-400 mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01M12 6v-1m0-1H8.5m0 0v.01M12 4.5V3m4.5 1.5V6m0-1.5h-1.5m-3 0h3m-3 0V3m0 0h-1.5m3 0h1.5m-1.5 0V3m0 0h1.5m-1.5 0V3" />
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M4.872 14.81C4.305 15.253 4 15.865 4 16.519c0 1.218.991 2.209 2.209 2.209h11.582A2.209 2.209 0 0020 16.519c0-.654-.305-1.266-.872-1.71m-14.256 0A2.209 2.209 0 017.291 12.5h9.418a2.209 2.209 0 012.118 2.31" />
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">The Foundation</h2>
+                    <p class="text-gray-400 flex-grow">
+                        Explore SFOF's dual-entity structure and its evolution from a niche group into a national anti-ESG powerhouse.
+                    </p>
+                    <a href="foundation.html" class="mt-6 inline-block text-cyan-400 font-semibold hover:underline">Learn More &rarr;</a>
+                </div>
+                <!-- Card 2: The Network -->
+                <div class="info-card p-8 flex flex-col text-center reveal" style="transition-delay: 150ms;">
+                    <div class="card-icon text-cyan-400 mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">The Network</h2>
+                    <p class="text-gray-400 flex-grow">
+                        Investigate the web of influence surrounding SFOF, including key partnerships with The Heritage Foundation, ALEC, and state Attorneys General.
+                    </p>
+                    <a href="network.html" class="mt-6 inline-block text-cyan-400 font-semibold hover:underline">Learn More &rarr;</a>
+                </div>
+                <!-- Card 3: The Playbook -->
+                <div class="info-card p-8 flex flex-col text-center reveal" style="transition-delay: 300ms;">
+                    <div class="card-icon text-cyan-400 mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-lora font-semibold mb-3 text-cyan-400">The Playbook</h2>
+                    <p class="text-gray-400 flex-grow">
+                        Deconstruct the specific tactics SFOF employs, from public pressure to legislative capture and the creation of the "fiduciary trap."
+                    </p>
+                    <a href="playbook.html" class="mt-6 inline-block text-cyan-400 font-semibold hover:underline">Learn More &rarr;</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="border-t border-gray-800 py-12 px-6">
+        <div class="container mx-auto text-center text-gray-500">
+            <p>&copy; 2025 SFOFWatch.org. This is an open-source intelligence project.</p>
+            <p class="mt-2">Content is provided for research and informational purposes under the AGPL-3.0 license.</p>
+            <div class="mt-4">
+                <a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="text-cyan-400 hover:underline">Contribute on GitHub</a>
+            </div>
+
+            <!-- ===== START: NETLIFY FORM ===== -->
+            <div class="max-w-xl mx-auto mt-12 text-left">
+                <h3 class="text-2xl font-lora font-semibold text-center mb-3 text-cyan-400">Contact the Project</h3>
+                <p class="text-gray-400 mb-6 text-center">
+                    Have a tip, correction, or question? All submissions are secure and confidential.
+                </p>
+                <form name="contact" method="POST" data-netlify="true">
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="name">Name (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="text" name="name" id="name" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="email">Email (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="email" name="email" id="email" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="message">Message</label>
+                        <textarea class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" name="message" id="message" rows="4" required></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button class="inline-block bg-cyan-400 text-black font-bold px-8 py-3 rounded-lg hover:bg-cyan-300 transition-colors" type="submit">Send Message</button>
+                    </div>
+                </form>
+            </div>
+            <!-- ===== END: NETLIFY FORM ===== -->
+
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Scroll Reveal Animation
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            revealElements.forEach(el => {
+                revealObserver.observe(el);
+            });
+
+            // Animated Number Counter
+            const counters = document.querySelectorAll('[data-target]');
+            const speed = 200; 
+
+            const startCounter = (counter) => {
+                const target = +counter.getAttribute('data-target');
+                const prefix = counter.getAttribute('data-prefix') || '';
+                const suffix = counter.getAttribute('data-suffix') || '';
+                
+                const updateCount = () => {
+                    const count = +counter.innerText.replace(/[\$,+]/g, '');
+                    const increment = target / speed;
+
+                    if (count < target) {
+                        const newCount = Math.ceil(count + increment);
+                        counter.innerText = prefix + newCount.toLocaleString() + suffix;
+                        setTimeout(updateCount, 10);
+                    } else {
+                        counter.innerText = prefix + target.toLocaleString() + suffix;
+                    }
+                };
+                updateCount();
+            };
+            
+            const counterObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        startCounter(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            counters.forEach(counter => {
+                counterObserver.observe(counter);
+            });
+            
+            // Share Button Logic
+            const pageUrl = 'https://sfofwatch.org';
+            const shareText = "Uncovering State Capture: An open-source dossier mapping the State Financial Officers Foundation (SFOF). Track their funders, legislative influence, and network operations.";
+
+            const facebookBtn = document.getElementById('share-facebook');
+            const twitterBtn = document.getElementById('share-twitter');
+
+            facebookBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`;
+                window.open(url, '_blank', 'width=600,height=400');
+            });
+
+            twitterBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const url = `https://twitter.com/intent/tweet?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(shareText)}`;
+                window.open(url, '_blank', 'width=600,height=400');
+            });
+
+            // Automated Date Update
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) {
+                const today = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                dateElement.textContent = today.toLocaleDateString('en-US', options);
+            }
+        });
+    </script>
+</body>
+</html>
