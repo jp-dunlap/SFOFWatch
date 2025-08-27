@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The SFOF-Kansas Nexus: An Architecture of Influence
 
 The relationship between the national SFOF organization and key political figures in Kansas is uniquely intertwined, as SFOF was co-founded in Kansas by a state official and maintains its headquarters there. This positions the state not merely as a member but as the operational and ideological home base for the anti-ESG movement. The state serves as both the origin point and a key implementation ground for the national agenda, which is then showcased as a "model" for other states to follow.
