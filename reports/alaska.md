@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 Alaska represents a primary target for the SFOF network due to its deep fossil fuel dependency and its control of the Alaska Permanent Fund, one of the world's largest sovereign wealth funds. The anti-ESG campaign in Alaska is characterized by a dynamic of "incomplete capture": while the SFOF network has achieved significant, high-level penetration within the state's executive branch, its campaign to codify its ideology into law has been consistently thwarted by the state legislature.
