@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 As a major industrial state with deep ties to the fossil fuel and manufacturing sectors, Ohio represents a crucial battleground for the anti-ESG movement. The state's Republican-controlled government created a fertile environment for the SFOF agenda to flourish. The campaign in Ohio was the direct outcome of a coordinated alignment between the state's most powerful financial and legal officers and the national SFOF network. This "whole-of-government" approach culminated in the successful legislative redefinition of fiduciary duty itself, creating a profound conflict between partisan ideology and the duties owed to the beneficiaries of the state's public pension funds.
