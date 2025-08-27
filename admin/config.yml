@@ -11,206 +11,177 @@ collections:
   - name: "reports"
     label: "State Reports"
     files:
-      - file: "reports/alabama.html"
+      - file: "reports/alabama.md"
         label: "Alabama Report"
         name: "alabama"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/alaska.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/alaska.md"
         label: "Alaska Report"
         name: "alaska"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/arizona.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/arizona.md"
         label: "Arizona Report"
         name: "arizona"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/arkansas.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/arkansas.md"
         label: "Arkansas Report"
         name: "arkansas"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/florida.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/florida.md"
         label: "Florida Report"
         name: "florida"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/georgia.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/georgia.md"
         label: "Georgia Report"
         name: "georgia"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/idaho.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/idaho.md"
         label: "Idaho Report"
         name: "idaho"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/indiana.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/indiana.md"
         label: "Indiana Report"
         name: "indiana"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/iowa.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/iowa.md"
         label: "Iowa Report"
         name: "iowa"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/kansas.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/kansas.md"
         label: "Kansas Report"
         name: "kansas"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/kentucky.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/kentucky.md"
         label: "Kentucky Report"
         name: "kentucky"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/louisiana.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/louisiana.md"
         label: "Louisiana Report"
         name: "louisiana"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/mississippi.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/mississippi.md"
         label: "Mississippi Report"
         name: "mississippi"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/missouri.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/missouri.md"
         label: "Missouri Report"
         name: "missouri"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/montana.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/montana.md"
         label: "Montana Report"
         name: "montana"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/nebraska.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/nebraska.md"
         label: "Nebraska Report"
         name: "nebraska"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/nevada.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/nevada.md"
         label: "Nevada Report"
         name: "nevada"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/north-carolina.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/north-carolina.md"
         label: "North Carolina Report"
         name: "north-carolina"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/north-dakota.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/north-dakota.md"
         label: "North Dakota Report"
         name: "north-dakota"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/ohio.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/ohio.md"
         label: "Ohio Report"
         name: "ohio"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/oklahoma.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/oklahoma.md"
         label: "Oklahoma Report"
         name: "oklahoma"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/pennsylvania.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/pennsylvania.md"
         label: "Pennsylvania Report"
         name: "pennsylvania"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/south-carolina.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/south-carolina.md"
         label: "South Carolina Report"
         name: "south-carolina"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/south-dakota.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/south-dakota.md"
         label: "South Dakota Report"
         name: "south-dakota"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/texas.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/texas.md"
         label: "Texas Report"
         name: "texas"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/utah.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/utah.md"
         label: "Utah Report"
         name: "utah"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/west-virginia.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/west-virginia.md"
         label: "West Virginia Report"
         name: "west-virginia"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/wisconsin.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/wisconsin.md"
         label: "Wisconsin Report"
         name: "wisconsin"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
-      - file: "reports/wyoming.html"
+          - {label: "Report Content", name: "body", widget: "markdown"}
+      - file: "reports/wyoming.md"
         label: "Wyoming Report"
         name: "wyoming"
         format: "frontmatter"
-        frontmatter_delimiter: "---"
         fields:
-          - {label: "Report Content", name: "body", widget: "html"}
+          - {label: "Report Content", name: "body", widget: "markdown"}
