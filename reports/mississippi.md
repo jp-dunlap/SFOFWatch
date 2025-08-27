@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architecture of Influence
 
 Mississippi serves as a crucial and complex case study in the SFOF network's national campaign. The state is not merely a follower of the anti-ESG trend but a central leadership hub, given the deep integration of its top executive officers within the SFOF network's leadership structure. This has facilitated a coordinated "whole-of-government" approach to implement a national agenda, creating a profound conflict between the political objectives of state officials and the established fiduciary duties governing the Public Employees' Retirement System of Mississippi (PERS).
