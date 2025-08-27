@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The Architect and the Network
 
 The campaign to direct Arkansas's public funds toward politically favored investments was not the product of independent financial judgment but the calculated culmination of a multi-pronged political influence campaign. This campaign was led by SFOF-aligned state officials and amplified by the national political network of the State Financial Officers Foundation (SFOF).
