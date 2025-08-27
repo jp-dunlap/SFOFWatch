@@ -1,3 +1,6 @@
+---
+layout: report.njk
+---
 ### I. The SFOF-Alabama Relationship
 
 The anti-ESG campaign in Alabama is a direct extension of a coordinated national strategy, built upon operational links between the national SFOF network and key state officials. Alabama's financial and legal leadership constitutes an active and influential outpost for the SFOF's national strategy, forming a "whole-of-government" front to capture the state's financial and legal oversight apparatus.
