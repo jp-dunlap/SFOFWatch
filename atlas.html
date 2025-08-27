@@ -62,21 +62,15 @@
             stroke-width: 1px; 
             transition: fill 0.2s ease-in-out, filter 0.2s ease-in-out; 
         }
-        .state.member { 
-            fill: var(--primary-cyan); 
-            cursor: pointer; 
-        }
-        .state.non-member { 
-            fill: #374151; 
-        }
-        .state.member:hover { 
+        .state.has-report:hover { 
             fill: #FFFFFF; 
             filter: drop-shadow(0 0 6px var(--primary-cyan));
+            cursor: pointer;
         }
         
         #tooltip { 
             position: absolute; 
-            text-align: center; 
+            text-align: left; 
             padding: 8px 12px; 
             font-size: 0.875rem; 
             background: #1f2937; 
@@ -86,6 +80,11 @@
             opacity: 0; 
             transition: opacity 0.2s; 
             color: #EAEAEA; 
+        }
+        #tooltip .tooltip-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #FFFFFF;
         }
 
         /* MODAL STYLES */
@@ -198,10 +197,7 @@
 
         <section class="container mx-auto px-6 py-16">
             <div id="map-container"></div>
-            <div class="flex justify-center items-center space-x-6 mt-8">
-                <div class="flex items-center space-x-2"><div class="w-5 h-5 rounded-full bg-cyan-400"></div><span class="text-gray-300">SFOF Member State</span></div>
-                <div class="flex items-center space-x-2"><div class="w-5 h-5 rounded-full bg-gray-700"></div><span class="text-gray-300">Non-Member State</span></div>
-            </div>
+            <div id="legend-container" class="flex justify-center items-center space-x-6 mt-8"></div>
         </section>
     </main>
     
@@ -258,12 +254,58 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const sfofMemberStates = [
-                "Alabama", "Alaska", "Arizona", "Arkansas", "Florida", "Georgia", "Idaho", "Indiana", "Iowa", "Kansas",
-                "Kentucky", "Louisiana", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "North Carolina",
-                "North Dakota", "Ohio", "Oklahoma", "Pennsylvania", "South Carolina", "South Dakota", "Texas", "Utah",
-                "Wisconsin", "Wyoming", "West Virginia" 
-            ];
+            const sfofInfluenceData = {
+                "Alabama": { score: 3, actors: 3, laws: 1, hasReport: true },
+                "Alaska": { score: 1, actors: 1, laws: 0, hasReport: true },
+                "Arizona": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Arkansas": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "California": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "Colorado": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "Connecticut": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "Delaware": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "Florida": { score: 3, actors: 2, laws: 1, hasReport: true },
+                "Georgia": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Hawaii": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "Idaho": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Illinois": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "Indiana": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Iowa": { score: 1, actors: 1, laws: 0, hasReport: true },
+                "Kansas": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Kentucky": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Louisiana": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Maine": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "Maryland": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "Massachusetts": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "Michigan": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "Minnesota": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "Mississippi": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Missouri": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Montana": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Nebraska": { score: 1, actors: 1, laws: 0, hasReport: true },
+                "Nevada": { score: 1, actors: 1, laws: 0, hasReport: true },
+                "New Hampshire": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "New Jersey": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "New Mexico": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "New York": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "North Carolina": { score: 1, actors: 1, laws: 0, hasReport: true },
+                "North Dakota": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Ohio": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Oklahoma": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Oregon": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "Pennsylvania": { score: 1, actors: 1, laws: 0, hasReport: true },
+                "Rhode Island": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "South Carolina": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "South Dakota": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Tennessee": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "Texas": { score: 3, actors: 2, laws: 1, hasReport: true },
+                "Utah": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Vermont": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "Virginia": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "Washington": { score: 0, actors: 0, laws: 0, hasReport: false },
+                "West Virginia": { score: 2, actors: 1, laws: 1, hasReport: true },
+                "Wisconsin": { score: 1, actors: 1, laws: 0, hasReport: true },
+                "Wyoming": { score: 2, actors: 1, laws: 1, hasReport: true }
+            };
 
             const container = document.getElementById('map-container');
             const svg = d3.select("#map-container").append("svg").attr("viewBox", `0 0 975 610`).attr("width", "100%").attr("height", "auto");
@@ -277,6 +319,34 @@
             const closeModalBtn = document.getElementById('close-modal-btn');
             const modalOverlay = document.getElementById('modal-overlay');
             const mainContent = document.querySelector('main');
+            
+            const colorScale = d3.scaleQuantize()
+                .domain([0, 3])
+                .range(["#374151", "#22d3ee", "#0ea5e9", "#0891b2"]);
+
+            const legendLabels = {
+                0: "No known SFOF affiliation",
+                1: "SFOF member state",
+                2: "SFOF member state with key actors or anti-ESG laws",
+                3: "SFOF member state with multiple key actors and anti-ESG laws"
+            };
+
+            const legendContainer = d3.select("#legend-container");
+            const legend = legendContainer.selectAll(".legend")
+                .data(colorScale.range())
+                .enter().append("div")
+                .attr("class", "legend flex items-center space-x-2");
+
+            legend.append("div")
+                .style("width", "20px")
+                .style("height", "20px")
+                .style("border-radius", "50%")
+                .style("background-color", d => d);
+
+            legend.append("span")
+                .text((d, i) => legendLabels[i])
+                .attr("class", "text-gray-300 text-sm");
+
 
             function showModal(stateName) {
                 const reportPath = `reports/${stateName.toLowerCase().replace(/\s+/g, '-')}.html`;
@@ -322,15 +392,42 @@
                     .data(states.features)
                     .enter().append("path")
                     .attr("d", path)
-                    .attr("class", d => `state ${sfofMemberStates.includes(d.properties.name) ? 'member' : 'non-member'}`)
+                    .attr("class", d => {
+                        const stateData = sfofInfluenceData[d.properties.name];
+                        return `state ${stateData && stateData.hasReport ? 'has-report' : ''}`;
+                    })
+                    .style("fill", d => {
+                        const stateData = sfofInfluenceData[d.properties.name];
+                        return stateData ? colorScale(stateData.score) : "#374151";
+                    })
+                    .attr("aria-label", d => {
+                        const stateData = sfofInfluenceData[d.properties.name];
+                        let label = d.properties.name;
+                        if (stateData) {
+                            label += `, Influence Score: ${stateData.score}`;
+                        }
+                        return label;
+                    })
                     .on("mouseover", (event, d) => {
+                        const stateData = sfofInfluenceData[d.properties.name];
+                        let tooltipHtml = `<div class="tooltip-title">${d.properties.name}</div>`;
+                        if (stateData) {
+                            tooltipHtml += `
+                                <div>Influence Score: ${stateData.score}</div>
+                                <div>Key Actors: ${stateData.actors}</div>
+                                <div>Anti-ESG Laws: ${stateData.laws}</div>
+                            `;
+                        }
                         tooltip.transition().duration(200).style("opacity", .9);
-                        tooltip.html(d.properties.name).style("left", `${event.pageX + 15}px`).style("top", `${event.pageY - 28}px`);
+                        tooltip.html(tooltipHtml)
+                            .style("left", `${event.pageX + 15}px`)
+                            .style("top", `${event.pageY - 28}px`);
                     })
                     .on("mouseout", () => tooltip.transition().duration(500).style("opacity", 0))
                     .on("mousemove", (event) => tooltip.style("left", `${event.pageX + 15}px`).style("top", `${event.pageY - 28}px`))
                     .on("click", (event, d) => {
-                        if (sfofMemberStates.includes(d.properties.name)) {
+                        const stateData = sfofInfluenceData[d.properties.name];
+                        if (stateData && stateData.hasReport) {
                             showModal(d.properties.name);
                         }
                     });
