@@ -1,8 +1,8 @@
 backend:
   name: git-gateway
-  branch: main # Or master, depending on your default branch
+  branch: main
 
-media_folder: "assets/uploads" # Optional: For uploading images, etc.
+media_folder: "assets/uploads"
 
 collections:
   - name: "network"
@@ -12,28 +12,18 @@ collections:
         label: "SFOF Network Data"
         name: "sfof_network"
         fields:
-          - label: "Nodes"
-            name: "nodes"
-            widget: "list"
-            fields:
-              - { label: "ID", name: "id", widget: "string" }
-              - { label: "Label", name: "label", widget: "string" }
-              - label: "Type"
-                name: "type"
-                widget: "select"
-                options: ["person", "organization", "donor"]
-              - { label: "Description", name: "description", widget: "markdown", required: false }
-              - { label: "Website", name: "website", widget: "string", required: false }
-          - label: "Edges"
-            name: "edges"
-            widget: "list"
-            fields:
-              - { label: "Source", name: "source", widget: "string" }
-              - { label: "Target", name: "target", widget: "string" }
-              - label: "Type"
-                name: "type"
-                widget: "select"
-                options: ["donation", "affiliation", "member"]
-              - { label: "Amount", name: "amount", widget: "number", required: false }
-              - { label: "Year", name: "year", widget: "number", required: false }
-              - { label: "Description", name: "description", widget: "string", required: false }
+          - {label: "Nodes", name: "nodes", widget: "list", fields: [
+              {label: "ID", name: "id", widget: "string"},
+              {label: "Label", name: "label", widget: "string"},
+              {label: "Type", name: "type", widget: "select", options: ["person", "organization", "donor"]},
+              {label: "Description", name: "description", widget: "markdown", required: false},
+              {label: "Website", name: "website", widget: "string", required: false}
+            ]}
+          - {label: "Edges", name: "edges", widget: "list", fields: [
+              {label: "Source", name: "source", widget: "string"},
+              {label: "Target", name: "target", widget: "string"},
+              {label: "Type", name: "type", widget: "select", options: ["donation", "affiliation", "member"]},
+              {label: "Amount", name: "amount", widget: "number", required: false, value_type: "int"},
+              {label: "Year", name: "year", widget: "number", required: false, value_type: "int"},
+              {label: "Description", name: "description", widget: "string", required: false}
+            ]}
