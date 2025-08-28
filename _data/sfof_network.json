@@ -1,17 +1,114 @@
 {
+  "metadata": {
+    "last_updated": "2025-08-28",
+    "description": "A curated dataset representing the network of influence surrounding the State Financial Officers Foundation (SFOF)."
+  },
   "nodes": [
-    { "id": "SFOF", "label": "SFOF", "type": "organization" },
-    { "id": "ALEC", "label": "ALEC", "type": "organization" },
-    { "id": "Heritage Foundation", "label": "Heritage Foundation", "type": "organization" },
-    { "id": "Charles Koch Foundation", "label": "Charles Koch Foundation", "type": "donor" },
-    { "id": "State Treasurer A", "label": "State Treasurer A", "type": "person" },
-    { "id": "State Treasurer B", "label": "State Treasurer B", "type": "person" }
+    {
+      "id": "sfof_c3",
+      "name": "State Financial Officers Foundation (SFOF)",
+      "type": "political_group",
+      "subtype": "501(c)(3)",
+      "description": "Central organization coordinating the anti-ESG agenda among state financial officers. Revenue grew from $940k (2021) to $2.9M (2023).",
+      "state": null
+    },
+    {
+      "id": "derek_kreifels",
+      "name": "Derek Kreifels",
+      "type": "person",
+      "subtype": "Operative",
+      "description": "Co-founder and former CEO of SFOF. Founder of Prospr Aligned, a for-profit anti-ESG consultancy.",
+      "state": "KS"
+    },
+    {
+      "id": "bradley_foundation",
+      "name": "The Bradley Foundation",
+      "type": "foundation",
+      "subtype": "Ideological Funder",
+      "description": "SFOF's largest identifiable ideological funder.",
+      "state": "WI"
+    },
+    {
+      "id": "donors_trust",
+      "name": "DonorsTrust",
+      "type": "dark_money_fund",
+      "subtype": "DAF",
+      "description": "The 'dark money ATM' of the political right. Major funder of the entire anti-ESG ecosystem, anonymizing donors.",
+      "state": null
+    },
+    {
+      "id": "alec",
+      "name": "ALEC",
+      "type": "political_group",
+      "subtype": "Bill Mill",
+      "description": "Develops and disseminates model anti-ESG legislation (e.g., 'Eliminate Political Boycotts Act'). Shares leadership with SFOF.",
+      "state": null
+    },
+    {
+      "id": "consumers_research",
+      "name": "Consumers' Research",
+      "type": "political_group",
+      "subtype": "PR/Attack Dog",
+      "description": "Key operational partner and major funder of SFOF. Runs aggressive public campaigns against 'woke' companies.",
+      "state": null
+    },
+    {
+      "id": "federated_hermes",
+      "name": "Federated Hermes",
+      "type": "corporation",
+      "subtype": "Financial Services",
+      "description": "Major SFOF sponsor. Beneficiary of divestment actions by SFOF members.",
+      "state": null
+    },
+    {
+      "id": "curtis_loftis",
+      "name": "Curtis Loftis",
+      "type": "state_officer",
+      "subtype": "Treasurer",
+      "description": "South Carolina Treasurer. Central figure in the SEC 'pay-to-play' complaint regarding BlackRock divestment.",
+      "state": "SC"
+    }
   ],
   "edges": [
-    { "source": "Charles Koch Foundation", "target": "SFOF", "type": "donation", "amount": 50000 },
-    { "source": "ALEC", "target": "SFOF", "type": "affiliation" },
-    { "source": "Heritage Foundation", "target": "SFOF", "type": "affiliation" },
-    { "source": "SFOF", "target": "State Treasurer A", "type": "member" },
-    { "source": "SFOF", "target": "State Treasurer B", "type": "member" }
+    {
+      "source": "bradley_foundation",
+      "target": "sfof_c3",
+      "type": "funding",
+      "details": "Major ideological funding grant.",
+      "amount": 750000,
+      "year": "2022-2023",
+      "citation_url": "https://www.exposedbycmd.org/..."
+    },
+    {
+      "source": "donors_trust",
+      "target": "sfof_c3",
+      "type": "funding",
+      "details": "Funding via DAF.",
+      "amount": 405000,
+      "year": "2022-2023",
+      "citation_url": "https://sfofexposed.org/..."
+    },
+    {
+      "source": "derek_kreifels",
+      "target": "sfof_c3",
+      "type": "personnel",
+      "details": "Co-founder and CEO."
+    },
+    {
+      "source": "federated_hermes",
+      "target": "sfof_c3",
+      "type": "sponsorship",
+      "details": "Gold Level Sponsorship.",
+      "amount": 50000,
+      "year": "2022"
+    },
+    {
+        "source": "curtis_loftis",
+        "target": "federated_hermes",
+        "type": "official_action",
+        "details": "Moved state funds divested from BlackRock to Federated Hermes. (Alleged Pay-to-Play).",
+        "year": "2022",
+        "citation_url": "https://campaignforaccountability.org/..."
+    }
   ]
 }
