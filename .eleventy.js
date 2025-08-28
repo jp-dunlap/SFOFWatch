@@ -2,19 +2,24 @@ const markdownIt = require("markdown-it");
 const htmlmin = require("html-minifier-terser");
 
 module.exports = function(eleventyConfig) {
-  // Initialize markdown-it with HTML support to allow tags in your tables
+  // Initialize markdown-it with HTML support
   const md = new markdownIt({
     html: true,
   });
   eleventyConfig.setLibrary("md", md);
 
-  // Tell Eleventy to copy these folders and files directly to the output
+  // --- THIS IS THE CRUCIAL LINE ---
+  // Copies the _data directory to your built site
+  eleventyConfig.addPassthroughCopy("_data");
+  // --- END OF CRUCIAL LINE ---
+
+  // Copy other assets
   eleventyConfig.addPassthroughCopy("assets");
   eleventyConfig.addPassthroughCopy("admin");
   eleventyConfig.addPassthroughCopy("pagefind");
-  eleventyConfig.addPassthroughCopy("*.html"); // Copies top-level pages like index.html
+  eleventyConfig.addPassthroughCopy("*.html");
 
-  // Add a transform to minify HTML
+  // Minify HTML
   eleventyConfig.addTransform("htmlmin", function(content, outputPath) {
     if (outputPath && outputPath.endsWith(".html")) {
       let minified = htmlmin.minify(content, {
@@ -24,19 +29,17 @@ module.exports = function(eleventyConfig) {
       });
       return minified;
     }
-
     return content;
   });
 
   // Define the project structure
   return {
     dir: {
-      input: ".",          // Use the root folder for input
-      includes: "_includes", // Where layouts are located
-      output: "_site",     // Where the finished site will be built
+      input: ".",
+      includes: "_includes",
+      output: "_site",
     },
-    // Specify which file types to process
-    templateFormats: ["njk", "md", "html"],
+    templateFormats: ["md", "njk", "html"],
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk",
   };
