@@ -1,0 +1,132 @@
+---
+layout: "base.njk"
+title: "SFOF Influence Network"
+---
+
+<style>
+    /* This is the same styling as before */
+    #network-graph {
+        background-color: rgba(17, 24, 39, 0.5);
+        border: 1px solid #374151;
+        border-radius: 0.5rem;
+    }
+    .links line {
+        stroke: #6b7280;
+        stroke-opacity: 0.6;
+    }
+    .nodes circle {
+        stroke: #fff;
+        stroke-width: 1.5px;
+        cursor: pointer;
+    }
+    .node-label {
+        font-family: 'Inter', sans-serif;
+        font-size: 12px;
+        fill: #9ca3af;
+        pointer-events: none;
+    }
+</style>
+
+<section class="text-center px-6 pt-32 pb-24 hero-bg">
+    <div class="max-w-4xl mx-auto relative z-10">
+        <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Network</h1>
+        <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+            SFOF does not operate in a vacuum. It is the central node in a sophisticated and well-funded network of conservative think tanks, corporate lobbyists, and legal organizations working in concert to achieve a unified political agenda. Drag and explore the nodes below.
+        </p>
+    </div>
+</section>
+
+<section class="container mx-auto px-6 py-16 md:py-24">
+    <div id="network-graph" class="mx-auto" style="width: 100%; max-width: 960px; height: 600px; position: relative;"></div>
+</section>
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- THIS IS THE KEY CHANGE ---
+    // Instead of fetching the JSON file, we embed it directly into the page.
+    // Eleventy makes the content of `_data/sfof_network.json` available as the `sfof_network` variable.
+    const graphData = {{ sfof_network | dump | safe }};
+
+    const graphContainer = document.getElementById('network-graph');
+    const width = graphContainer.offsetWidth;
+    const height = 600;
+
+    const svg = d3.select("#network-graph").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", `0 0 ${width} ${height}`);
+
+    const color = d3.scaleOrdinal()
+        .domain(["organization", "donor", "person"])
+        .range(["#22d3ee", "#a3e635", "#f87171"]); // Cyan, Lime, Red
+
+    const simulation = d3.forceSimulation()
+        .force("link", d3.forceLink().id(d => d.id).distance(120))
+        .force("charge", d3.forceManyBody().strength(-200))
+        .force("center", d3.forceCenter(width / 2, height / 2));
+
+    const link = svg.append("g")
+        .attr("class", "links")
+        .selectAll("line")
+        .data(graphData.edges)
+        .enter().append("line");
+
+    const node = svg.append("g")
+        .attr("class", "nodes")
+        .selectAll("g")
+        .data(graphData.nodes)
+        .enter().append("g")
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    node.append("circle")
+        .attr("r", 12)
+        .attr("fill", d => color(d.type));
+
+    node.append("text")
+        .attr("class", "node-label")
+        .attr("x", 18)
+        .attr("y", 4)
+        .text(d => d.label);
+
+    node.append("title")
+        .text(d => `${d.label}\nType: ${d.type}`);
+
+    simulation
+        .nodes(graphData.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graphData.edges);
+
+    function ticked() {
+        link
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+        node
+            .attr("transform", d => `translate(${d.x},${d.y})`);
+    }
+
+    function dragstarted(d) {
+        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+        if (!d3.event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+});
+</script>
