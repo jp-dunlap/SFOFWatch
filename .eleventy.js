@@ -8,6 +8,11 @@ module.exports = function(eleventyConfig) {
   });
   eleventyConfig.setLibrary("md", md);
 
+  // --- THIS IS THE NEW LINE ---
+  // It tells Eleventy to copy our network data to the final site.
+  eleventyConfig.addPassthroughCopy("_data");
+  // --- END OF NEW LINE ---
+
   // Tell Eleventy to copy these folders and files directly to the output
   eleventyConfig.addPassthroughCopy("assets");
   eleventyConfig.addPassthroughCopy("admin");
@@ -31,9 +36,9 @@ module.exports = function(eleventyConfig) {
   // Define the project structure
   return {
     dir: {
-      input: ".",           // Use the root folder for input
-      includes: "_includes",// Where layouts are located
-      output: "_site",      // Where the finished site will be built
+      input: ".",          // Use the root folder for input
+      includes: "_includes", // Where layouts are located
+      output: "_site",     // Where the finished site will be built
     },
     // Specify which file types to process
     templateFormats: ["md", "njk", "html"],
