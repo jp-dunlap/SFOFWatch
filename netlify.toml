@@ -8,6 +8,10 @@
   directory = "netlify/functions/"
   node_bundler = "esbuild"
 
+# Schedule the function to run daily
+[functions.fetch-legislation]
+  schedule = "@daily"
+
 # Caching policy for static assets (e.g., images, CSS)
 [[headers]]
   for = "/assets/*"
