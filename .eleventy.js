@@ -36,7 +36,7 @@ module.exports = function(eleventyConfig) {
       output: "_site",     // Where the finished site will be built
     },
     // Specify which file types to process
-    templateFormats: ["md", "njk", "html"],
+    templateFormats: ["njk", "md", "html"],
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk",
   };
