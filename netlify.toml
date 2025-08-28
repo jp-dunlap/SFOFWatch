@@ -36,11 +36,6 @@
   status = 200
 
 [[redirects]]
-  from = "/network"
-  to = "/network.html"
-  status = 200
-
-[[redirects]]
   from = "/playbook"
   to = "/playbook.html"
   status = 200
