@@ -1,31 +1,19 @@
-// Import necessary libraries.
-// axios is used for making HTTP requests to the LegiScan API.
-// @octokit/rest is for interacting with the GitHub API to commit the new data.
-// @netlify/functions provides the scheduling wrapper.
 const axios = require('axios');
 const { Octokit } = require('@octokit/rest');
 const { schedule } = require('@netlify/functions');
 
-// Retrieve sensitive keys and repository information from Netlify environment variables.
-// This is a secure way to handle API keys without hardcoding them.
 const LEGISCAN_API_KEY = process.env.LEGISCAN_API_KEY;
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const REPO_OWNER = process.env.REPO_OWNER; // Your GitHub username or organization
-const REPO_NAME = process.env.REPO_NAME;   // The name of your repository
+const REPO_OWNER = process.env.REPO_OWNER;
+const REPO_NAME = process.env.REPO_NAME;
 const DATA_FILE_PATH = '_data/legislation.json';
-
-// The search query to find relevant bills in the LegiScan database.
 const SEARCH_QUERY = '"ESG" OR "fiduciary duty" OR "economic boycott" OR "state divestment"';
 
-/**
- * The main handler for the Netlify Scheduled Function.
- * This function will be executed based on the cron schedule.
- */
 const handler = async function(event, context) {
-    console.log("Starting scheduled legislative data update...");
+    console.log("Starting legislative data update...");
 
     try {
-        // Step 1: Fetch the latest legislative data from the LegiScan API.
+        // 1. Fetch data from LegiScan
         const response = await axios.get('https://api.legiscan.com/', {
             params: {
                 key: LEGISCAN_API_KEY,
@@ -34,79 +22,68 @@ const handler = async function(event, context) {
             }
         });
 
-        // Check if the API call was successful and returned the expected data structure.
         if (response.data.status === 'OK' && response.data.searchresult) {
-            // The API returns a summary object along with bill objects. We filter to get only the bills.
+            // Filter out the summary object, keeping only bill objects
             const bills = Object.values(response.data.searchresult).filter(item => item.bill_id);
             
-            // Step 2: Process the raw bill data into a clean, state-by-state summary.
+            // 2. Process the data into a state-by-state summary
             const processedData = processLegislationData(bills);
             const contentToCommit = JSON.stringify({
                 last_updated: new Date().toISOString(),
                 states: processedData
             }, null, 2);
 
-            // Step 3: Commit the new JSON data file to the GitHub repository.
+            // 3. Commit to GitHub
             await commitToGitHub(contentToCommit);
 
-            console.log("Legislative data update successful.");
             return { statusCode: 200, body: "Update successful." };
         } else {
-            // If the API response is not what we expect, throw an error.
-            throw new Error('LegiScan API call failed or returned an unexpected structure.');
+            throw new Error('LegiScan API call failed or returned unexpected structure.');
         }
 
     } catch (error) {
-        console.error("Error during the legislative update process:", error.message);
+        console.error("Error during update process:", error);
         return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
     }
 };
 
-/**
- * Processes raw bill data from LegiScan into a structured, state-by-state summary.
- * This function also determines an `overallStatus` for each state to simplify map coloring.
- * @param {Array} bills - An array of bill objects from the LegiScan API.
- * @returns {Object} A summary of legislative activity, keyed by state abbreviation.
- */
+// Helper function to summarize LegiScan data by state
 function processLegislationData(bills) {
     const stateSummary = {};
 
     bills.forEach(bill => {
         if (!bill.state) return;
 
-        // Initialize the state object if it doesn't exist.
         if (!stateSummary[bill.state]) {
             stateSummary[bill.state] = {
                 bills: [],
-                overallStatus: 'No Action' // Default status
+                overallStatus: 'No Action'
             };
         }
 
-        // Add relevant bill details to the state's list.
         stateSummary[bill.state].bills.push({
             bill_id: bill.bill_id,
             number: bill.bill_number,
             title: bill.title,
-            // LegiScan status codes: 1=Introduced, 2=In Progress, 3=Failed, 4=Enacted
+            // LegiScan status codes: 1=Introduced, 2=Engrossed/In Progress, 3=Dead/Failed/Vetoed, 4=Passed/Enacted
             status_code: bill.status,
             url: bill.url,
             last_action_date: bill.last_action_date
         });
     });
 
-    // Determine the overall status for each state based on the status of its bills.
-    // The status is prioritized: Enacted > Pending > Failed.
+    // Determine overall status for the map visualization based on priority
     Object.keys(stateSummary).forEach(state => {
-        const billsInState = stateSummary[state].bills;
-        const isEnacted = billsInState.some(b => b.status_code === 4);
-        const isPending = billsInState.some(b => b.status_code === 1 || b.status_code === 2);
-        const allFailed = billsInState.every(b => b.status_code === 3);
+        const bills = stateSummary[state].bills;
+        const enacted = bills.some(b => b.status_code === 4);
+        const pending = bills.some(b => b.status_code === 1 || b.status_code === 2);
+        const failed = bills.every(b => b.status_code === 3); // Only failed if all are failed
 
-        if (isEnacted) {
+        if (enacted) {
             stateSummary[state].overallStatus = 'Enacted';
-        } else if (isPending) {
+        } else if (pending) {
             stateSummary[state].overallStatus = 'Pending';
-        } else if (allFailed && billsInState.length > 0) {
+        } else if (failed && bills.length > 0) {
              stateSummary[state].overallStatus = 'Failed';
         }
     });
@@ -114,17 +91,12 @@ function processLegislationData(bills) {
     return stateSummary;
 }
 
-/**
- * Commits a file to the GitHub repository.
- * It will update the file if it exists or create it if it doesn't.
- * @param {string} content - The string content to be committed.
- */
 async function commitToGitHub(content) {
     const octokit = new Octokit({ auth: GITHUB_TOKEN });
 
     let currentSHA = null;
     try {
-        // We need the SHA of the existing file to update it.
+        // Get the SHA of the existing file to update it
         const { data: fileData } = await octokit.repos.getContent({
             owner: REPO_OWNER,
             repo: REPO_NAME,
@@ -133,27 +105,23 @@ async function commitToGitHub(content) {
         currentSHA = fileData.sha;
     } catch (error) {
         if (error.status === 404) {
-            // If the file doesn't exist, we'll create it. The SHA will be null.
-            console.log(`File not found at ${DATA_FILE_PATH}. A new file will be created.`);
+            console.log("File not found, creating new file.");
+            // If file doesn't exist (404), SHA remains null for creation
         } else {
-            // Rethrow other errors (e.g., auth issues).
             throw error;
         }
     }
 
-    // Use the GitHub API to create or update the file.
     await octokit.repos.createOrUpdateFileContents({
         owner: REPO_OWNER,
         repo: REPO_NAME,
         path: DATA_FILE_PATH,
-        message: 'Automated Update: Refresh legislative data via Netlify Function',
-        content: Buffer.from(content).toString('base64'), // Content must be base64 encoded
-        sha: currentSHA, // If SHA is null, it creates a new file. If provided, it updates.
+        message: 'Automated Update: Legislation data refresh via Netlify Function',
+        content: Buffer.from(content).toString('base64'),
+        sha: currentSHA,
         branch: 'main',
     });
-
-    console.log(`Successfully committed update to ${DATA_FILE_PATH}`);
 }
 
-// Export the handler and schedule it to run daily at 1 AM UTC using a cron expression.
+// Schedule the function to run daily at 1 AM UTC
 module.exports.handler = schedule("0 1 * * *", handler);
