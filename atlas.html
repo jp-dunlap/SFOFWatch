@@ -10,6 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://d3js.org/topojson.v3.min.js"></script>
+    
+    <!-- ** NEW ** Leaflet CSS added -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
     <style>
         :root {
             --background-dark: #0a0a0a;
@@ -161,6 +165,21 @@
             margin-bottom: 1rem;
             padding-left: 0.5rem;
         }
+        /* ** NEW ** Leaflet Legend Styles */
+        .info.legend {
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            color: #333;
+        }
+        .info.legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -196,7 +215,8 @@
         </section>
 
         <section class="container mx-auto px-6 py-16">
-            <div id="map-container"></div>
+            <!-- ** MODIFIED ** The old D3 map container is replaced with the new Leaflet map container -->
+            <div id="mapid" style="height: 600px;"></div>
             <div id="legend-container" class="flex justify-center items-center space-x-6 mt-8"></div>
         </section>
     </main>
@@ -437,5 +457,10 @@
             });
         });
     </script>
+
+    <!-- ** NEW ** Leaflet JS and our new atlas script are added at the end -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/assets/js/atlas.js"></script>
+
 </body>
 </html>
