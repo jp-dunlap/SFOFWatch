@@ -1,0 +1,17 @@
+{
+  "nodes": [
+    { "id": "SFOF", "label": "SFOF", "type": "organization" },
+    { "id": "ALEC", "label": "ALEC", "type": "organization" },
+    { "id": "Heritage Foundation", "label": "Heritage Foundation", "type": "organization" },
+    { "id": "Charles Koch Foundation", "label": "Charles Koch Foundation", "type": "donor" },
+    { "id": "State Treasurer A", "label": "State Treasurer A", "type": "person" },
+    { "id": "State Treasurer B", "label": "State Treasurer B", "type": "person" }
+  ],
+  "edges": [
+    { "source": "Charles Koch Foundation", "target": "SFOF", "type": "donation", "amount": 50000 },
+    { "source": "ALEC", "target": "SFOF", "type": "affiliation" },
+    { "source": "Heritage Foundation", "target": "SFOF", "type": "affiliation" },
+    { "source": "SFOF", "target": "State Treasurer A", "type": "member" },
+    { "source": "SFOF", "target": "State Treasurer B", "type": "member" }
+  ]
+}
