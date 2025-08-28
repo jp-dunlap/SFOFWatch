@@ -168,8 +168,6 @@
     <!-- D3.js Library and Visualization Script -->
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script>
-        const graph = {{ sfof_network | dump | safe }};
-
         document.addEventListener('DOMContentLoaded', () => {
             const graphContainer = document.getElementById('network-graph');
             if (graphContainer) {
@@ -190,7 +188,7 @@
                     .force("charge", d3.forceManyBody().strength(-250))
                     .force("center", d3.forceCenter(width / 2, height / 2));
 
-                Promise.resolve(graph).then(function(graph) {
+                d3.json("/_data/sfof_network.json").then(function(graph) {
                     if (!graph || !graph.nodes || !graph.edges) {
                         throw new Error("Data is not in the expected format or is missing.");
                     }
