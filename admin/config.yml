@@ -1,187 +1,39 @@
 backend:
   name: git-gateway
-  branch: main
+  branch: main # Or master, depending on your default branch
 
-publish_mode: editorial_workflow
-
-media_folder: "assets/images"
-public_folder: "/assets/images"
+media_folder: "assets/uploads" # Optional: For uploading images, etc.
 
 collections:
-  - name: "reports"
-    label: "State Reports"
+  - name: "network"
+    label: "Influence Network"
     files:
-      - file: "reports/alabama.md"
-        label: "Alabama Report"
-        name: "alabama"
-        format: "frontmatter"
+      - file: "_data/sfof_network.json"
+        label: "SFOF Network Data"
+        name: "sfof_network"
         fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/alaska.md"
-        label: "Alaska Report"
-        name: "alaska"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/arizona.md"
-        label: "Arizona Report"
-        name: "arizona"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/arkansas.md"
-        label: "Arkansas Report"
-        name: "arkansas"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/florida.md"
-        label: "Florida Report"
-        name: "florida"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/georgia.md"
-        label: "Georgia Report"
-        name: "georgia"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/idaho.md"
-        label: "Idaho Report"
-        name: "idaho"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/indiana.md"
-        label: "Indiana Report"
-        name: "indiana"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/iowa.md"
-        label: "Iowa Report"
-        name: "iowa"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/kansas.md"
-        label: "Kansas Report"
-        name: "kansas"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/kentucky.md"
-        label: "Kentucky Report"
-        name: "kentucky"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/louisiana.md"
-        label: "Louisiana Report"
-        name: "louisiana"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/mississippi.md"
-        label: "Mississippi Report"
-        name: "mississippi"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/missouri.md"
-        label: "Missouri Report"
-        name: "missouri"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/montana.md"
-        label: "Montana Report"
-        name: "montana"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/nebraska.md"
-        label: "Nebraska Report"
-        name: "nebraska"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/nevada.md"
-        label: "Nevada Report"
-        name: "nevada"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/north-carolina.md"
-        label: "North Carolina Report"
-        name: "north-carolina"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/north-dakota.md"
-        label: "North Dakota Report"
-        name: "north-dakota"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/ohio.md"
-        label: "Ohio Report"
-        name: "ohio"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/oklahoma.md"
-        label: "Oklahoma Report"
-        name: "oklahoma"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/pennsylvania.md"
-        label: "Pennsylvania Report"
-        name: "pennsylvania"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/south-carolina.md"
-        label: "South Carolina Report"
-        name: "south-carolina"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/south-dakota.md"
-        label: "South Dakota Report"
-        name: "south-dakota"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/texas.md"
-        label: "Texas Report"
-        name: "texas"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/utah.md"
-        label: "Utah Report"
-        name: "utah"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/west-virginia.md"
-        label: "West Virginia Report"
-        name: "west-virginia"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/wisconsin.md"
-        label: "Wisconsin Report"
-        name: "wisconsin"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
-      - file: "reports/wyoming.md"
-        label: "Wyoming Report"
-        name: "wyoming"
-        format: "frontmatter"
-        fields:
-          - {label: "Report Content", name: "body", widget: "markdown"}
+          - label: "Nodes"
+            name: "nodes"
+            widget: "list"
+            fields:
+              - { label: "ID", name: "id", widget: "string" }
+              - { label: "Label", name: "label", widget: "string" }
+              - label: "Type"
+                name: "type"
+                widget: "select"
+                options: ["person", "organization", "donor"]
+              - { label: "Description", name: "description", widget: "markdown", required: false }
+              - { label: "Website", name: "website", widget: "string", required: false }
+          - label: "Edges"
+            name: "edges"
+            widget: "list"
+            fields:
+              - { label: "Source", name: "source", widget: "string" }
+              - { label: "Target", name: "target", widget: "string" }
+              - label: "Type"
+                name: "type"
+                widget: "select"
+                options: ["donation", "affiliation", "member"]
+              - { label: "Amount", name: "amount", widget: "number", required: false }
+              - { label: "Year", name: "year", widget: "number", required: false }
+              - { label: "Description", name: "description", widget: "string", required: false }
