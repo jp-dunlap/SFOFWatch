@@ -16,18 +16,15 @@ module.exports = function(eleventyConfig) {
 
   // Copy core assets (Includes JS and JSON Data)
   eleventyConfig.addPassthroughCopy("assets");
-  
+
   // Copy HTML snippets for network visualization modals
   eleventyConfig.addPassthroughCopy("network-reports");
-  
+
   // Copy CMS configuration
   eleventyConfig.addPassthroughCopy("admin");
-  
+
   // Copy Pagefind search index
   eleventyConfig.addPassthroughCopy("pagefind");
-
-  // !!! CRITICAL CHANGE: Removed eleventyConfig.addPassthroughCopy("*.html"); !!!
-  // HTML files must be processed as templates, not copied directly.
 
   // Minify HTML (Updated syntax for modern Eleventy versions)
   eleventyConfig.addTransform("htmlmin", function(content) {
@@ -56,7 +53,7 @@ module.exports = function(eleventyConfig) {
       output: "_site",
     },
     // Ensure HTML is recognized as a template format
-    templateFormats: ["md", "njk", "html"], 
+    templateFormats: ["md", "njk", "html"],
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk",
   };
