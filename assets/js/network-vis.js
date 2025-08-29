@@ -1,3 +1,5 @@
+import * as d3 from "https://cdn.skypack.dev/d3";
+
 (function() {
     // Enhanced Logging: Explicitly log every step to the browser console.
     console.log("[SFOF Network] 1. Script loaded and executing.");
@@ -9,7 +11,7 @@
         3: "#10b981", // Corporations/Sponsors (Green)
         4: "#22d3ee", // Individuals/Officials (Cyan - Site Primary)
         5: "#ef4444", // Targets (Red)
-        6: "#64748b"  // Legislation/Actions (Gray)
+        6: "#64748b" // Legislation/Actions (Gray)
     };
 
     const LINK_COLORS = {
@@ -47,7 +49,7 @@
     function displayError(message) {
         const container = d3.select("#network-container");
         if (!container.empty()) {
-             container.html(`<div class="text-center text-red-500 p-10 border border-red-700 bg-red-900/30 m-4 rounded-lg">
+            container.html(`<div class="text-center text-red-500 p-10 border border-red-700 bg-red-900/30 m-4 rounded-lg">
                     <h3 class="text-xl font-bold">Visualization Error</h3>
                     <p class="mt-2">${message}</p>
                 </div>`);
@@ -83,19 +85,22 @@
         // Layout is ready, now fetch data.
         console.log(`[SFOF Network] 4. Container ready. Dimensions: ${rect.width}w x ${rect.height}h.`);
         fetchNetworkData();
-   }
+    }
 
     // Load the data from the external JSON file
     function fetchNetworkData() {
         // --- FIX: Corrected the path to the data file ---
         const dataPath = "/_data/sfof_network.json";
         console.log(`[SFOF Network] 5. Attempting to fetch data from ${dataPath}`);
-        
+
         d3.json(dataPath).then(data => {
             // --- FIX: Use data.edges instead of data.links ---
             console.log("[SFOF Network] 6. Data successfully fetched. Nodes:", data.nodes.length, "Edges:", data.edges.length);
             try {
-                initializeNetworkVisualization({ nodes: data.nodes, links: data.edges });
+                initializeNetworkVisualization({
+                    nodes: data.nodes,
+                    links: data.edges
+                });
             } catch (error) {
                 console.error("[SFOF Network] Error during visualization rendering:", error);
                 displayError("An error occurred while rendering the visualization. Check the browser console.");
@@ -110,7 +115,7 @@
     function initializeNetworkVisualization(data) {
         console.log("[SFOF Network] 7. Starting visualization rendering.");
         const container = d3.select("#network-container");
-        
+
         // Dimensions are guaranteed to be ready
         const width = container.node().getBoundingClientRect().width;
         const height = container.node().getBoundingClientRect().height;
@@ -155,7 +160,7 @@
             .on("zoom", (event) => {
                 g.attr("transform", event.transform);
             });
-        
+
         svg.call(zoom); // Attach zoom behavior
 
         // Initialize Simulation
@@ -223,7 +228,7 @@
         // --- Interaction Handlers (Focus/Fade and Sidebar) ---
 
         function nodeClicked(event, d) {
-            event.stopPropagation(); 
+            event.stopPropagation();
 
             // 1. Update Sidebar (Includes button to open modal if report exists)
             updateSidebar(d, filteredLinks);
@@ -237,8 +242,8 @@
         }
 
         function resetHighlight(event) {
-             // Only reset if clicking the SVG background itself
-             if (event.target.tagName.toLowerCase() === 'svg') {
+            // Only reset if clicking the SVG background itself
+            if (event.target.tagName.toLowerCase() === 'svg') {
                 svg.classed("network-faded", false);
                 node.classed("highlighted", false);
                 link.classed("highlighted", false);
@@ -257,7 +262,7 @@
     // --- Sidebar Update ---
     function updateSidebar(d, allLinks) {
         const detailsContent = d3.select("#details-content");
-        
+
         // Generate connections list
         const connectionsHtml = generateConnectionsHtml(d, allLinks);
 
@@ -266,8 +271,8 @@
         if (d.report_file) {
             // Use window.showModal to call the modal function
             dossierButtonHtml = `<button onclick="window.showModal('${d.name}', '${d.report_file}')" class="mt-4 mb-4 w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
-                                    View Full Dossier
-                                 </button>`;
+                                        View Full Dossier
+                                     </button>`;
         }
 
         // Generate HTML for the sidebar
@@ -280,7 +285,7 @@
         `);
     }
 
-     function generateConnectionsHtml(d, allLinks) {
+    function generateConnectionsHtml(d, allLinks) {
         // D3 ensures source/target are objects here
         const connections = allLinks.filter(l => l.source.id === d.id || l.target.id === d.id);
         let listHtml = connections.map(c => {
@@ -343,7 +348,7 @@
         // Attach event listeners
         if (closeModalBtn) closeModalBtn.addEventListener('click', hideModal);
         if (modalOverlay) modalOverlay.addEventListener('click', hideModal);
-        
+
         document.addEventListener('keydown', (event) => {
             if (event.key === "Escape") {
                 hideModal();
@@ -403,9 +408,9 @@
                     const className = `.link-${type.replace(/\s+/g, '-')}`;
                     // Toggle visibility of links
                     svg.selectAll(className)
-                       .style("display", checked ? null : 'none');
+                        .style("display", checked ? null : 'none');
                 });
-            
+
             // Add a visual color swatch for the filter key
             label.append("span")
                 .style("width", "12px")
