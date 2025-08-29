@@ -41,6 +41,7 @@ title: SFOF Network
         border-radius: 0.5rem;
         position: relative;
         height: 70vh;
+        width: 100%;
         overflow: hidden; /* Keep visualization contained */
     }
 
@@ -48,7 +49,7 @@ title: SFOF Network
         #network-container {
             height: auto;
         }
-     }
+    }
 
     /* --- D3 Element Styles (Aesthetically Dope) --- */
     .link {
@@ -188,7 +189,16 @@ title: SFOF Network
 {%- endcapture -%}
 
 {%- capture scripts -%}
+    <script>
+      // Inline the data from Eleventy's global data (_data/sfof_network.json).
+      // Since this file uses Liquid syntax (like 'capture'), we use the 'jsonify' filter 
+      // to safely convert the data object to a JSON string.
+      window.networkData = {{ sfof_network | jsonify }};
+    </script>
+    {# Load the visualization logic #}
     <script src="/assets/js/network-vis.js" defer></script>
+    {# CRITICAL: Load the initialization script that consumes window.networkData #}
+    <script src="/assets/js/network.js" defer></script>
 {%- endcapture -%}
 
 <section class="text-center px-6 pt-32 pb-24 hero-bg">
