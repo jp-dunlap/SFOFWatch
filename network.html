@@ -3,12 +3,12 @@ layout: base_dark.njk
 title: SFOF Network
 ---
 
-{# Corrected to use Liquid 'capture' tag instead of Nunjucks 'set' tag #}
-{%- capture head -%}
+{# Use Nunjucks 'set' tag instead of Liquid 'capture' tag #}
+{%- set head -%}
     <script src="https://d3js.org/d3.v7.min.js"></script>
-{%- endcapture -%}
+{%- endset -%}
 
-{%- capture styles -%}
+{%- set styles -%}
 <style>
     /* --- Hero Background Styling --- */
     .hero-bg {
@@ -186,21 +186,19 @@ title: SFOF Network
         font-size: 0.875rem;
     }
 </style>
-{%- endcapture -%}
+{%- endset -%}
 
-{%- capture scripts -%}
+{%- set scripts -%}
     <script>
       // Inline the data from Eleventy's global data (_data/sfof_network.json).
-      // Since this file uses Liquid syntax (like 'capture'), we use the 'jsonify' filter 
-      // to safely convert the data object to a JSON string.
-      window.networkData = {{ sfof_network | jsonify }};
+      // We use the Nunjucks 'dump' filter to serialize the data to JSON, 
+      // and 'safe' to prevent HTML escaping.
+      window.networkData = {{ sfof_network | dump | safe }};
     </script>
-    {# network-vis.js is removed as logic is now consolidated in network.js #}
-    {# <script src="/assets/js/network-vis.js" defer></script> #}
     
     {# CRITICAL: Load the initialization script that consumes window.networkData #}
     <script src="/assets/js/network.js" defer></script>
-{%- endcapture -%}
+{%- endset -%}
 
 <section class="text-center px-6 pt-32 pb-24 hero-bg">
     <div class="max-w-5xl mx-auto relative z-10">
