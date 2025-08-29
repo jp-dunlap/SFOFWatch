@@ -15,6 +15,7 @@ module.exports = function(eleventyConfig) {
 
   // Copy other assets
   eleventyConfig.addPassthroughCopy("assets");
+  eleventyConfig.addPassthroughCopy("network-reports"); 
   eleventyConfig.addPassthroughCopy("admin");
   eleventyConfig.addPassthroughCopy("pagefind");
   eleventyConfig.addPassthroughCopy("*.html");
