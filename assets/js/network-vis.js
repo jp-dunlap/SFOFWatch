@@ -13,14 +13,11 @@
     };
 
     const LINK_COLORS = {
-        "Funding": "#f59e0b",
-        "Sponsorship": "#10b981",
-        "Membership": "#22d3ee",
-        "Affiliation": "#8b5cf6",
-        "Operational": "#64748b",
-        "Personnel": "#22d3ee",
-        "Political Action": "#ef4444",
-        "Beneficiary": "#10b981"
+        "funding": "#f59e0b",
+        "sponsorship": "#10b981",
+        "membership": "#22d3ee",
+        "personnel": "#8b5cf6",
+        "official_action": "#ef4444"
     };
 
     // Global variables for modal elements
@@ -90,13 +87,15 @@
 
     // Load the data from the external JSON file
     function fetchNetworkData() {
-        const dataPath = "/assets/data/network-data.json";
+        // --- FIX: Corrected the path to the data file ---
+        const dataPath = "/_data/sfof_network.json";
         console.log(`[SFOF Network] 5. Attempting to fetch data from ${dataPath}`);
         
         d3.json(dataPath).then(data => {
-            console.log("[SFOF Network] 6. Data successfully fetched. Nodes:", data.nodes.length, "Links:", data.links.length);
+            // --- FIX: Use data.edges instead of data.links ---
+            console.log("[SFOF Network] 6. Data successfully fetched. Nodes:", data.nodes.length, "Edges:", data.edges.length);
             try {
-                initializeNetworkVisualization(data);
+                initializeNetworkVisualization({ nodes: data.nodes, links: data.edges });
             } catch (error) {
                 console.error("[SFOF Network] Error during visualization rendering:", error);
                 displayError("An error occurred while rendering the visualization. Check the browser console.");
@@ -104,7 +103,7 @@
         }).catch(error => {
             // This block executes if the JSON file cannot be found (404) or is invalid
             console.error("[SFOF Network] ERROR fetching network data:", error);
-            displayError(`CRITICAL ERROR: Failed to load network data from <code>${dataPath}</code>. This indicates the file is missing on the server. Ensure your Eleventy configuration (<code>.eleventy.js</code>) is correctly copying the 'assets' directory.`);
+            displayError(`CRITICAL ERROR: Failed to load network data from <code>${dataPath}</code>. This indicates the file is missing on the server. Ensure your Eleventy configuration (<code>.eleventy.js</code>) is correctly copying the '_data' directory.`);
         });
     }
 
@@ -197,7 +196,7 @@
             .attr("class", "node-label")
             .attr("dy", d => -(getRadius(d) + 5))
             // Show labels only for highly connected or important nodes
-            .text(d => (d.importance > 6 || degree[d.id] > 5) ? d.id : '');
+            .text(d => (d.importance > 6 || degree[d.id] > 5) ? d.name : '');
 
         // Simulation Tick
         simulation.on("tick", () => {
@@ -266,15 +265,16 @@
         let dossierButtonHtml = '';
         if (d.report_file) {
             // Use window.showModal to call the modal function
-            dossierButtonHtml = `<button onclick="window.showModal('${d.id}', '${d.report_file}')" class="mt-4 mb-4 w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+            dossierButtonHtml = `<button onclick="window.showModal('${d.name}', '${d.report_file}')" class="mt-4 mb-4 w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
                                     View Full Dossier
                                  </button>`;
         }
 
         // Generate HTML for the sidebar
         detailsContent.html(`
-            <h4 class="text-xl font-semibold text-white mt-4 mb-3">${d.id}</h4>
-            <p class="text-sm text-gray-500 mb-3">Type: ${d.type || 'N/A'}</p>
+            <h4 class="text-xl font-semibold text-white mt-4 mb-3">${d.name}</h4>
+            <p class="text-sm text-gray-500 mb-3">Type: ${d.subtype || d.type || 'N/A'}</p>
+            <p class="text-sm text-gray-300 mb-3">${d.description || ''}</p>
             ${dossierButtonHtml}
             ${connectionsHtml}
         `);
@@ -284,10 +284,10 @@
         // D3 ensures source/target are objects here
         const connections = allLinks.filter(l => l.source.id === d.id || l.target.id === d.id);
         let listHtml = connections.map(c => {
-            const otherNodeId = c.source.id === d.id ? c.target.id : c.source.id;
+            const otherNode = c.source.id === d.id ? c.target : c.source;
             // Include details or financial values if present
-            const detail = c.detail ? ` (${c.detail})` : (c.value ? ` ($${c.value.toLocaleString()})` : '');
-            return `<li><strong style="color:${LINK_COLORS[c.type] || '#9ca3af'}">${c.type}:</strong> connection to ${otherNodeId}${detail}</li>`;
+            const detail = c.details ? ` (${c.details})` : (c.amount ? ` ($${c.amount.toLocaleString()})` : '');
+            return `<li><strong style="color:${LINK_COLORS[c.type] || '#9ca3af'}">${c.type}:</strong> connection to ${otherNode.name}${detail}</li>`;
         }).join('');
 
         return `<h5 class="text-lg text-cyan-400 mt-4 mb-2">Connections (${connections.length})</h5>
@@ -317,11 +317,11 @@
         }
 
         // Expose showModal globally so the sidebar button can access it
-        window.showModal = function(nodeId, reportFile) {
+        window.showModal = function(nodeName, reportFile) {
             const reportPath = `/network-reports/${reportFile}`;
             console.log(`[SFOF Network] Modal: Fetching ${reportPath}`);
 
-            modalTitle.textContent = `Dossier: ${nodeId}`;
+            modalTitle.textContent = `Dossier: ${nodeName}`;
             modalContent.innerHTML = `<p class="text-gray-500">Loading detailed dossier...</p>`;
             modal.classList.add('is-visible');
             if (mainContent) mainContent.style.filter = 'blur(4px)';
@@ -336,7 +336,7 @@
                 })
                 .catch(error => {
                     console.error("[SFOF Network] ERROR fetching report:", error);
-                    modalContent.innerHTML = `<p class="text-red-500">Failed to load detailed report for ${nodeId}. Check console for details. ${error.message}</p>`;
+                    modalContent.innerHTML = `<p class="text-red-500">Failed to load detailed report for ${nodeName}. Check console for details. ${error.message}</p>`;
                 });
         }
 
