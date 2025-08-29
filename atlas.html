@@ -11,9 +11,6 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://d3js.org/topojson.v3.min.js"></script>
     
-    <!-- ** NEW ** Leaflet CSS added -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
     <style>
         :root {
             --background-dark: #0a0a0a;
@@ -214,10 +211,9 @@
             </div>
         </section>
 
-        <section class="container mx-auto px-6 py-16">
-            <!-- ** MODIFIED ** The old D3 map container is replaced with the new Leaflet map container -->
-            <div id="mapid" style="height: 600px;"></div>
-            <div id="legend-container" class="flex justify-center items-center space-x-6 mt-8"></div>
+<section class="container mx-auto px-6 py-16">
+            <div id="map-container"></div>
+            <div id="legend-container" class="flex justify-center items-center flex-wrap gap-6 mt-8"></div>
         </section>
     </main>
     
@@ -457,10 +453,6 @@
             });
         });
     </script>
-
-    <!-- ** NEW ** Leaflet JS and our new atlas script are added at the end -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="/assets/js/atlas.js"></script>
 
 </body>
 </html>
