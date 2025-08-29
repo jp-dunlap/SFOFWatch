@@ -15,7 +15,7 @@ const API_KEY = process.env.LEGISCAN_API_KEY;
 /**
  * A simple wrapper to fetch a master list of bills for a given state from Legiscan.
  * @param {string} state - The two-letter abbreviation for the state (e.g., 'TX').
- * @returns {Promise<Object>} The JSON response from the Legiscan API.
+ * @returns {Promise<Object|null>} The JSON response from the Legiscan API or null if no data is available.
  */
 async function getMasterList(state) {
   if (!API_KEY) {
@@ -29,8 +29,16 @@ async function getMasterList(state) {
     throw new Error(`Legiscan API error for state ${state}: ${data.alert.message}`);
   }
 
-  // The master list is nested under a dynamic key, so we extract it.
   const masterlist = data.masterlist;
+
+  // **FIX APPLIED HERE**
+  // This check handles cases where the API returns a null or invalid masterlist object.
+  if (!masterlist || typeof masterlist !== 'object' || Object.keys(masterlist).length === 0) {
+    console.warn(`WARN: No valid masterlist data returned from API for state: ${state}. Skipping.`);
+    return null; // Return null to gracefully skip this state.
+  }
+
+  // The master list is nested under a dynamic key, so we extract it.
   const key = Object.keys(masterlist).find(k => k !== 'session');
   return masterlist[key];
 }
@@ -60,8 +68,13 @@ async function updateLegislationData() {
     for (const state of states) {
       try {
         const bills = await getMasterList(state);
-        allBillLists[state] = bills;
-        console.log(`Successfully fetched ${Object.keys(bills).length} bills for ${state}.`);
+
+        // **FIX APPLIED HERE**
+        // Only process and log if the `getMasterList` function returned valid bill data.
+        if (bills) {
+          allBillLists[state] = bills;
+          console.log(`Successfully fetched ${Object.keys(bills).length} bills for ${state}.`);
+        }
       } catch (stateError) {
         console.error(`Could not fetch data for state: ${state}. Error: ${stateError.message}`);
         // Continue to the next state even if one fails.
@@ -85,3 +98,4 @@ async function updateLegislationData() {
 
 // Self-execute the main function when the script is run.
 updateLegislationData();
+
