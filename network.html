@@ -1,316 +1,238 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SFOF Watch | The Network of Influence</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    
+---
+title: "SFOF Watch | The Network of Influence"
+layout: "_includes/base_dark.njk"
+---
+
+{# Inject page-specific scripts into the <head> of the base template #}
+{%- set head -%}
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="/assets/js/network-viz.js" defer></script>
+{%- endset -%}
 
-    <style>
-        /* --- Global Theme Variables --- */
-        :root {
-            --background-dark: #0a0a0a;
-            --background-light: #111827;
-            --primary-cyan: #22d3ee;
-            --text-primary: #EAEAEA;
-            --text-secondary: #9ca3af;
-            --border-color: #374151;
-        }
+{# Inject page-specific styles into the <head> of the base template #}
+{%- set styles -%}
+<style>
+    /* --- Hero Background Styling --- */
+    .hero-bg {
+        background-color: var(--background-dark);
+        background-image: 
+            radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
+            radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
+        position: relative;
+        overflow: hidden;
+    }
 
-        html { scroll-behavior: smooth; }
-        body {
-            background-color: var(--background-dark);
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-        }
-        h1, h2, h3, .font-lora { font-family: 'Lora', serif; }
-        
-        /* --- Performance optimization for blur effect --- */
-        main {
-            will-change: transform;
-            transition: filter 0.3s ease-out;
-        }
+    /* --- Layout --- */
+    .visualization-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
 
-        /* --- Hero Background Styling --- */
-        .hero-bg {
-            background-color: var(--background-dark);
-            background-image: 
-                radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
-                radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* --- Layout --- */
+    @media (min-width: 1024px) {
         .visualization-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
+            grid-template-columns: 3fr 1fr; /* 75% viz, 25% sidebar */
+            min-height: 85vh;
         }
+    }
 
-        @media (min-width: 1024px) {
-            .visualization-grid {
-                grid-template-columns: 3fr 1fr; /* 75% viz, 25% sidebar */
-                min-height: 85vh;
-            }
-        }
+    /* --- Visualization Container Styling --- */
+    #network-container {
+        background-color: var(--background-light);
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        position: relative;
+        height: 70vh;
+        overflow: hidden; /* Keep visualization contained */
+    }
 
-        /* --- Visualization Container Styling --- */
+    @media (min-width: 1024px) {
         #network-container {
-            background-color: var(--background-light);
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            position: relative;
-            height: 70vh;
-            overflow: hidden; /* Keep visualization contained */
+            height: auto;
         }
+     }
 
-        @media (min-width: 1024px) {
-            #network-container {
-                height: auto;
-            }
-         }
+    /* --- D3 Element Styles (Aesthetically Dope) --- */
+    .link {
+        stroke-opacity: 0.5;
+        transition: stroke-opacity 0.3s, stroke-width 0.3s, opacity 0.3s;
+    }
+    .node circle {
+        stroke: var(--background-dark);
+        stroke-width: 2px;
+        transition: filter 0.3s ease, r 0.3s ease, opacity 0.3s;
+        cursor: pointer;
+    }
 
-        /* --- D3 Element Styles (Aesthetically Dope) --- */
-        .link {
-            stroke-opacity: 0.5;
-            transition: stroke-opacity 0.3s, stroke-width 0.3s, opacity 0.3s;
-        }
-        .node circle {
-            stroke: var(--background-dark);
-            stroke-width: 2px;
-            transition: filter 0.3s ease, r 0.3s ease, opacity 0.3s;
-            cursor: pointer;
-        }
+    .node-label {
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        fill: var(--text-secondary);
+        pointer-events: none;
+        text-anchor: middle;
+        transition: fill 0.3s, font-weight 0.3s, opacity 0.3s, font-size 0.3s;
+        /* Add shadow for readability on dark background */
+        text-shadow: 0 0 5px var(--background-dark), 0 0 3px var(--background-dark), 0 0 1px var(--background-dark);
+    }
 
-        .node-label {
-            font-family: 'Inter', sans-serif;
-            font-size: 11px;
-            fill: var(--text-secondary);
-            pointer-events: none;
-            text-anchor: middle;
-            transition: fill 0.3s, font-weight 0.3s, opacity 0.3s, font-size 0.3s;
-            /* Add shadow for readability on dark background */
-            text-shadow: 0 0 5px var(--background-dark), 0 0 3px var(--background-dark), 0 0 1px var(--background-dark);
-        }
+    /* --- Dynamic Highlighting/Dimming States (Focus/Fade) --- */
+    /* When active, fade elements significantly */
+    .network-faded .node circle,
+    .network-faded .node-label,
+    .network-faded .link {
+        opacity: 0.05;
+    }
 
-        /* --- Dynamic Highlighting/Dimming States (Focus/Fade) --- */
-        /* When active, fade elements significantly */
-        .network-faded .node circle,
-        .network-faded .node-label,
-        .network-faded .link {
-            opacity: 0.05;
-        }
+    /* Bring highlighted elements forward with a glow effect */
+    .node.highlighted circle {
+        opacity: 1;
+        /* Brighten and add a cyan glow */
+        filter: brightness(1.4) drop-shadow(0 0 8px var(--primary-cyan));
+    }
 
-        /* Bring highlighted elements forward with a glow effect */
-        .node.highlighted circle {
-            opacity: 1;
-            /* Brighten and add a cyan glow */
-            filter: brightness(1.4) drop-shadow(0 0 8px var(--primary-cyan));
-        }
+    .node.highlighted .node-label {
+        opacity: 1;
+        fill: white;
+        font-weight: bold;
+        font-size: 14px;
+    }
 
-        .node.highlighted .node-label {
-            opacity: 1;
-            fill: white;
-            font-weight: bold;
-            font-size: 14px;
-        }
+    .link.highlighted {
+        opacity: 1;
+        stroke-opacity: 1;
+        stroke-width: 3px;
+    }
 
-        .link.highlighted {
-            opacity: 1;
-            stroke-opacity: 1;
-            stroke-width: 3px;
-        }
+    /* --- Sidebar/Details Styling --- */
+    #node-details {
+        background-color: var(--background-light);
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        overflow-y: auto;
+    }
 
-        /* --- Sidebar/Details Styling --- */
-        #node-details {
-            background-color: var(--background-light);
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            overflow-y: auto;
-        }
+    /* --- Filter Checkbox Styling --- */
+    .filter-checkbox {
+        accent-color: var(--primary-cyan);
+        cursor: pointer;
+        width: 1rem;
+        height: 1rem;
+    }
+    .filter-label {
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    .filter-label:hover {
+        color: white;
+    }
 
-        /* --- Filter Checkbox Styling --- */
-        .filter-checkbox {
-            accent-color: var(--primary-cyan);
-            cursor: pointer;
-            width: 1rem;
-            height: 1rem;
-        }
-        .filter-label {
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        .filter-label:hover {
-            color: white;
-        }
+    /* --- MODAL STYLES (Mirroring Atlas.html) --- */
+    #report-modal { transition: opacity 0.3s ease-out; }
+    #report-modal.is-visible { opacity: 1; pointer-events: auto; }
+    #report-modal.is-visible .modal-transform { transform: scale(1); }
+    .modal-transform { 
+        transition: transform 0.3s ease-out; 
+        transform: scale(0.95); 
+        will-change: transform;
+        background-color: var(--background-light);
+        border: 1px solid var(--border-color);
+    }
+    .modal-content-area { max-height: 70vh; overflow-y: auto; }
+    /* Scrollbar Styling */
+    .modal-content-area::-webkit-scrollbar { width: 8px; }
+    .modal-content-area::-webkit-scrollbar-track { background: #1f2937; }
+    .modal-content-area::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+    .modal-content-area::-webkit-scrollbar-thumb:hover { background: #6b7280; }
 
-        /* --- MODAL STYLES (Mirroring Atlas.html) --- */
-        #report-modal { transition: opacity 0.3s ease-out; }
-        #report-modal.is-visible { opacity: 1; pointer-events: auto; }
-        #report-modal.is-visible .modal-transform { transform: scale(1); }
-        .modal-transform { 
-            transition: transform 0.3s ease-out; 
-            transform: scale(0.95); 
-            will-change: transform;
-            background-color: var(--background-light);
-            border: 1px solid var(--border-color);
-        }
-        .modal-content-area { max-height: 70vh; overflow-y: auto; }
-        /* Scrollbar Styling */
-        .modal-content-area::-webkit-scrollbar { width: 8px; }
-        .modal-content-area::-webkit-scrollbar-track { background: #1f2937; }
-        .modal-content-area::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
-        .modal-content-area::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+     /* DYNAMIC CONTENT STYLES (for modal content) */
+     #modal-content h3 {
+        font-family: 'Lora', serif;
+        font-size: 1.5rem;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--primary-cyan);
+    }
+    #modal-content h4 {
+        font-family: 'Lora', serif;
+        font-size: 1.25rem;
+        color: var(--primary-cyan);
+        margin-bottom: 0.5rem;
+        margin-top: 1.5rem;
+    }
+    #modal-content p {
+        margin-bottom: 1rem;
+    }
+    #modal-content strong {
+        color: white;
+    }
+    #modal-content ul {
+        list-style-position: inside;
+        list-style-type: disc;
+        margin-bottom: 1rem;
+        padding-left: 0.5rem;
+    }
+    #modal-content blockquote {
+        border-left: 4px solid var(--primary-cyan);
+        padding-left: 1rem;
+        margin: 1rem 0;
+        font-style: italic;
+        color: var(--text-secondary);
+    }
+    #modal-content cite {
+        display: block;
+        margin-top: 0.5rem;
+        font-style: normal;
+        font-size: 0.875rem;
+    }
+</style>
+{%- endset -%}
 
-         /* DYNAMIC CONTENT STYLES (for modal content) */
-         #modal-content h3 {
-            font-family: 'Lora', serif;
-            font-size: 1.5rem;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--primary-cyan);
-        }
-        #modal-content h4 {
-            font-family: 'Lora', serif;
-            font-size: 1.25rem;
-            color: var(--primary-cyan);
-            margin-bottom: 0.5rem;
-            margin-top: 1.5rem;
-        }
-        #modal-content p {
-            margin-bottom: 1rem;
-        }
-        #modal-content strong {
-            color: white;
-        }
-        #modal-content ul {
-            list-style-position: inside;
-            list-style-type: disc;
-            margin-bottom: 1rem;
-            padding-left: 0.5rem;
-        }
-        #modal-content blockquote {
-            border-left: 4px solid var(--primary-cyan);
-            padding-left: 1rem;
-            margin: 1rem 0;
-            font-style: italic;
-            color: var(--text-secondary);
-        }
-        #modal-content cite {
-            display: block;
-            margin-top: 0.5rem;
-            font-style: normal;
-            font-size: 0.875rem;
-        }
+{# Inject the main visualization script at the end of the <body> #}
+{%- set scripts -%}
+    <script src="/assets/js/network-vis.js" defer></script>
+{%- endset -%}
 
-    </style>
-</head>
-<body class="antialiased">
+<section class="text-center px-6 pt-32 pb-24 hero-bg">
+    <div class="max-w-5xl mx-auto relative z-10">
+        <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Network of Influence</h1>
+        <p class="text-lg md:text-xl text-gray-400 max-w-4xl mx-auto">
+            SFOF is the central node in a sophisticated network of funders, political groups, and corporate partners. This interactive map visualizes these connections. Click any node for details.
+        </p>
+    </div>
+</section>
 
-    <header class="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-gray-800">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="/" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
-            <nav class="hidden md:flex items-center space-x-8">
-                <a href="/foundation" class="hover:text-cyan-400 transition-colors">The Foundation</a>
-                <a href="/network" class="text-cyan-400 font-bold">The Network</a>
-                <a href="/playbook" class="hover:text-cyan-400 transition-colors">The Playbook</a>
-                <a href="/atlas" class="hover:text-cyan-400 transition-colors">The Atlas</a>
-                <a href="/data" class="hover:text-cyan-400 transition-colors">Data & Methodology</a>
-                 <form action="/search" method="get" class="relative">
-                    <input type="search" name="q" placeholder="Search..." class="bg-gray-800 border border-gray-700 rounded-full py-1 px-4 text-sm text-white focus:outline-none focus:border-cyan-400" />
-                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </button>
-                </form>
-            </nav>
-        </div>
-    </header>
-
-    <main id="main-content">
-        <section class="text-center px-6 pt-32 pb-24 hero-bg">
-            <div class="max-w-5xl mx-auto relative z-10">
-                <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Network of Influence</h1>
-                <p class="text-lg md:text-xl text-gray-400 max-w-4xl mx-auto">
-                    SFOF is the central node in a sophisticated network of funders, political groups, and corporate partners. This interactive map visualizes these connections. Click any node for details.
-                </p>
-            </div>
-        </section>
-
-        <section class="container mx-auto px-6 py-16">
-            
-            <div id="filter-container" class="mb-8 flex flex-wrap gap-6 items-center justify-center p-4 bg-gray-900/50 border border-gray-800 rounded-lg">
-                </div>
-
-            <div class="visualization-grid">
-                
-                <div id="network-container">
-                    </div>
-
-                <div id="node-details">
-                    <h3 class="text-2xl font-lora text-cyan-400 mb-4 pb-2 border-b border-gray-700">Connection Details</h3>
-                    <div id="details-content" class="text-gray-300">
-                        <p class="text-gray-500 italic">Click a node to view connections and highlight the network. Zoom and drag to explore. Click the background to reset.</p>
-                    </div>
-                </div>
-
-            </div>
-
-        </section>
-    </main>
+<section class="container mx-auto px-6 py-16">
     
-    <div id="report-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none">
-        <div id="modal-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
-        <div class="relative rounded-lg shadow-2xl w-full max-w-4xl modal-transform">
-            <div class="px-6 py-4 border-b flex justify-between items-center" style="border-color: var(--border-color);">
-                <h2 id="modal-title" class="text-2xl font-lora text-white"></h2>
-                <button id="close-modal-btn" class="text-gray-400 hover:text-white transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <div id="modal-content" class="p-6 md:p-8 modal-content-area text-gray-300">
-                </div>
-        </div>
+    <div id="filter-container" class="mb-8 flex flex-wrap gap-6 items-center justify-center p-4 bg-gray-900/50 border border-gray-800 rounded-lg">
     </div>
 
-    <footer class="border-t border-gray-800 py-12 px-6 mt-16">
-        <div class="container mx-auto text-center text-gray-500">
-            <p>&copy; 2025 SFOFWatch.org. This is an open-source intelligence project.</p>
-            <p class="mt-2">Content is provided for research and informational purposes under the AGPL-3.0 license.</p>
-            <div class="mt-4"><a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="text-cyan-400 hover:underline">Contribute on GitHub</a></div>
+    <div class="visualization-grid">
+        
+        <div id="network-container">
+        </div>
 
-            <div class="max-w-xl mx-auto mt-12 text-left">
-                <h3 class="text-2xl font-lora font-semibold text-center mb-3 text-cyan-400">Contact the Project</h3>
-                <p class="text-gray-400 mb-6 text-center">
-                    Have a tip, correction, or question? All submissions are secure and confidential.
-                </p>
-                <form name="contact" method="POST" data-netlify="true">
-                    <div class="mb-4">
-                        <label class="block text-gray-400 mb-2" for="name">Name (Optional)</label>
-                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="text" name="name" id="name" />
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-400 mb-2" for="email">Email (Optional)</label>
-                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="email" name="email" id="email" />
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-400 mb-2" for="message">Message</label>
-                        <textarea class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" name="message" id="message" rows="4" required></textarea>
-                    </div>
-                    <div class="text-center">
-                        <button class="inline-block bg-cyan-400 text-black font-bold px-8 py-3 rounded-lg hover:bg-cyan-300 transition-colors" type="submit">Send Message</button>
-                    </div>
-                </form>
+        <div id="node-details">
+            <h3 class="text-2xl font-lora text-cyan-400 mb-4 pb-2 border-b border-gray-700">Connection Details</h3>
+            <div id="details-content" class="text-gray-300">
+                <p class="text-gray-500 italic">Click a node to view connections and highlight the network. Zoom and drag to explore. Click the background to reset.</p>
             </div>
         </div>
-    </footer>
-</body>
-</html>
+
+    </div>
+
+</section>
+
+<div id="report-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none">
+    <div id="modal-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+    <div class="relative rounded-lg shadow-2xl w-full max-w-4xl modal-transform">
+        <div class="px-6 py-4 border-b flex justify-between items-center" style="border-color: var(--border-color);">
+            <h2 id="modal-title" class="text-2xl font-lora text-white"></h2>
+            <button id="close-modal-btn" class="text-gray-400 hover:text-white transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div id="modal-content" class="p-6 md:p-8 modal-content-area text-gray-300">
+        </div>
+    </div>
+</div>
