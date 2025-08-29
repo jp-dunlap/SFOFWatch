@@ -1,57 +1,390 @@
----
-title: The Influence Network
-layout: base.njk
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFOF Watch | The Network of Influence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 
-<main>
-  <section class="text-center px-6 pt-32 pb-24 hero-bg">
-    <div class="max-w-4xl mx-auto relative z-10">
-      <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Network</h1>
-      <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
-        SFOF is the central node in a sophisticated network of funders, political groups, and corporate partners. This interactive map, based on our research, visualizes these connections. Click any node for details.
-      </p>
-    </div>
-  </section>
+    <style>
+        /* --- Global Theme Variables (Matches Atlas.html) --- */
+        :root {
+            --background-dark: #0a0a0a;
+            --background-light: #111827; /* Used for containers/cards */
+            --primary-cyan: #22d3ee;
+            --text-primary: #EAEAEA;
+            --text-secondary: #9ca3af;
+            --border-color: #374151;
+        }
 
-  <section class="container mx-auto px-6 py-16 md:py-24">
-    <div id="network-container" class="bg-gray-900/50 border border-gray-800 rounded-lg p-4 md:p-8">
-      
-      <div id="network-controls" class="flex flex-wrap justify-center gap-x-6 gap-y-3 pb-4 mb-4 border-b border-gray-800">
-        <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer hover:text-white">
-          <input type="checkbox" class="filter-checkbox form-checkbox bg-gray-700 border-gray-600 text-cyan-400 focus:ring-cyan-500" data-type="funding" checked> Funding
-        </label>
-        <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer hover:text-white">
-          <input type="checkbox" class="filter-checkbox form-checkbox bg-gray-700 border-gray-600 text-cyan-400 focus:ring-cyan-500" data-type="sponsorship" checked> Sponsorship
-        </label>
-        <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer hover:text-white">
-          <input type="checkbox" class="filter-checkbox form-checkbox bg-gray-700 border-gray-600 text-cyan-400 focus:ring-cyan-500" data-type="personnel" checked> Personnel
-        </label>
-        <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer hover:text-white">
-          <input type="checkbox" class="filter-checkbox form-checkbox bg-gray-700 border-gray-600 text-cyan-400 focus:ring-cyan-500" data-type="membership" checked> Membership
-        </label>
-        <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer hover:text-white">
-          <input type="checkbox" class="filter-checkbox form-checkbox bg-gray-700 border-gray-600 text-cyan-400 focus:ring-cyan-500" data-type="official_action" checked> Official Action
-        </label>
-      </div>
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, .font-lora { font-family: 'Lora', serif; }
+        
+        /* --- Hero Background Styling (Matches Atlas) --- */
+        .hero-bg {
+            background-color: var(--background-dark);
+            background-image: 
+                radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
+                radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
+            position: relative;
+            overflow: hidden;
+        }
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-2">
-          <div id="network-viz" class="relative w-full">
-            <svg id="network-svg" class="w-full h-full min-h-[600px] rounded"></svg>
-          </div>
+        /* --- Layout --- */
+        .visualization-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .visualization-grid {
+                grid-template-columns: 3fr 1fr; /* 3/4 for visualization, 1/4 for sidebar */
+                min-height: 80vh;
+            }
+        }
+
+        /* --- Visualization Styling --- */
+        #network-container {
+            background-color: var(--background-light);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            position: relative;
+            height: 70vh; /* Default height for mobile/stacked view */
+        }
+
+         @media (min-width: 1024px) {
+            #network-container {
+                height: auto; /* Allow grid to define height on desktop */
+            }
+         }
+
+        /* Styles for D3 elements (Nodes, Links) */
+        .link {
+            stroke-opacity: 0.7;
+            transition: stroke-opacity 0.2s;
+        }
+        .node circle {
+            stroke: var(--background-dark);
+            stroke-width: 1.5px;
+            transition: filter 0.2s ease, transform 0.2s ease;
+            cursor: pointer;
+        }
+        .node:hover circle {
+            filter: brightness(1.3);
+            transform: scale(1.1);
+        }
+
+        /* --- Sidebar/Details Styling --- */
+        #node-details {
+            background-color: var(--background-light);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            overflow-y: auto; /* Allow sidebar to scroll if content is long */
+        }
+        
+        /* --- Filter Checkbox Styling --- */
+        .filter-checkbox {
+            /* Use accent-color for a clean, themed checkbox */
+            accent-color: var(--primary-cyan);
+            cursor: pointer;
+            width: 1rem;
+            height: 1rem;
+        }
+        .filter-label {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .filter-label:hover {
+            color: white;
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="foundation.html" class="hover:text-cyan-400 transition-colors">The Foundation</a>
+                <a href="network.html" class="text-cyan-400 font-bold">The Network</a>
+                <a href="playbook.html" class="hover:text-cyan-400 transition-colors">The Playbook</a>
+                <a href="atlas.html" class="hover:text-cyan-400 transition-colors">The Atlas</a>
+                <a href="data.html" class="hover:text-cyan-400 transition-colors">Data & Methodology</a>
+                 <form action="search.html" method="get" class="relative">
+                    <input type="search" name="q" placeholder="Search..." class="bg-gray-800 border border-gray-700 rounded-full py-1 px-4 text-sm text-white focus:outline-none focus:border-cyan-400" />
+                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </button>
+                </form>
+            </nav>
         </div>
-        <div class="lg:col-span-1">
-          <div id="node-details" class="bg-gray-900 border border-gray-800 rounded-lg p-6 sticky top-24">
-             <h3 class="text-lg font-lora text-gray-400">Click a node to see details</h3>
-             <p class="text-sm text-gray-500 mt-2">Use the checkboxes to filter the types of connections shown on the graph.</p>
-          </div>
-        </div>
-      </div>
-      
-       <div id="network-legend" class="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-8 pt-4 border-t border-gray-800"></div>
-    </div>
-  </section>
-</main>
+    </header>
 
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="/assets/js/network.js"></script>
+    <main>
+        <section class="text-center px-6 pt-32 pb-24 hero-bg">
+            <div class="max-w-5xl mx-auto relative z-10">
+                <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Network of Influence</h1>
+                <p class="text-lg md:text-xl text-gray-400 max-w-4xl mx-auto">
+                    SFOF is the central node in a sophisticated network of funders, political groups, and corporate partners. This interactive map, based on our research, visualizes these connections. Click any node for details.
+                </p>
+            </div>
+        </section>
+
+        <section class="container mx-auto px-6 py-16">
+            
+            <div class="mb-8 flex flex-wrap gap-6 items-center justify-center p-4 bg-gray-900/50 border border-gray-800 rounded-lg">
+                <label class="flex items-center space-x-3 filter-label text-gray-300">
+                    <input type="checkbox" class="filter-checkbox" data-type="Funding" checked>
+                    <span>Funding</span>
+                </label>
+                <label class="flex items-center space-x-3 filter-label text-gray-300">
+                    <input type="checkbox" class="filter-checkbox" data-type="Sponsorship" checked>
+                    <span>Sponsorship</span>
+                </label>
+                <label class="flex items-center space-x-3 filter-label text-gray-300">
+                    <input type="checkbox" class="filter-checkbox" data-type="Personnel" checked>
+                    <span>Personnel</span>
+                </label>
+                <label class="flex items-center space-x-3 filter-label text-gray-300">
+                    <input type="checkbox" class="filter-checkbox" data-type="Membership" checked>
+                    <span>Membership</span>
+                </label>
+                <label class="flex items-center space-x-3 filter-label text-gray-300">
+                    <input type="checkbox" class="filter-checkbox" data-type="Official Action" checked>
+                    <span>Official Action</span>
+                </label>
+            </div>
+
+            <div class="visualization-grid">
+                
+                <div id="network-container">
+                    </div>
+
+                <div id="node-details">
+                    <h3 class="text-2xl font-lora text-cyan-400 mb-4 pb-2 border-b border-gray-700">Connection Details</h3>
+                    <div id="details-content" class="text-gray-300">
+                        <p class="text-gray-500 italic">Click on a node in the network to see details, affiliations, and descriptions.</p>
+                        </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+    
+    <footer class="border-t border-gray-800 py-12 px-6 mt-16">
+        <div class="container mx-auto text-center text-gray-500">
+            <p>&copy; 2025 SFOFWatch.org. This is an open-source intelligence project.</p>
+            <p class="mt-2">Content is provided for research and informational purposes under the AGPL-3.0 license.</p>
+            <div class="mt-4"><a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="text-cyan-400 hover:underline">Contribute on GitHub</a></div>
+
+            <div class="max-w-xl mx-auto mt-12 text-left">
+                <h3 class="text-2xl font-lora font-semibold text-center mb-3 text-cyan-400">Contact the Project</h3>
+                <p class="text-gray-400 mb-6 text-center">
+                    Have a tip, correction, or question? All submissions are secure and confidential.
+                </p>
+                <form name="contact" method="POST" data-netlify="true">
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="name">Name (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="text" name="name" id="name" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="email">Email (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="email" name="email" id="email" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="message">Message</label>
+                        <textarea class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" name="message" id="message" rows="4" required></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button class="inline-block bg-cyan-400 text-black font-bold px-8 py-3 rounded-lg hover:bg-cyan-300 transition-colors" type="submit">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* 
+           NOTE: This script provides a placeholder visualization demonstrating the layout and sidebar integration.
+           If your visualization logic is in an external file, replace this script block 
+           with <script src="/path/to/your/network.js"></script> and ensure it targets the correct IDs (#network-container, #details-content).
+        */
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const container = d3.select("#network-container");
+            // Use the container's dimensions for the SVG
+            const width = container.node().getBoundingClientRect().width;
+            const height = container.node().getBoundingClientRect().height;
+
+            if (width === 0 || height === 0) return;
+
+            // Clear the container and append the SVG
+            container.html('');
+            const svg = container.append("svg")
+                .attr("width", "100%")
+                .attr("height", "100%")
+                .attr("viewBox", [0, 0, width, height]);
+
+            // Example Data (Replicating the structure/colors from the screenshot)
+            const data = {
+                nodes: [
+                    { id: "SFOF", group: 1, color: "#8b5cf6", description: "The State Financial Officers Foundation. The central organizing body." }, // Central Node (Purple)
+                    { id: "SFOF Action", group: 1, color: "#8b5cf6", description: "501(c)(4) Lobbying Arm. The 501(c)(4) affiliate of SFOF, legally permitted to engage in unlimited lobbying and direct political campaign activities." },
+                    // Funding (Blue)
+                    { id: "Funder A", group: 2, color: "#3b82f6" },
+                    { id: "Funder B", group: 2, color: "#3b82f6" },
+                    // Sponsorship (Red)
+                    { id: "Sponsor X", group: 3, color: "#ef4444" },
+                    // Personnel (Green)
+                    { id: "Staffer 1", group: 4, color: "#22c55e" },
+                    { id: "Think Tank", group: 4, color: "#22c55e" },
+                    // Membership (Purple variant)
+                    { id: "Treasurer Smith", group: 5, color: "#a78bfa" },
+                    // Official Action (Orange)
+                    { id: "Letter to Bank", group: 6, color: "#f97316" },
+                    { id: "Model Legislation", group: 6, color: "#f97316" },
+                ],
+                links: [
+                    { source: "SFOF", target: "SFOF Action", type: "Personnel" },
+                    { source: "SFOF", target: "Funder A", type: "Funding" },
+                    { source: "SFOF", target: "Funder B", type: "Funding" },
+                    { source: "SFOF", target: "Sponsor X", type: "Sponsorship" },
+                    { source: "SFOF", target: "Staffer 1", type: "Personnel" },
+                    { source: "SFOF", target: "Think Tank", type: "Membership" },
+                    { source: "SFOF", target: "Treasurer Smith", type: "Membership" },
+                    { source: "Treasurer Smith", target: "Letter to Bank", type: "Official Action" },
+                    { source: "SFOF", target: "Model Legislation", type: "Official Action" },
+                    { source: "Think Tank", target: "Model Legislation", type: "Personnel" },
+                ]
+            };
+
+            // Define link colors based on type
+            const linkColor = (type) => {
+                switch(type) {
+                    case "Funding": return "#3b82f6";
+                    case "Sponsorship": return "#ef4444";
+                    case "Personnel": return "#22c55e";
+                    case "Membership": return "#a78bfa";
+                    case "Official Action": return "#f97316";
+                    default: return "#9ca3af";
+                }
+            };
+
+            // Initialize Simulation
+            const simulation = d3.forceSimulation(data.nodes)
+                .force("link", d3.forceLink(data.links).id(d => d.id).distance(150))
+                .force("charge", d3.forceManyBody().strength(-400))
+                .force("center", d3.forceCenter(width / 2, height / 2));
+
+            // Draw Links
+            const link = svg.append("g")
+                .attr("class", "links")
+                .selectAll("line")
+                .data(data.links)
+                .enter().append("line")
+                .attr("class", d => `link link-${d.type.replace(/\s+/g, '-')}`)
+                .style("stroke", d => linkColor(d.type))
+                .style("stroke-width", 2);
+
+            // Draw Nodes
+            const node = svg.append("g")
+                .attr("class", "nodes")
+                .selectAll("g")
+                .data(data.nodes)
+                .enter().append("g")
+                .attr("class", "node")
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended))
+                .on("click", updateSidebar);
+
+            node.append("circle")
+                .attr("r", 10)
+                .attr("fill", d => d.color);
+
+            // Add tooltips
+            node.append("title")
+                .text(d => d.id);
+            
+            // Simulation Tick
+            simulation.on("tick", () => {
+                link
+                    .attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y);
+
+                node
+                    .attr("transform", d => `translate(${d.x},${d.y})`);
+            });
+
+            // Interaction Handlers
+            function updateSidebar(event, d) {
+                const detailsContent = d3.select("#details-content");
+                
+                // Find connections
+                const connections = data.links.filter(l => l.source.id === d.id || l.target.id === d.id);
+                let connectionHtml = connections.map(c => {
+                    const otherNode = c.source.id === d.id ? c.target.id : c.source.id;
+                    return `<li><strong style="color:${linkColor(c.type)}">${c.type}:</strong> connected to ${otherNode}</li>`;
+                }).join('');
+
+                detailsContent.html(`
+                    <h4 class="text-xl font-semibold text-white mt-4 mb-3">${d.id}</h4>
+                    <p class="mb-4 text-gray-300">${d.description || 'No description available.'}</p>
+                    <h5 class="text-lg text-cyan-400 mt-4 mb-2">Connections</h5>
+                    <ul class="list-disc list-inside space-y-1">
+                        ${connectionHtml || '<li>No connections found.</li>'}
+                    </ul>
+                `);
+            }
+
+            // Drag functions
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+            
+            // Filter functionality (Visual toggle example)
+            d3.selectAll(".filter-checkbox").on("change", function() {
+                const type = d3.select(this).attr("data-type");
+                const checked = this.checked;
+                
+                const className = `.link-${type.replace(/\s+/g, '-')}`;
+
+                svg.selectAll(className)
+                   .style("display", checked ? null : 'none');
+                
+                // Note: A robust implementation often requires filtering the data 
+                // and re-running the simulation, rather than just hiding links visually.
+            });
+
+        });
+    </script>
+</body>
+</html>
