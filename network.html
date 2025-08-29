@@ -218,14 +218,14 @@
 
     <header class="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-gray-800">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
+            <a href="/" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
             <nav class="hidden md:flex items-center space-x-8">
-                <a href="foundation.html" class="hover:text-cyan-400 transition-colors">The Foundation</a>
-                <a href="network.html" class="text-cyan-400 font-bold">The Network</a>
-                <a href="playbook.html" class="hover:text-cyan-400 transition-colors">The Playbook</a>
-                <a href="atlas.html" class="hover:text-cyan-400 transition-colors">The Atlas</a>
-                <a href="data.html" class="hover:text-cyan-400 transition-colors">Data & Methodology</a>
-                 <form action="search.html" method="get" class="relative">
+                <a href="/foundation" class="hover:text-cyan-400 transition-colors">The Foundation</a>
+                <a href="/network" class="text-cyan-400 font-bold">The Network</a>
+                <a href="/playbook" class="hover:text-cyan-400 transition-colors">The Playbook</a>
+                <a href="/atlas" class="hover:text-cyan-400 transition-colors">The Atlas</a>
+                <a href="/data" class="hover:text-cyan-400 transition-colors">Data & Methodology</a>
+                 <form action="/search" method="get" class="relative">
                     <input type="search" name="q" placeholder="Search..." class="bg-gray-800 border border-gray-700 rounded-full py-1 px-4 text-sm text-white focus:outline-none focus:border-cyan-400" />
                     <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -314,3 +314,7 @@
     </footer>
 </body>
 </html>
+```
+I've updated the `network.html` file with absolute paths in the navigation menu. This should resolve the routing issues.
+
+As with the previous file, I recommend we refactor this page to use the `_includes/base.njk` template for better maintainability. Shall we proceed with th
