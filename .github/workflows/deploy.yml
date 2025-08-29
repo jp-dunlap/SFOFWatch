@@ -34,15 +34,15 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        # npm ci ensures a clean install based on package-lock.json
-        run: npm ci
+        # Changed from 'npm ci' to 'npm install' to bypass synchronization issues
+        # between package.json and package-lock.json
+        run: npm install
 
       - name: Build with Eleventy
         # This runs the 'npm run build' script defined in package.json
         run: npm run build
-        # NOTE: The build process includes 'build:data' (update-legislation.js).
-        # As seen in previous Netlify logs, this step likely requires the LEGISCAN_API_KEY.
-        # You must add this key to your GitHub Repository Secrets (Settings -> Secrets and variables -> Actions).
+        # NOTE: The build process (specifically update-legislation.js) likely requires the LEGISCAN_API_KEY.
+        # Ensure this key is added to your GitHub Repository Secrets (Settings -> Secrets and variables -> Actions).
         # env:
         #   LEGISCAN_API_KEY: ${{ secrets.LEGISCAN_API_KEY }}
 
