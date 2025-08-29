@@ -3,7 +3,7 @@ layout: base_dark.njk
 title: SFOF Network
 ---
 
-{# Use Nunjucks 'set' tag instead of Liquid 'capture' tag #}
+{# Use Nunjucks 'set' tag #}
 {%- set head -%}
     <script src="https://d3js.org/d3.v7.min.js"></script>
 {%- endset -%}
@@ -21,16 +21,18 @@ title: SFOF Network
     }
 
     /* --- Layout --- */
+    /* CRITICAL FIX: Ensure the grid layout provides height for the visualization */
     .visualization-grid {
         display: grid;
         grid-template-columns: 1fr;
         gap: 2rem;
+        /* Ensure the grid itself takes up significant height */
+        min-height: 85vh; 
     }
 
     @media (min-width: 1024px) {
         .visualization-grid {
             grid-template-columns: 3fr 1fr; /* 75% viz, 25% sidebar */
-            min-height: 85vh;
         }
     }
 
@@ -40,14 +42,41 @@ title: SFOF Network
         border: 1px solid var(--border-color);
         border-radius: 0.5rem;
         position: relative;
-        height: 70vh;
         width: 100%;
         overflow: hidden; /* Keep visualization contained */
+        
+        /* CRITICAL FIX: Ensure the container occupies the available space in the grid cell. */
+        height: 100%; 
     }
 
-    @media (min-width: 1024px) {
+    /* Ensure the sidebar also stretches if the visualization grows */
+    #node-details {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Allow content within sidebar to scroll */
+    #details-scroll-container {
+        overflow-y: auto;
+        flex-grow: 1;
+    }
+
+    /* Mobile specific adjustments */
+    @media (max-width: 1023px) {
+        /* On mobile, the grid stacks vertically. */
+        .visualization-grid {
+             /* Reset min-height on mobile to prevent excessive scrolling if content is short */
+            min-height: auto;
+        }
         #network-container {
-            height: auto;
+            /* Define a specific viewport height for the visualization on mobile */
+            height: 70vh;
+        }
+        #node-details {
+            /* Allow details panel to size naturally on mobile */
+            height: auto; 
+            display: block;
         }
     }
 
@@ -108,7 +137,7 @@ title: SFOF Network
         border: 1px solid var(--border-color);
         border-radius: 0.5rem;
         padding: 1.5rem;
-        overflow-y: auto;
+        /* Height/Overflow is now controlled above in the Layout section */
     }
 
     /* --- Filter Checkbox Styling --- */
@@ -138,11 +167,16 @@ title: SFOF Network
         border: 1px solid var(--border-color);
     }
     .modal-content-area { max-height: 70vh; overflow-y: auto; }
-    /* Scrollbar Styling */
-    .modal-content-area::-webkit-scrollbar { width: 8px; }
-    .modal-content-area::-webkit-scrollbar-track { background: #1f2937; }
-    .modal-content-area::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
-    .modal-content-area::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+    
+    /* Scrollbar Styling (Applied to modal and sidebar scroll container) */
+    .modal-content-area::-webkit-scrollbar,
+    #details-scroll-container::-webkit-scrollbar { width: 8px; }
+    .modal-content-area::-webkit-scrollbar-track,
+    #details-scroll-container::-webkit-scrollbar-track { background: #1f2937; }
+    .modal-content-area::-webkit-scrollbar-thumb,
+    #details-scroll-container::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+    .modal-content-area::-webkit-scrollbar-thumb:hover,
+    #details-scroll-container::-webkit-scrollbar-thumb:hover { background: #6b7280; }
 
      /* DYNAMIC CONTENT STYLES (for modal content) */
      #modal-content h3 {
@@ -220,10 +254,7 @@ title: SFOF Network
         </div>
 
         <div id="node-details">
-            <h3 class="text-2xl font-lora text-cyan-400 mb-4 pb-2 border-b border-gray-700">Connection Details</h3>
-            <div id="details-content" class="text-gray-300">
-                <p class="text-gray-500 italic">Click a node to view connections and highlight the network. Zoom and drag to explore. Click the background to reset.</p>
-            </div>
+            {# Content is dynamically populated by network.js #}
         </div>
 
     </div>
