@@ -7,6 +7,7 @@
 [functions]
   directory = "netlify/functions/"
   node_bundler = "esbuild"
+  external_node_modules = ["@netlify/functions"]
 
 # Schedule the function to run daily
 [functions.fetch-legislation]
