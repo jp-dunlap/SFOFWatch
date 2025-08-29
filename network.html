@@ -1,20 +1,44 @@
 ---
-title: SFOF Influence Network
+title: The Influence Network
 layout: base.njk
 ---
-<h1>SFOF Influence Network</h1>
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<div id="network-viz">
+
+<style>
+    #network-container { display: flex; flex-direction: column; align-items: center; }
+    #network-viz { position: relative; width: 100%; max-width: 1200px; }
+    #network-svg { background-color: rgba(17, 24, 39, 0.5); border: 1px solid #374151; border-radius: 8px; width: 100%; }
+    .node-label { font-size: 12px; fill: #EAEAEA; stroke: #0a0a0a; stroke-width: 0.5px; paint-order: stroke; }
+    #network-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; padding: 1rem; margin-bottom: 1rem; background-color: rgba(31, 41, 55, 0.5); border-radius: 8px; }
+    #network-controls label { display: flex; align-items: center; gap: 0.5rem; color: #EAEAEA; cursor: pointer; }
+    #node-details { background-color: #111827; padding: 1.5rem; border-radius: 8px; border: 1px solid #374151; margin-top: 1.5rem; max-width: 1200px; width: 100%; }
+    #network-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
+    .legend-item { display: flex; align-items: center; font-size: 0.8rem; color: #9ca3af; }
+    .legend-color-box { width: 14px; height: 14px; border-radius: 3px; margin-right: 6px; }
+</style>
+
+<div class="text-center px-6 pt-24 pb-16">
+    <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Network</h1>
+    <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+        SFOF is the central node in a sophisticated network of funders, political groups, and corporate partners. This interactive map, based on our research, visualizes these connections. Click any node for details.
+    </p>
+</div>
+
+<div id="network-container" class="container mx-auto px-6">
+    <div id="network-viz">
+        <svg id="network-svg" width="960" height="600"></svg>
+    </div>
     <div id="network-controls">
-        <h4>Filter Relationships:</h4>
         <label><input type="checkbox" class="filter-checkbox" data-type="funding" checked> Funding</label>
         <label><input type="checkbox" class="filter-checkbox" data-type="sponsorship" checked> Sponsorship</label>
         <label><input type="checkbox" class="filter-checkbox" data-type="personnel" checked> Personnel</label>
+        <label><input type="checkbox" class="filter-checkbox" data-type="membership" checked> Membership</label>
         <label><input type="checkbox" class="filter-checkbox" data-type="official_action" checked> Official Action</label>
     </div>
-    <svg id="network-svg" width="960" height="600" style="border: 1px solid #ccc;"></svg>
+    <div id="network-legend"></div>
     <div id="node-details">
-        <h3>Click a node for details</h3>
+        <h3 class="text-lg font-lora text-gray-400">Click a node to see details</h3>
     </div>
 </div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="/assets/js/network.js"></script>
