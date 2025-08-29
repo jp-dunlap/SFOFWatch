@@ -15,12 +15,12 @@ title: SFOF Network
     {{ super() }}
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
-    {# Styles specific to the network visualization (previously captured in 'styles' variable) #}
+    {# Styles specific to the network visualization #}
     <style>
         /* --- Hero Background Styling --- */
         .hero-bg {
             background-color: var(--background-dark);
-            background-image: 
+            background-image:
                 radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
                 radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
             position: relative;
@@ -28,13 +28,11 @@ title: SFOF Network
         }
 
         /* --- Layout --- */
-        /* CRITICAL FIX: Ensure the grid layout provides height for the visualization */
         .visualization-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 2rem;
-            /* Ensure the grid itself takes up significant height */
-            min-height: 85vh; 
+            min-height: 85vh;
         }
 
         @media (min-width: 1024px) {
@@ -50,44 +48,35 @@ title: SFOF Network
             border-radius: 0.5rem;
             position: relative;
             width: 100%;
-            overflow: hidden; /* Keep visualization contained */
-            
-            /* CRITICAL FIX: Ensure the container occupies the available space in the grid cell. */
-            height: 100%; 
+            overflow: hidden;
+            height: 100%;
         }
 
-        /* Ensure the sidebar also stretches if the visualization grows */
         #node-details {
             height: 100%;
             display: flex;
             flex-direction: column;
         }
 
-        /* Allow content within sidebar to scroll */
         #details-scroll-container {
             overflow-y: auto;
             flex-grow: 1;
         }
 
-        /* Mobile specific adjustments */
         @media (max-width: 1023px) {
-            /* On mobile, the grid stacks vertically. */
             .visualization-grid {
-                 /* Reset min-height on mobile to prevent excessive scrolling if content is short */
                 min-height: auto;
             }
             #network-container {
-                /* Define a specific viewport height for the visualization on mobile */
                 height: 70vh;
             }
             #node-details {
-                /* Allow details panel to size naturally on mobile */
-                height: auto; 
+                height: auto;
                 display: block;
             }
         }
 
-        /* --- D3 Element Styles (Aesthetically Dope) --- */
+        /* --- D3 Element Styles --- */
         .link {
             stroke-opacity: 0.5;
             transition: stroke-opacity 0.3s, stroke-width 0.3s, opacity 0.3s;
@@ -106,22 +95,18 @@ title: SFOF Network
             pointer-events: none;
             text-anchor: middle;
             transition: fill 0.3s, font-weight 0.3s, opacity 0.3s, font-size 0.3s;
-            /* Add shadow for readability on dark background */
             text-shadow: 0 0 5px var(--background-dark), 0 0 3px var(--background-dark), 0 0 1px var(--background-dark);
         }
 
-        /* --- Dynamic Highlighting/Dimming States (Focus/Fade) --- */
-        /* When active, fade elements significantly */
-        .network-faded .node circle,
-        .network-faded .node-label,
-        .network-faded .link {
+        /* --- Dynamic Highlighting/Dimming States --- */
+        .network-faded .node:not(.highlighted) circle,
+        .network-faded .node:not(.highlighted) .node-label,
+        .network-faded .link:not(.highlighted) {
             opacity: 0.05;
         }
 
-        /* Bring highlighted elements forward with a glow effect */
         .node.highlighted circle {
             opacity: 1;
-            /* Brighten and add a cyan glow */
             filter: brightness(1.4) drop-shadow(0 0 8px var(--primary-cyan));
         }
 
@@ -144,7 +129,6 @@ title: SFOF Network
             border: 1px solid var(--border-color);
             border-radius: 0.5rem;
             padding: 1.5rem;
-            /* Height/Overflow is now controlled above in the Layout section */
         }
 
         /* --- Filter Checkbox Styling --- */
@@ -162,20 +146,20 @@ title: SFOF Network
             color: white;
         }
 
-        /* --- MODAL STYLES (Mirroring Atlas.html) --- */
+        /* --- MODAL STYLES --- */
         #report-modal { transition: opacity 0.3s ease-out; }
         #report-modal.is-visible { opacity: 1; pointer-events: auto; }
         #report-modal.is-visible .modal-transform { transform: scale(1); }
-        .modal-transform { 
-            transition: transform 0.3s ease-out; 
-            transform: scale(0.95); 
+        .modal-transform {
+            transition: transform 0.3s ease-out;
+            transform: scale(0.95);
             will-change: transform;
             background-color: var(--background-light);
             border: 1px solid var(--border-color);
         }
         .modal-content-area { max-height: 70vh; overflow-y: auto; }
-        
-        /* Scrollbar Styling (Applied to modal and sidebar scroll container) */
+
+        /* Scrollbar Styling */
         .modal-content-area::-webkit-scrollbar,
         #details-scroll-container::-webkit-scrollbar { width: 8px; }
         .modal-content-area::-webkit-scrollbar-track,
@@ -185,8 +169,8 @@ title: SFOF Network
         .modal-content-area::-webkit-scrollbar-thumb:hover,
         #details-scroll-container::-webkit-scrollbar-thumb:hover { background: #6b7280; }
 
-         /* DYNAMIC CONTENT STYLES (for modal content) */
-         #modal-content h3 {
+        /* DYNAMIC CONTENT STYLES (for modal content) */
+        #modal-content h3 {
             font-family: 'Lora', serif;
             font-size: 1.5rem;
             color: var(--text-primary);
@@ -233,7 +217,6 @@ title: SFOF Network
 {# CONTENT Block (Main HTML Body)                                             #}
 {# -------------------------------------------------------------------------- #}
 
-{# Wrap the main page content in the 'content' block #}
 {% block content %}
 <section class="text-center px-6 pt-32 pb-24 hero-bg">
     <div class="max-w-5xl mx-auto relative z-10">
@@ -245,23 +228,28 @@ title: SFOF Network
 </section>
 
 <section class="container mx-auto px-6 py-16">
-    
+
     <div id="filter-container" class="mb-8 flex flex-wrap gap-6 items-center justify-center p-4 bg-gray-900/50 border border-gray-800 rounded-lg">
+        <!-- Filters will be generated by the script -->
     </div>
 
     <div class="visualization-grid">
-        
         <div id="network-container">
+            <!-- D3 visualization will be rendered here -->
         </div>
 
         <div id="node-details">
-            {# Content is dynamically populated by network.js #}
+             <div id="details-scroll-container">
+                <div id="details-content">
+                     <p class="text-secondary fst-italic">Click a node to view connections and highlight the network. Zoom and drag to explore. Click the background to reset.</p>
+                </div>
+             </div>
         </div>
-
     </div>
 
 </section>
 
+<!-- Modal for Dossier Reports -->
 <div id="report-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none">
     <div id="modal-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
     <div class="relative rounded-lg shadow-2xl w-full max-w-4xl modal-transform">
@@ -272,6 +260,7 @@ title: SFOF Network
             </button>
         </div>
         <div id="modal-content" class="p-6 md:p-8 modal-content-area text-gray-300">
+            <!-- Content is loaded here via fetch -->
         </div>
     </div>
 </div>
@@ -281,16 +270,14 @@ title: SFOF Network
 {# SCRIPTS Block (Footer Scripts and Data Inlining)                           #}
 {# -------------------------------------------------------------------------- #}
 
-{# Inject data inlining and visualization script into the scripts block (previously captured in 'scripts' variable) #}
 {% block scripts %}
     {{ super() }}
     <script>
       // Inline the data from Eleventy's global data (_data/sfof_network.json).
-      // We use the Nunjucks 'dump' filter to serialize the data to JSON, 
-      // and 'safe' to prevent HTML escaping.
+      // This makes the data immediately available to our visualization script.
       window.networkData = {{ sfof_network | dump | safe }};
     </script>
-    
-    {# CRITICAL: Load the initialization script that consumes window.networkData #}
-    <script src="/assets/js/network.js" defer></script>
+
+    {# CORRECTED: Load the main visualization script directly. #}
+    <script src="/assets/js/network-vis.js" type="module"></script>
 {% endblock %}
