@@ -3,13 +3,12 @@ title: "SFOF Watch | The Network of Influence"
 layout: "_includes/base_dark.njk"
 ---
 
-{# Inject page-specific scripts into the <head> of the base template #}
-{%- set head -%}
+{# Corrected to use Liquid 'capture' tag instead of Nunjucks 'set' tag #}
+{%- capture head -%}
     <script src="https://d3js.org/d3.v7.min.js"></script>
-{%- endset -%}
+{%- endcapture -%}
 
-{# Inject page-specific styles into the <head> of the base template #}
-{%- set styles -%}
+{%- capture styles -%}
 <style>
     /* --- Hero Background Styling --- */
     .hero-bg {
@@ -186,12 +185,11 @@ layout: "_includes/base_dark.njk"
         font-size: 0.875rem;
     }
 </style>
-{%- endset -%}
+{%- endcapture -%}
 
-{# Inject the main visualization script at the end of the <body> #}
-{%- set scripts -%}
+{%- capture scripts -%}
     <script src="/assets/js/network-vis.js" defer></script>
-{%- endset -%}
+{%- endcapture -%}
 
 <section class="text-center px-6 pt-32 pb-24 hero-bg">
     <div class="max-w-5xl mx-auto relative z-10">
