@@ -1,114 +1,48 @@
 {
   "metadata": {
     "last_updated": "2025-08-28",
-    "description": "A curated dataset representing the network of influence surrounding the State Financial Officers Foundation (SFOF)."
+    "description": "A comprehensive, research-backed dataset representing the network of influence surrounding the State Financial Officers Foundation (SFOF)."
   },
   "nodes": [
-    {
-      "id": "sfof_c3",
-      "name": "State Financial Officers Foundation (SFOF)",
-      "type": "political_group",
-      "subtype": "501(c)(3)",
-      "description": "Central organization coordinating the anti-ESG agenda among state financial officers. Revenue grew from $940k (2021) to $2.9M (2023).",
-      "state": null
-    },
-    {
-      "id": "derek_kreifels",
-      "name": "Derek Kreifels",
-      "type": "person",
-      "subtype": "Operative",
-      "description": "Co-founder and former CEO of SFOF. Founder of Prospr Aligned, a for-profit anti-ESG consultancy.",
-      "state": "KS"
-    },
-    {
-      "id": "bradley_foundation",
-      "name": "The Bradley Foundation",
-      "type": "foundation",
-      "subtype": "Ideological Funder",
-      "description": "SFOF's largest identifiable ideological funder.",
-      "state": "WI"
-    },
-    {
-      "id": "donors_trust",
-      "name": "DonorsTrust",
-      "type": "dark_money_fund",
-      "subtype": "DAF",
-      "description": "The 'dark money ATM' of the political right. Major funder of the entire anti-ESG ecosystem, anonymizing donors.",
-      "state": null
-    },
-    {
-      "id": "alec",
-      "name": "ALEC",
-      "type": "political_group",
-      "subtype": "Bill Mill",
-      "description": "Develops and disseminates model anti-ESG legislation (e.g., 'Eliminate Political Boycotts Act'). Shares leadership with SFOF.",
-      "state": null
-    },
-    {
-      "id": "consumers_research",
-      "name": "Consumers' Research",
-      "type": "political_group",
-      "subtype": "PR/Attack Dog",
-      "description": "Key operational partner and major funder of SFOF. Runs aggressive public campaigns against 'woke' companies.",
-      "state": null
-    },
-    {
-      "id": "federated_hermes",
-      "name": "Federated Hermes",
-      "type": "corporation",
-      "subtype": "Financial Services",
-      "description": "Major SFOF sponsor. Beneficiary of divestment actions by SFOF members.",
-      "state": null
-    },
-    {
-      "id": "curtis_loftis",
-      "name": "Curtis Loftis",
-      "type": "state_officer",
-      "subtype": "Treasurer",
-      "description": "South Carolina Treasurer. Central figure in the SEC 'pay-to-play' complaint regarding BlackRock divestment.",
-      "state": "SC"
-    }
+    { "id": "sfof", "name": "SFOF", "type": "political_group", "subtype": "501(c)(3) Hub", "description": "State Financial Officers Foundation. A 501(c)(3) non-profit that acts as the central coordinating body for the anti-ESG campaign among state officials." },
+    { "id": "sfof_action", "name": "SFOF Action", "type": "political_group", "subtype": "501(c)(4) Lobbying Arm", "description": "The 501(c)(4) affiliate of SFOF, legally permitted to engage in unlimited lobbying and direct political campaign activities." },
+    { "id": "derek_kreifels", "name": "Derek Kreifels", "type": "person", "subtype": "CEO & Founder", "description": "Co-founder and CEO of SFOF. Later founded Prospr Aligned, a for-profit anti-ESG consultancy." },
+    { "id": "leonard_leo", "name": "Leonard Leo", "type": "person", "subtype": "Strategic Hub", "description": "Conservative legal activist whose network is a central coordinating and funding hub for the anti-ESG ecosystem." },
+    { "id": "bradley_foundation", "name": "Bradley Foundation", "type": "foundation", "subtype": "Top Funder", "description": "The largest and most influential identifiable ideological funder of SFOF." },
+    { "id": "bradley_impact_fund", "name": "Bradley Impact Fund", "type": "dark_money_fund", "subtype": "Donor-Advised Fund", "description": "A donor-advised fund affiliated with the Bradley Foundation, used to channel anonymous donations." },
+    { "id": "donors_trust", "name": "DonorsTrust", "type": "dark_money_fund", "subtype": "Donor-Advised Fund", "description": "A major donor-advised fund, often called a 'dark money ATM,' that anonymizes the original source of funds for numerous conservative groups." },
+    { "id": "sarah_scaife_foundation", "name": "Sarah Scaife Foundation", "type": "foundation", "subtype": "Major Funder", "description": "A pillar of right-wing funding built on the Mellon industrial, oil, and banking fortune." },
+    { "id": "heritage_foundation", "name": "The Heritage Foundation", "type": "political_group", "subtype": "Think Tank & Patron", "description": "A leading conservative think tank that provides ideological legitimacy, hosts SFOF meetings, and co-develops model legislation." },
+    { "id": "alec", "name": "ALEC", "type": "political_group", "subtype": "Bill Mill", "description": "American Legislative Exchange Council. Creates and promotes model anti-ESG legislation in partnership with SFOF." },
+    { "id": "consumers_research", "name": "Consumers' Research", "type": "political_group", "subtype": "PR & Media Arm", "description": "Acts as both a major funder to SFOF and its public-facing 'attack dog,' running aggressive ad campaigns against 'woke' companies." },
+    { "id": "federated_hermes", "name": "Federated Hermes", "type": "corporation", "subtype": "Financial Services", "description": "A top-tier 'Gold' level sponsor of SFOF. Beneficiary of divestment from BlackRock by SFOF member Curtis Loftis." },
+    { "id": "public_trust_advisors", "name": "Public Trust Advisors", "type": "corporation", "subtype": "Financial Services", "description": "'Diamond' level sponsor of SFOF that appears to have benefited financially from anti-ESG legislation in Texas." },
+    { "id": "curtis_loftis", "name": "Curtis Loftis", "type": "state_officer", "subtype": "SC Treasurer", "description": "South Carolina Treasurer and SFOF member. Divested state funds from non-donor BlackRock and moved them to SFOF-donor Federated Hermes." },
+    { "id": "riley_moore", "name": "Riley Moore", "type": "state_officer", "subtype": "WV Treasurer", "description": "Then-West Virginia Treasurer who created the first 'Restricted Financial Institutions List,' providing a tactical blueprint for the SFOF network." },
+    { "id": "glenn_hegar", "name": "Glenn Hegar", "type": "state_officer", "subtype": "TX Comptroller", "description": "Texas Comptroller responsible for implementing the state's anti-ESG 'energy boycott' law." },
+    { "id": "marlo_oaks", "name": "Marlo Oaks", "type": "state_officer", "subtype": "UT Treasurer", "description": "Utah Treasurer who serves as a key public spokesman for the anti-ESG movement's ideological justifications." }
   ],
   "edges": [
-    {
-      "source": "bradley_foundation",
-      "target": "sfof_c3",
-      "type": "funding",
-      "details": "Major ideological funding grant.",
-      "amount": 750000,
-      "year": "2022-2023",
-      "citation_url": "https://www.exposedbycmd.org/..."
-    },
-    {
-      "source": "donors_trust",
-      "target": "sfof_c3",
-      "type": "funding",
-      "details": "Funding via DAF.",
-      "amount": 405000,
-      "year": "2022-2023",
-      "citation_url": "https://sfofexposed.org/..."
-    },
-    {
-      "source": "derek_kreifels",
-      "target": "sfof_c3",
-      "type": "personnel",
-      "details": "Co-founder and CEO."
-    },
-    {
-      "source": "federated_hermes",
-      "target": "sfof_c3",
-      "type": "sponsorship",
-      "details": "Gold Level Sponsorship.",
-      "amount": 50000,
-      "year": "2022"
-    },
-    {
-        "source": "curtis_loftis",
-        "target": "federated_hermes",
-        "type": "official_action",
-        "details": "Moved state funds divested from BlackRock to Federated Hermes. (Alleged Pay-to-Play).",
-        "year": "2022",
-        "citation_url": "https://campaignforaccountability.org/..."
-    }
+    { "source": "derek_kreifels", "target": "sfof", "type": "personnel", "details": "Co-founder and CEO." },
+    { "source": "sfof", "target": "sfof_action", "type": "personnel", "details": "Created as 501(c)(4) affiliate." },
+    { "source": "bradley_foundation", "target": "sfof", "type": "funding", "details": "Largest known ideological funder.", "amount": 750000, "year": "2022-2023" },
+    { "source": "bradley_impact_fund", "target": "sfof", "type": "funding", "details": "DAF funding.", "amount": 1000094, "year": "2022-2023" },
+    { "source": "donors_trust", "target": "sfof", "type": "funding", "details": "'Dark money' DAF funding.", "amount": 405000, "year": "2022-2023" },
+    { "source": "sarah_scaife_foundation", "target": "sfof", "type": "funding", "details": "Foundation grant.", "amount": 245000, "year": "2022-2023" },
+    { "source": "heritage_foundation", "target": "sfof", "type": "funding", "details": "'Innovation Prize' grant.", "amount": 100000, "year": "2022" },
+    { "source": "consumers_research", "target": "sfof", "type": "funding", "details": "Operational partner that also acts as a major funder.", "amount": 617500, "year": "2021-2023" },
+    { "source": "donors_trust", "target": "consumers_research", "type": "funding", "details": "Massive funding that fuels its operations and grants to SFOF.", "amount": 6500000, "year": "2023" },
+    { "source": "donors_trust", "target": "alec", "type": "funding", "details": "Funding for legislative partner.", "amount": 111100, "year": "2023" },
+    { "source": "leonard_leo", "target": "donors_trust", "type": "personnel", "details": "Leo's network funnels tens of millions to DonorsTrust, which then funds the ecosystem." },
+    { "source": "sfof", "target": "alec", "type": "personnel", "details": "Shared leadership and collaboration on model legislation." },
+    { "source": "sfof", "target": "heritage_foundation", "type": "personnel", "details": "Institutional patronage, event hosting, and legislative development." },
+    { "source": "federated_hermes", "target": "sfof", "type": "sponsorship", "details": "Gold Level Sponsorship." },
+    { "source": "public_trust_advisors", "target": "sfof", "type": "sponsorship", "details": "Diamond Level Sponsorship." },
+    { "source": "curtis_loftis", "target": "sfof", "type": "membership", "details": "Member State Officer." },
+    { "source": "riley_moore", "target": "sfof", "type": "membership", "details": "Member State Officer." },
+    { "source": "glenn_hegar", "target": "sfof", "type": "membership", "details": "Member State Officer." },
+    { "source": "marlo_oaks", "target": "sfof", "type": "membership", "details": "Member State Officer." },
+    { "source": "curtis_loftis", "target": "federated_hermes", "type": "official_action", "details": "Divested from non-donor BlackRock and moved funds to Federated Hermes." },
+    { "source": "glenn_hegar", "target": "public_trust_advisors", "type": "official_action", "details": "Implemented Texas SB 13, which created a favorable market for PTA." }
   ]
 }
