@@ -1,60 +1,100 @@
 (function() {
-    // Initialize the visualization when the DOM is ready
+    // Configuration for visualization aesthetics
+    const NODE_COLORS = {
+        1: "#8b5cf6", // Core Network (Purple)
+        2: "#f59e0b", // Funders/DAFs (Amber)
+        3: "#10b981", // Corporations/Sponsors (Green)
+        4: "#22d3ee", // Individuals/Officials (Cyan - Site Primary)
+        5: "#ef4444", // Targets (Red)
+        6: "#64748b"  // Legislation/Actions (Gray)
+    };
+
+    const LINK_COLORS = {
+        "Funding": "#f59e0b",
+        "Sponsorship": "#10b981",
+        "Membership": "#22d3ee",
+        "Affiliation": "#8b5cf6",
+        "Operational": "#64748b",
+        "Personnel": "#22d3ee",
+        "Political Action": "#ef4444",
+        "Beneficiary": "#10b981"
+    };
+
+    // Global variables for modal elements
+    let modal, modalTitle, modalContent, mainContent;
+
+    // Initialize when the DOM is ready
     document.addEventListener('DOMContentLoaded', () => {
-        // Ensure D3 is available
         if (typeof d3 === 'undefined') {
             console.error("D3.js is not loaded.");
             return;
         }
-        initializeNetworkVisualization();
+        initializeModal();
+        fetchNetworkData();
     });
 
-    function initializeNetworkVisualization() {
+    // Load the data from the external JSON file
+    function fetchNetworkData() {
+        d3.json("/assets/data/network-data.json").then(data => {
+            initializeNetworkVisualization(data);
+        }).catch(error => {
+            console.error("Error loading network data:", error);
+            d3.select("#network-container").html('<p class="text-center text-red-400 p-10">Failed to load network data. Ensure /assets/data/network-data.json exists and is accessible.</p>');
+        });
+    }
+
+    function initializeNetworkVisualization(data) {
         const container = d3.select("#network-container");
         if (container.empty()) return;
 
         const width = container.node().getBoundingClientRect().width;
         const height = container.node().getBoundingClientRect().height;
 
-        // Retry if the container dimensions haven't settled yet (common in complex layouts)
+        // Handle potential race condition where layout hasn't settled
         if (width === 0 || height === 0) {
-             setTimeout(initializeNetworkVisualization, 200);
+             setTimeout(() => initializeNetworkVisualization(data), 200);
              return;
         }
 
-        // Clear the container and append the SVG
+        // Prepare data: Calculate node degree (connectivity)
+        const degree = {};
+        data.nodes.forEach(d => degree[d.id] = 0);
+        // Calculate degree based on initial link structure (strings before simulation initialization)
+        data.links.forEach(l => {
+            degree[l.source]++;
+            degree[l.target]++;
+        });
+
+        const getRadius = (d) => {
+            const base = 5;
+            const scale = 1.5;
+            return base + (degree[d.id] || 0) * scale;
+        };
+
+        // Setup SVG and Zoom/Pan functionality
         container.html('');
         const svg = container.append("svg")
             .attr("width", "100%")
             .attr("height", "100%")
             .attr("viewBox", [0, 0, width, height]);
 
-        // Group for zoom/pan functionality
-        const g = svg.append("g");
+        const g = svg.append("g"); // Group for applying zoom transform
 
-        // Data
-        const data = getNetworkData();
+        const zoom = d3.zoom()
+            .scaleExtent([0.3, 4])
+            .on("zoom", (event) => {
+                g.attr("transform", event.transform);
+            });
+        
+        svg.call(zoom); // Attach zoom behavior
 
-        // Calculate node degree (connectivity) for dynamic sizing
-        const degree = {};
-        data.nodes.forEach(d => degree[d.id] = 0);
-        // Calculate degree based on initial link structure (strings)
-        data.links.forEach(l => {
-            degree[l.source]++;
-            degree[l.target]++;
-        });
-
-        // Define dynamic radius function
-        const getRadius = (d) => 5 + (degree[d.id] || 0) * 2;
-
-        // Initialize Simulation
+        // Initialize Simulation with optimized forces
         const simulation = d3.forceSimulation(data.nodes)
-            .force("link", d3.forceLink(data.links).id(d => d.id).distance(120).strength(1))
-            .force("charge", d3.forceManyBody().strength(-600))
-            .force("x", d3.forceX(width / 2).strength(0.1))
-            .force("y", d3.forceY(height / 2).strength(0.1))
-            // Prevent overlaps, accounting for dynamic radius and labels
-            .force("collision", d3.forceCollide().radius(d => getRadius(d) + 15));
+            .force("link", d3.forceLink(data.links).id(d => d.id).distance(100).strength(0.8))
+            .force("charge", d3.forceManyBody().strength(-500))
+            .force("x", d3.forceX(width / 2).strength(0.05))
+            .force("y", d3.forceY(height / 2).strength(0.05))
+            .force("collision", d3.forceCollide().radius(d => getRadius(d) + 20).strength(0.7));
 
         // Draw Links
         const link = g.append("g")
@@ -63,7 +103,7 @@
             .data(data.links)
             .enter().append("line")
             .attr("class", d => `link link-${d.type.replace(/\s+/g, '-')}`)
-            .style("stroke", d => linkColor(d.type))
+            .style("stroke", d => LINK_COLORS[d.type] || "#9ca3af")
             .style("stroke-width", 1.5);
 
         // Draw Nodes
@@ -76,17 +116,17 @@
             .call(drag(simulation))
             .on("click", nodeClicked);
 
-        // Circles (Dynamically sized)
+        // Circles
         node.append("circle")
             .attr("r", getRadius)
-            .attr("fill", d => d.color);
+            .attr("fill", d => NODE_COLORS[d.group] || "#cccccc");
 
         // Labels
         node.append("text")
             .attr("class", "node-label")
-            .attr("dy", d => -(getRadius(d) + 8)) // Position above the circle
+            .attr("dy", d => -(getRadius(d) + 5))
             // Show labels only for highly connected or important nodes
-            .text(d => (degree[d.id] > 3 || d.importance > 5) ? d.id : '');
+            .text(d => (d.importance > 6 || degree[d.id] > 5) ? d.id : '');
 
         // Simulation Tick
         simulation.on("tick", () => {
@@ -100,95 +140,141 @@
                 .attr("transform", d => `translate(${d.x},${d.y})`);
         });
 
-        // Create adjacency list for highlighting neighbors (after D3 initializes links)
+        // Create adjacency list for highlighting (Post-simulation initialization)
         const adjList = new Map();
         data.links.forEach(d => {
+            // D3 converts source/target strings to objects here
             if (!adjList.has(d.source.id)) adjList.set(d.source.id, []);
             if (!adjList.has(d.target.id)) adjList.set(d.target.id, []);
             adjList.get(d.source.id).push(d.target.id);
             adjList.get(d.target.id).push(d.source.id);
         });
 
-        // --- Interaction Handlers (Focus/Fade) ---
+        // --- Interaction Handlers (Focus/Fade and Sidebar) ---
 
         function nodeClicked(event, d) {
-            event.stopPropagation(); // Prevent the background click handler from firing
+            event.stopPropagation(); 
 
-            // 1. Update Sidebar
+            // 1. Update Sidebar (Includes button to open modal if report exists)
             updateSidebar(d, data.links);
 
-            // 2. Apply Highlighting/Dimming
+            // 2. Apply Highlighting/Dimming (Focus/Fade effect)
             svg.classed("network-faded", true);
 
             const neighbors = adjList.get(d.id) || [];
-
-            // Highlight the clicked node and its neighbors
             node.classed("highlighted", n => n.id === d.id || neighbors.includes(n.id));
-            
-            // Highlight the connecting links
             link.classed("highlighted", l => l.source.id === d.id || l.target.id === d.id);
         }
 
         function resetHighlight(event) {
-            // Only reset if clicking the SVG background itself
-            if (event.target.tagName.toLowerCase() === 'svg') {
+             // Only reset if clicking the SVG background itself
+             if (event.target.tagName.toLowerCase() === 'svg') {
                 svg.classed("network-faded", false);
                 node.classed("highlighted", false);
                 link.classed("highlighted", false);
                 // Reset sidebar
-                d3.select("#details-content").html('<p class="text-gray-500 italic">Click on a node in the network to see details. Click the background to reset the view.</p>');
+                d3.select("#details-content").html('<p class="text-gray-500 italic">Click a node to view connections and highlight the network. Zoom and drag to explore. Click the background to reset.</p>');
             }
         }
 
-        // --- Setup Zoom and Background Click ---
-        const zoom = d3.zoom()
-            .scaleExtent([0.5, 5])
-            .on("zoom", (event) => {
-                g.attr("transform", event.transform);
-            });
-        
-        svg.call(zoom).on("click", resetHighlight);
+        svg.on("click", resetHighlight);
 
-        // Attach filter functionality
-        setupFilters(svg);
+        // Setup dynamic filters
+        setupFilters(svg, data.links);
     }
 
-    // --- Helper Functions ---
-
-    // Define link colors based on type
-    const linkColor = (type) => {
-        switch(type) {
-            case "Funding": return "#3b82f6";          // Blue
-            case "Sponsorship": return "#ef4444";      // Red
-            case "Personnel": return "#22c55e";        // Green
-            case "Membership": return "#a78bfa";       // Light Purple
-            case "Official Action": return "#f97316";  // Orange
-            default: return "#9ca3af";                 // Gray
-        }
-    };
-
+    // --- Sidebar Update ---
     function updateSidebar(d, allLinks) {
         const detailsContent = d3.select("#details-content");
         
-        // Find connections (D3 modifies links so source/target are objects)
-        const connections = allLinks.filter(l => l.source.id === d.id || l.target.id === d.id);
-        let connectionHtml = connections.map(c => {
-            const otherNodeId = c.source.id === d.id ? c.target.id : c.source.id;
-            return `<li><strong style="color:${linkColor(c.type)}">${c.type}:</strong> connected to ${otherNodeId}</li>`;
-        }).join('');
+        // Generate connections list
+        const connectionsHtml = generateConnectionsHtml(d, allLinks);
+
+        // Check if a detailed report exists and add button
+        let dossierButtonHtml = '';
+        if (d.report_file) {
+            // Use window.showModal to call the modal function
+            dossierButtonHtml = `<button onclick="window.showModal('${d.id}', '${d.report_file}')" class="mt-4 mb-4 w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                                    View Full Dossier
+                                 </button>`;
+        }
 
         // Generate HTML for the sidebar
         detailsContent.html(`
             <h4 class="text-xl font-semibold text-white mt-4 mb-3">${d.id}</h4>
-            <p class="mb-4 text-gray-300">${d.description || 'No description available.'}</p>
-            <h5 class="text-lg text-cyan-400 mt-4 mb-2">Connections (${connections.length})</h5>
-            <ul class="list-disc list-inside space-y-1 text-sm">
-                ${connectionHtml || '<li>No connections found.</li>'}
-            </ul>
+            <p class="text-sm text-gray-500 mb-3">Type: ${d.type || 'N/A'}</p>
+            ${dossierButtonHtml}
+            ${connectionsHtml}
         `);
     }
 
-    // Standard D3 Drag functionality
+     function generateConnectionsHtml(d, allLinks) {
+        // D3 ensures source/target are objects here
+        const connections = allLinks.filter(l => l.source.id === d.id || l.target.id === d.id);
+        let listHtml = connections.map(c => {
+            const otherNodeId = c.source.id === d.id ? c.target.id : c.source.id;
+            // Include details or financial values if present
+            const detail = c.detail ? ` (${c.detail})` : (c.value ? ` ($${c.value.toLocaleString()})` : '');
+            return `<li><strong style="color:${LINK_COLORS[c.type] || '#9ca3af'}">${c.type}:</strong> connection to ${otherNodeId}${detail}</li>`;
+        }).join('');
+
+        return `<h5 class="text-lg text-cyan-400 mt-4 mb-2">Connections (${connections.length})</h5>
+                <ul class="list-disc list-inside space-y-1 text-sm">${listHtml || '<li>No connections found.</li>'}</ul>`;
+    }
+
+
+    // --- Modal Functions ---
+    function initializeModal() {
+        // Cache modal elements
+        modal = document.getElementById('report-modal');
+        modalTitle = document.getElementById('modal-title');
+        modalContent = document.getElementById('modal-content');
+        mainContent = document.getElementById('main-content'); // The target for blurring
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modalOverlay = document.getElementById('modal-overlay');
+
+        // Define hideModal function
+        function hideModal() {
+            modal.classList.remove('is-visible');
+            if (mainContent) mainContent.style.filter = 'none';
+            // Do NOT reset visualization highlights here; that is handled by the SVG click handler
+        }
+
+        // Expose showModal globally so the sidebar button can access it
+        window.showModal = function(nodeId, reportFile) {
+            const reportPath = `/network-reports/${reportFile}`;
+            modalTitle.textContent = `Dossier: ${nodeId}`;
+            modalContent.innerHTML = `<p class="text-gray-500">Loading detailed dossier...</p>`;
+            modal.classList.add('is-visible');
+            if (mainContent) mainContent.style.filter = 'blur(4px)';
+
+            fetch(reportPath)
+                .then(response => {
+                    if (!response.ok) throw new Error('Report file not found on server.');
+                    return response.text();
+                })
+                .then(html => {
+                    modalContent.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error("Error fetching report:", error);
+                    modalContent.innerHTML = `<p class="text-red-500">Failed to load detailed report for ${nodeId}.</p>`;
+                });
+        }
+
+        // Attach event listeners
+        if (closeModalBtn) closeModalBtn.addEventListener('click', hideModal);
+        if (modalOverlay) modalOverlay.addEventListener('click', hideModal);
+        
+        document.addEventListener('keydown', (event) => {
+            if (event.key === "Escape") {
+                hideModal();
+            }
+        });
+    }
+
+    // --- Helper Functions (Drag and Filters) ---
+
     function drag(simulation) {
         function dragstarted(event, d) {
             if (!event.active) simulation.alphaTarget(0.3).restart();
@@ -203,7 +289,7 @@
 
         function dragended(event, d) {
             if (!event.active) simulation.alphaTarget(0);
-            // Keep nodes where they are dragged for exploration (optional)
+            // "Pin" nodes where they are dragged for easier exploration
             // d.fx = null;
             // d.fy = null;
         }
@@ -214,62 +300,38 @@
             .on("end", dragended);
     }
 
-    function setupFilters(svg) {
-        d3.selectAll(".filter-checkbox").on("change", function() {
-            const type = d3.select(this).attr("data-type");
-            const checked = this.checked;
-            const className = `.link-${type.replace(/\s+/g, '-')}`;
+    // Dynamically generate filters based on data
+    function setupFilters(svg, links) {
+        const filterContainer = d3.select("#filter-container");
+        // Get unique link types from data
+        const linkTypes = [...new Set(links.map(l => l.type))].sort();
 
-            // Toggle visibility of the links
-            svg.selectAll(className)
-               .style("display", checked ? null : 'none');
+        linkTypes.forEach(type => {
+            const label = filterContainer.append("label")
+                .attr("class", "flex items-center space-x-3 filter-label text-gray-300");
+
+            label.append("input")
+                .attr("type", "checkbox")
+                .attr("class", "filter-checkbox")
+                .attr("data-type", type)
+                .property("checked", true)
+                .on("change", function() {
+                    const checked = this.checked;
+                    const className = `.link-${type.replace(/\s+/g, '-')}`;
+                    // Toggle visibility of links
+                    svg.selectAll(className)
+                       .style("display", checked ? null : 'none');
+                });
+            
+            // Add a visual color swatch for the filter key
+            label.append("span")
+                .style("width", "12px")
+                .style("height", "12px")
+                .style("background-color", LINK_COLORS[type] || "#9ca3af")
+                .style("border-radius", "3px");
+
+            label.append("span").text(type);
         });
-    }
-
-    // Data Source
-    function getNetworkData() {
-        // Expanded data for a richer visualization
-        return {
-            nodes: [
-                { id: "SFOF", group: 1, color: "#8b5cf6", description: "The State Financial Officers Foundation. The central organizing body.", importance: 10 },
-                { id: "SFOF Action (c4)", group: 1, color: "#8b5cf6", description: "501(c)(4) Lobbying Arm. Legally permitted to engage in unlimited lobbying and direct political campaign activities.", importance: 8 },
-                // Funding (Blue)
-                { id: "DonorsTrust", group: 2, color: "#3b82f6", description: "A major vehicle for anonymous conservative donations.", importance: 6 },
-                { id: "Koch Industries", group: 2, color: "#3b82f6", description: "Multinational corporation involved in heavy political funding.", importance: 6 },
-                { id: "Consumers Research", group: 2, color: "#3b82f6", description: "Advocacy group leading anti-ESG campaigns.", importance: 4 },
-                // Sponsorship (Red)
-                { id: "JP Morgan Chase", group: 3, color: "#ef4444", description: "Corporate sponsor of SFOF events.", importance: 3 },
-                { id: "Wells Fargo", group: 3, color: "#ef4444", description: "Corporate sponsor of SFOF events.", importance: 3 },
-                // Personnel/Affiliates (Green)
-                { id: "ALEC", group: 4, color: "#22c55e", description: "American Legislative Exchange Council. Coordinates model legislation.", importance: 7 },
-                { id: "Heartland Institute", group: 4, color: "#22c55e", description: "Think tank promoting climate skepticism.", importance: 4 },
-                { id: "Heritage Foundation", group: 4, color: "#22c55e", description: "Major conservative think tank.", importance: 7 },
-                // Membership (Purple variant)
-                { id: "Riley Moore (WV)", group: 5, color: "#a78bfa", description: "Key SFOF member leading anti-ESG efforts.", importance: 6 },
-                { id: "Marlo Oaks (UT)", group: 5, color: "#a78bfa", description: "Utah State Treasurer.", importance: 4 },
-                // Official Action (Orange)
-                { id: "BlackRock Divestment", group: 6, color: "#f97316", description: "Official state action to divest funds from BlackRock.", importance: 4 },
-                { id: "Model Fiduciary Duty Act", group: 6, color: "#f97316", description: "Model legislation promoted by SFOF/ALEC.", importance: 5 },
-            ],
-            links: [
-                { source: "SFOF", target: "SFOF Action (c4)", type: "Personnel" },
-                { source: "SFOF", target: "DonorsTrust", type: "Funding" },
-                { source: "DonorsTrust", target: "SFOF Action (c4)", type: "Funding" },
-                { source: "Koch Industries", target: "DonorsTrust", type: "Funding" },
-                { source: "SFOF", target: "Consumers Research", type: "Funding" },
-                { source: "SFOF", target: "JP Morgan Chase", type: "Sponsorship" },
-                { source: "SFOF", target: "Wells Fargo", type: "Sponsorship" },
-                { source: "SFOF", target: "ALEC", type: "Personnel" },
-                { source: "ALEC", target: "Model Fiduciary Duty Act", type: "Personnel" },
-                { source: "Heritage Foundation", target: "Model Fiduciary Duty Act", type: "Personnel" },
-                { source: "SFOF", target: "Heartland Institute", type: "Membership" },
-                { source: "SFOF", target: "Heritage Foundation", type: "Membership" },
-                { source: "SFOF", target: "Riley Moore (WV)", type: "Membership" },
-                { source: "SFOF", target: "Marlo Oaks (UT)", type: "Membership" },
-                { source: "Riley Moore (WV)", target: "BlackRock Divestment", type: "Official Action" },
-                { source: "SFOF", target: "Model Fiduciary Duty Act", type: "Official Action" },
-            ]
-        };
     }
 
 })();
