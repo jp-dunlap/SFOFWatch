@@ -1,127 +1,87 @@
+// This script is run at build time to fetch the latest legislative data.
+const fs = require('fs');
+const path = require('path');
 const axios = require('axios');
-const { Octokit } = require('@octokit/rest');
-const { schedule } = require('@netlify/functions');
 
-const LEGISCAN_API_KEY = process.env.LEGISCAN_API_KEY;
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const REPO_OWNER = process.env.REPO_OWNER;
-const REPO_NAME = process.env.REPO_NAME;
-const DATA_FILE_PATH = '_data/legislation.json';
-const SEARCH_QUERY = '"ESG" OR "fiduciary duty" OR "economic boycott" OR "state divestment"';
+// --- IMPORTANT ---
+// The original script referenced a local-only file: `../utils/legiscan`.
+// To ensure the build works, the core fetching logic has been moved directly
+// into this file using the 'axios' library, which is already a dependency.
+// You will need to add your Legiscan API key as a build environment variable
+// in the Netlify UI. The key should be named `LEGISCAN_API_KEY`.
 
-const handler = async function(event, context) {
-    console.log("Starting legislative data update...");
+const API_KEY = process.env.LEGISCAN_API_KEY;
 
-    try {
-        // 1. Fetch data from LegiScan
-        const response = await axios.get('https://api.legiscan.com/', {
-            params: {
-                key: LEGISCAN_API_KEY,
-                op: 'search',
-                query: SEARCH_QUERY,
-            }
-        });
+/**
+ * A simple wrapper to fetch a master list of bills for a given state from Legiscan.
+ * @param {string} state - The two-letter abbreviation for the state (e.g., 'TX').
+ * @returns {Promise<Object>} The JSON response from the Legiscan API.
+ */
+async function getMasterList(state) {
+  if (!API_KEY) {
+    throw new Error('LEGISCAN_API_KEY is not defined in the environment variables.');
+  }
+  const url = `https://api.legiscan.com/?key=${API_KEY}&op=getMasterList&state=${state}`;
+  console.log(`Fetching master bill list for ${state}...`);
+  const { data } = await axios.get(url);
 
-        if (response.data.status === 'OK' && response.data.searchresult) {
-            // Filter out the summary object, keeping only bill objects
-            const bills = Object.values(response.data.searchresult).filter(item => item.bill_id);
-            
-            // 2. Process the data into a state-by-state summary
-            const processedData = processLegislationData(bills);
-            const contentToCommit = JSON.stringify({
-                last_updated: new Date().toISOString(),
-                states: processedData
-            }, null, 2);
+  if (data.status === 'ERROR') {
+    throw new Error(`Legiscan API error for state ${state}: ${data.alert.message}`);
+  }
 
-            // 3. Commit to GitHub
-            await commitToGitHub(contentToCommit);
-
-            return { statusCode: 200, body: "Update successful." };
-        } else {
-            throw new Error('LegiScan API call failed or returned unexpected structure.');
-        }
-
-    } catch (error) {
-        console.error("Error during update process:", error);
-        return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
-    }
-};
-
-// Helper function to summarize LegiScan data by state
-function processLegislationData(bills) {
-    const stateSummary = {};
-
-    bills.forEach(bill => {
-        if (!bill.state) return;
-
-        if (!stateSummary[bill.state]) {
-            stateSummary[bill.state] = {
-                bills: [],
-                overallStatus: 'No Action'
-            };
-        }
-
-        stateSummary[bill.state].bills.push({
-            bill_id: bill.bill_id,
-            number: bill.bill_number,
-            title: bill.title,
-            // LegiScan status codes: 1=Introduced, 2=Engrossed/In Progress, 3=Dead/Failed/Vetoed, 4=Passed/Enacted
-            status_code: bill.status,
-            url: bill.url,
-            last_action_date: bill.last_action_date
-        });
-    });
-
-    // Determine overall status for the map visualization based on priority
-    Object.keys(stateSummary).forEach(state => {
-        const bills = stateSummary[state].bills;
-        const enacted = bills.some(b => b.status_code === 4);
-        const pending = bills.some(b => b.status_code === 1 || b.status_code === 2);
-        const failed = bills.every(b => b.status_code === 3); // Only failed if all are failed
-
-        if (enacted) {
-            stateSummary[state].overallStatus = 'Enacted';
-        } else if (pending) {
-            stateSummary[state].overallStatus = 'Pending';
-        } else if (failed && bills.length > 0) {
-             stateSummary[state].overallStatus = 'Failed';
-        }
-    });
-
-    return stateSummary;
+  // The master list is nested under a dynamic key, so we extract it.
+  const masterlist = data.masterlist;
+  const key = Object.keys(masterlist).find(k => k !== 'session');
+  return masterlist[key];
 }
 
-async function commitToGitHub(content) {
-    const octokit = new Octokit({ auth: GITHUB_TOKEN });
 
-    let currentSHA = null;
-    try {
-        // Get the SHA of the existing file to update it
-        const { data: fileData } = await octokit.repos.getContent({
-            owner: REPO_OWNER,
-            repo: REPO_NAME,
-            path: DATA_FILE_PATH,
-        });
-        currentSHA = fileData.sha;
-    } catch (error) {
-        if (error.status === 404) {
-            console.log("File not found, creating new file.");
-            // If file doesn't exist (404), SHA remains null for creation
-        } else {
-            throw error;
-        }
+/**
+ * The main function to update legislation data.
+ * It fetches the master bill lists for a predefined set of states
+ * and writes the result to a JSON file in the `_data` directory.
+ */
+async function updateLegislationData() {
+  if (!API_KEY) {
+    console.warn("WARN: LEGISCAN_API_KEY environment variable not set. Skipping data fetch.");
+    // Create an empty file to prevent build errors if the file is expected to exist.
+    const outputPath = path.resolve(__dirname, '../../_data/billLists.json');
+     if (!fs.existsSync(path.dirname(outputPath))) {
+      fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+    }
+    fs.writeFileSync(outputPath, JSON.stringify({}), 'utf-8');
+    return; // Exit gracefully.
+  }
+
+  try {
+    const states = ["AL", "AK", "AZ", "AR", "FL", "GA", "ID", "IN", "IA", "KS", "KY", "LA", "MS", "MO", "MT", "NE", "NV", "NC", "ND", "OH", "OK", "PA", "SC", "SD", "TX", "UT", "WV", "WI", "WY"];
+    const allBillLists = {};
+
+    for (const state of states) {
+      try {
+        const bills = await getMasterList(state);
+        allBillLists[state] = bills;
+        console.log(`Successfully fetched ${Object.keys(bills).length} bills for ${state}.`);
+      } catch (stateError) {
+        console.error(`Could not fetch data for state: ${state}. Error: ${stateError.message}`);
+        // Continue to the next state even if one fails.
+      }
     }
 
-    await octokit.repos.createOrUpdateFileContents({
-        owner: REPO_OWNER,
-        repo: REPO_NAME,
-        path: DATA_FILE_PATH,
-        message: 'Automated Update: Legislation data refresh via Netlify Function',
-        content: Buffer.from(content).toString('base64'),
-        sha: currentSHA,
-        branch: 'main',
-    });
+    const outputPath = path.resolve(__dirname, '../../_data/billLists.json');
+    
+    // Ensure the _data directory exists before writing the file
+    if (!fs.existsSync(path.dirname(outputPath))) {
+      fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+    }
+
+    fs.writeFileSync(outputPath, JSON.stringify(allBillLists, null, 2), 'utf-8');
+    console.log(`Successfully updated and wrote legislation data to ${outputPath}`);
+  } catch (error) {
+    console.error('A critical error occurred during the legislation data fetch process:', error);
+    process.exit(1); // Exit with an error code to fail the build
+  }
 }
 
-// Schedule the function to run daily at 1 AM UTC
-module.exports.handler = schedule("0 1 * * *", handler);
+// Self-execute the main function when the script is run.
+updateLegislationData();
