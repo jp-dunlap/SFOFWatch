@@ -1,4 +1,7 @@
 (function() {
+    // Enhanced Logging: Explicitly log every step to the browser console.
+    console.log("[SFOF Network] 1. Script loaded and executing.");
+
     // Configuration for visualization aesthetics
     const NODE_COLORS = {
         1: "#8b5cf6", // Core Network (Purple)
@@ -25,42 +28,110 @@
 
     // Initialize when the DOM is ready
     document.addEventListener('DOMContentLoaded', () => {
+        console.log("[SFOF Network] 2. DOMContentLoaded fired.");
         if (typeof d3 === 'undefined') {
-            console.error("D3.js is not loaded.");
+            console.error("[SFOF Network] ERROR: D3.js is not loaded.");
+            displayError("Critical Error: D3.js library not found. Check the script tag in network.html.");
             return;
         }
-        initializeModal();
-        fetchNetworkData();
+        console.log("[SFOF Network] 3. D3.js confirmed loaded.");
+
+        try {
+            initializeModal();
+            // Start the robust initialization sequence
+            checkReadinessAndInitialize();
+        } catch (error) {
+            console.error("[SFOF Network] Error during initial setup:", error);
+            displayError("An unexpected error occurred during setup. Check the browser console for details.");
+        }
     });
+
+    // Helper to display errors within the container
+    function displayError(message) {
+        const container = d3.select("#network-container");
+        if (!container.empty()) {
+             container.html(`<div class="text-center text-red-500 p-10 border border-red-700 bg-red-900/30 m-4 rounded-lg">
+                    <h3 class="text-xl font-bold">Visualization Error</h3>
+                    <p class="mt-2">${message}</p>
+                </div>`);
+        }
+    }
+
+    // Robust Initialization: Wait for layout to settle before fetching data
+    function checkReadinessAndInitialize(retryCount = 0) {
+        const container = document.getElementById('network-container');
+        if (!container) {
+            console.error("[SFOF Network] ERROR: #network-container element not found in HTML.");
+            return;
+        }
+
+        // Add loading indicator
+        if (retryCount === 0) {
+            container.innerHTML = '<p class="text-center text-gray-500 p-10">Initializing visualization...</p>';
+        }
+
+        // Check if the container has dimensions (use a small threshold, e.g., 50px)
+        const rect = container.getBoundingClientRect();
+        if (rect.width < 50 || rect.height < 50) {
+            // Layout not ready or container is too small
+            if (retryCount > 10) { // Timeout after ~2 seconds
+                console.error("[SFOF Network] ERROR: Container layout failed to stabilize after multiple attempts.");
+                displayError("Visualization container failed to initialize (dimensions are too small). Check CSS styles for #network-container.");
+                return;
+            }
+            console.log(`[SFOF Network] 4. Container layout not ready (Retry ${retryCount}), waiting...`);
+            setTimeout(() => checkReadinessAndInitialize(retryCount + 1), 200);
+            return;
+        }
+        // Layout is ready, now fetch data.
+        console.log(`[SFOF Network] 4. Container ready. Dimensions: ${rect.width}w x ${rect.height}h.`);
+        fetchNetworkData();
+   }
 
     // Load the data from the external JSON file
     function fetchNetworkData() {
-        d3.json("/assets/data/network-data.json").then(data => {
-            initializeNetworkVisualization(data);
+        const dataPath = "/assets/data/network-data.json";
+        console.log(`[SFOF Network] 5. Attempting to fetch data from ${dataPath}`);
+        
+        d3.json(dataPath).then(data => {
+            console.log("[SFOF Network] 6. Data successfully fetched. Nodes:", data.nodes.length, "Links:", data.links.length);
+            try {
+                initializeNetworkVisualization(data);
+            } catch (error) {
+                console.error("[SFOF Network] Error during visualization rendering:", error);
+                displayError("An error occurred while rendering the visualization. Check the browser console.");
+            }
         }).catch(error => {
-            console.error("Error loading network data:", error);
-            d3.select("#network-container").html('<p class="text-center text-red-400 p-10">Failed to load network data. Ensure /assets/data/network-data.json exists and is accessible.</p>');
+            // This block executes if the JSON file cannot be found (404) or is invalid
+            console.error("[SFOF Network] ERROR fetching network data:", error);
+            displayError(`CRITICAL ERROR: Failed to load network data from <code>${dataPath}</code>. This indicates the file is missing on the server. Ensure your Eleventy configuration (<code>.eleventy.js</code>) is correctly copying the 'assets' directory.`);
         });
     }
 
     function initializeNetworkVisualization(data) {
+        console.log("[SFOF Network] 7. Starting visualization rendering.");
         const container = d3.select("#network-container");
-        if (container.empty()) return;
-
+        
+        // Dimensions are guaranteed to be ready
         const width = container.node().getBoundingClientRect().width;
         const height = container.node().getBoundingClientRect().height;
-
-        // Handle potential race condition where layout hasn't settled
-        if (width === 0 || height === 0) {
-             setTimeout(() => initializeNetworkVisualization(data), 200);
-             return;
-        }
 
         // Prepare data: Calculate node degree (connectivity)
         const degree = {};
         data.nodes.forEach(d => degree[d.id] = 0);
-        // Calculate degree based on initial link structure (strings before simulation initialization)
-        data.links.forEach(l => {
+
+        // Data integrity check: Filter links connecting to non-existent nodes
+        const validNodeIds = new Set(data.nodes.map(n => n.id));
+        const filteredLinks = data.links.filter(l => {
+            if (!validNodeIds.has(l.source) || !validNodeIds.has(l.target)) {
+                console.warn(`[SFOF Network] Data Integrity Issue: Link references non-existent node. Source: ${l.source}, Target: ${l.target}. Skipping link.`);
+                return false;
+            }
+            return true;
+        });
+
+        // Calculate degree based on filtered links
+        filteredLinks.forEach(l => {
             degree[l.source]++;
             degree[l.target]++;
         });
@@ -72,7 +143,7 @@
         };
 
         // Setup SVG and Zoom/Pan functionality
-        container.html('');
+        container.html(''); // Clear container (including loading messages/errors)
         const svg = container.append("svg")
             .attr("width", "100%")
             .attr("height", "100%")
@@ -88,9 +159,9 @@
         
         svg.call(zoom); // Attach zoom behavior
 
-        // Initialize Simulation with optimized forces
+        // Initialize Simulation
         const simulation = d3.forceSimulation(data.nodes)
-            .force("link", d3.forceLink(data.links).id(d => d.id).distance(100).strength(0.8))
+            .force("link", d3.forceLink(filteredLinks).id(d => d.id).distance(100).strength(0.8))
             .force("charge", d3.forceManyBody().strength(-500))
             .force("x", d3.forceX(width / 2).strength(0.05))
             .force("y", d3.forceY(height / 2).strength(0.05))
@@ -100,7 +171,7 @@
         const link = g.append("g")
             .attr("class", "links")
             .selectAll("line")
-            .data(data.links)
+            .data(filteredLinks)
             .enter().append("line")
             .attr("class", d => `link link-${d.type.replace(/\s+/g, '-')}`)
             .style("stroke", d => LINK_COLORS[d.type] || "#9ca3af")
@@ -142,7 +213,7 @@
 
         // Create adjacency list for highlighting (Post-simulation initialization)
         const adjList = new Map();
-        data.links.forEach(d => {
+        filteredLinks.forEach(d => {
             // D3 converts source/target strings to objects here
             if (!adjList.has(d.source.id)) adjList.set(d.source.id, []);
             if (!adjList.has(d.target.id)) adjList.set(d.target.id, []);
@@ -156,7 +227,7 @@
             event.stopPropagation(); 
 
             // 1. Update Sidebar (Includes button to open modal if report exists)
-            updateSidebar(d, data.links);
+            updateSidebar(d, filteredLinks);
 
             // 2. Apply Highlighting/Dimming (Focus/Fade effect)
             svg.classed("network-faded", true);
@@ -180,7 +251,8 @@
         svg.on("click", resetHighlight);
 
         // Setup dynamic filters
-        setupFilters(svg, data.links);
+        setupFilters(svg, filteredLinks);
+        console.log("[SFOF Network] 8. Visualization rendering complete.");
     }
 
     // --- Sidebar Update ---
@@ -233,16 +305,22 @@
         const closeModalBtn = document.getElementById('close-modal-btn');
         const modalOverlay = document.getElementById('modal-overlay');
 
+        if (!modal || !mainContent) {
+            console.warn("[SFOF Network] Modal or Main Content elements not found. Modal functionality disabled.");
+            return;
+        }
+
         // Define hideModal function
         function hideModal() {
             modal.classList.remove('is-visible');
             if (mainContent) mainContent.style.filter = 'none';
-            // Do NOT reset visualization highlights here; that is handled by the SVG click handler
         }
 
         // Expose showModal globally so the sidebar button can access it
         window.showModal = function(nodeId, reportFile) {
             const reportPath = `/network-reports/${reportFile}`;
+            console.log(`[SFOF Network] Modal: Fetching ${reportPath}`);
+
             modalTitle.textContent = `Dossier: ${nodeId}`;
             modalContent.innerHTML = `<p class="text-gray-500">Loading detailed dossier...</p>`;
             modal.classList.add('is-visible');
@@ -250,15 +328,15 @@
 
             fetch(reportPath)
                 .then(response => {
-                    if (!response.ok) throw new Error('Report file not found on server.');
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}. This indicates the report snippet is missing on the server. Ensure Eleventy is copying the 'network-reports' folder.`);
                     return response.text();
                 })
                 .then(html => {
                     modalContent.innerHTML = html;
                 })
                 .catch(error => {
-                    console.error("Error fetching report:", error);
-                    modalContent.innerHTML = `<p class="text-red-500">Failed to load detailed report for ${nodeId}.</p>`;
+                    console.error("[SFOF Network] ERROR fetching report:", error);
+                    modalContent.innerHTML = `<p class="text-red-500">Failed to load detailed report for ${nodeId}. Check console for details. ${error.message}</p>`;
                 });
         }
 
@@ -289,7 +367,7 @@
 
         function dragended(event, d) {
             if (!event.active) simulation.alphaTarget(0);
-            // "Pin" nodes where they are dragged for easier exploration
+            // "Pin" nodes where they are dragged (optional)
             // d.fx = null;
             // d.fy = null;
         }
@@ -303,6 +381,11 @@
     // Dynamically generate filters based on data
     function setupFilters(svg, links) {
         const filterContainer = d3.select("#filter-container");
+        if (filterContainer.empty()) return;
+
+        // Clear filters before adding them (prevents duplication if initialization runs twice)
+        filterContainer.html('');
+
         // Get unique link types from data
         const linkTypes = [...new Set(links.map(l => l.type))].sort();
 
