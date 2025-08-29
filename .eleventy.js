@@ -8,27 +8,42 @@ module.exports = function(eleventyConfig) {
   });
   eleventyConfig.setLibrary("md", md);
 
-  // --- THIS IS THE CRUCIAL LINE ---
-  // Copies the _data directory to your built site
+  // --- Passthrough Copies ---
+  // Ensure all necessary assets (JS, JSON, HTML snippets) are copied to the output (_site) directory.
+
+  // Copies the _data directory (if used for global data)
   eleventyConfig.addPassthroughCopy("_data");
-  // --- END OF CRUCIAL LINE ---
 
-  // Copy other assets
+  // Copy core assets (Includes JS and JSON Data)
   eleventyConfig.addPassthroughCopy("assets");
-  eleventyConfig.addPassthroughCopy("network-reports"); 
+  
+  // Copy HTML snippets for network visualization modals
+  eleventyConfig.addPassthroughCopy("network-reports");
+  
+  // Copy CMS configuration
   eleventyConfig.addPassthroughCopy("admin");
+  
+  // Copy Pagefind search index
   eleventyConfig.addPassthroughCopy("pagefind");
-  eleventyConfig.addPassthroughCopy("*.html");
 
-  // Minify HTML
-  eleventyConfig.addTransform("htmlmin", function(content, outputPath) {
-    if (outputPath && outputPath.endsWith(".html")) {
-      let minified = htmlmin.minify(content, {
-        useShortDoctype: true,
-        removeComments: true,
-        collapseWhitespace: true
-      });
-      return minified;
+  // !!! CRITICAL CHANGE: Removed eleventyConfig.addPassthroughCopy("*.html"); !!!
+  // HTML files must be processed as templates, not copied directly.
+
+  // Minify HTML (Updated syntax for modern Eleventy versions)
+  eleventyConfig.addTransform("htmlmin", function(content) {
+    // Use this.outputPath instead of the deprecated outputPath argument
+    if (this.outputPath && this.outputPath.endsWith(".html")) {
+      try {
+        let minified = htmlmin.minify(content, {
+          useShortDoctype: true,
+          removeComments: true,
+          collapseWhitespace: true
+        });
+        return minified;
+      } catch (error) {
+        console.error(`Error minifying HTML file: ${this.outputPath}`, error);
+        return content; // Return original content if minification fails
+      }
     }
     return content;
   });
@@ -40,7 +55,8 @@ module.exports = function(eleventyConfig) {
       includes: "_includes",
       output: "_site",
     },
-    templateFormats: ["md", "njk", "html"],
+    // Ensure HTML is recognized as a template format
+    templateFormats: ["md", "njk", "html"], 
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk",
   };
