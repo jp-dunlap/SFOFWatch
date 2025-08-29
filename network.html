@@ -1,239 +1,239 @@
 ---
-layout: base_dark.njk
 title: SFOF Network
+# The layout is defined by the {% extends %} tag below, not the 'layout' key.
 ---
+{# Use Nunjucks 'extends' to define the layout and enable block inheritance #}
+{% extends "_includes/base_dark.njk" %}
 
-{# Use Nunjucks 'set' tag #}
-{%- set head -%}
+{# -------------------------------------------------------------------------- #}
+{# HEAD Block (D3.js and Styles)                                              #}
+{# -------------------------------------------------------------------------- #}
+
+{# Inject D3 library and page-specific styles into the head block #}
+{% block head %}
+    {# Call super() to include content from the parent block if necessary #}
+    {{ super() }}
     <script src="https://d3js.org/d3.v7.min.js"></script>
-{%- endset -%}
 
-{%- set styles -%}
-<style>
-    /* --- Hero Background Styling --- */
-    .hero-bg {
-        background-color: var(--background-dark);
-        background-image: 
-            radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
-            radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
-        position: relative;
-        overflow: hidden;
-    }
-
-    /* --- Layout --- */
-    /* CRITICAL FIX: Ensure the grid layout provides height for the visualization */
-    .visualization-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        /* Ensure the grid itself takes up significant height */
-        min-height: 85vh; 
-    }
-
-    @media (min-width: 1024px) {
-        .visualization-grid {
-            grid-template-columns: 3fr 1fr; /* 75% viz, 25% sidebar */
+    {# Styles specific to the network visualization #}
+    <style>
+        /* --- Hero Background Styling --- */
+        .hero-bg {
+            background-color: var(--background-dark);
+            background-image:
+                radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
+                radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
+            position: relative;
+            overflow: hidden;
         }
-    }
 
-    /* --- Visualization Container Styling --- */
-    #network-container {
-        background-color: var(--background-light);
-        border: 1px solid var(--border-color);
-        border-radius: 0.5rem;
-        position: relative;
-        width: 100%;
-        overflow: hidden; /* Keep visualization contained */
-        
-        /* CRITICAL FIX: Ensure the container occupies the available space in the grid cell. */
-        height: 100%; 
-    }
-
-    /* Ensure the sidebar also stretches if the visualization grows */
-    #node-details {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* Allow content within sidebar to scroll */
-    #details-scroll-container {
-        overflow-y: auto;
-        flex-grow: 1;
-    }
-
-    /* Mobile specific adjustments */
-    @media (max-width: 1023px) {
-        /* On mobile, the grid stacks vertically. */
+        /* --- Layout --- */
+        /* CRITICAL FIX: Ensure the grid layout provides height for the visualization */
         .visualization-grid {
-             /* Reset min-height on mobile to prevent excessive scrolling if content is short */
-            min-height: auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            /* Ensure the grid itself takes up significant height */
+            min-height: 85vh;
         }
+
+        @media (min-width: 1024px) {
+            .visualization-grid {
+                grid-template-columns: 3fr 1fr; /* 75% viz, 25% sidebar */
+            }
+        }
+
+        /* --- Visualization Container Styling --- */
         #network-container {
-            /* Define a specific viewport height for the visualization on mobile */
-            height: 70vh;
+            background-color: var(--background-light);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            position: relative;
+            width: 100%;
+            overflow: hidden; /* Keep visualization contained */
+
+            /* CRITICAL FIX: Ensure the container occupies the available space in the grid cell. */
+            height: 100%;
         }
+
+        /* Ensure the sidebar also stretches if the visualization grows */
         #node-details {
-            /* Allow details panel to size naturally on mobile */
-            height: auto; 
-            display: block;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
-    }
 
-    /* --- D3 Element Styles (Aesthetically Dope) --- */
-    .link {
-        stroke-opacity: 0.5;
-        transition: stroke-opacity 0.3s, stroke-width 0.3s, opacity 0.3s;
-    }
-    .node circle {
-        stroke: var(--background-dark);
-        stroke-width: 2px;
-        transition: filter 0.3s ease, r 0.3s ease, opacity 0.3s;
-        cursor: pointer;
-    }
+        /* Allow content within sidebar to scroll */
+        #details-scroll-container {
+            overflow-y: auto;
+            flex-grow: 1;
+        }
 
-    .node-label {
-        font-family: 'Inter', sans-serif;
-        font-size: 11px;
-        fill: var(--text-secondary);
-        pointer-events: none;
-        text-anchor: middle;
-        transition: fill 0.3s, font-weight 0.3s, opacity 0.3s, font-size 0.3s;
-        /* Add shadow for readability on dark background */
-        text-shadow: 0 0 5px var(--background-dark), 0 0 3px var(--background-dark), 0 0 1px var(--background-dark);
-    }
+        /* Mobile specific adjustments */
+        @media (max-width: 1023px) {
+            /* On mobile, the grid stacks vertically. */
+            .visualization-grid {
+                /* Reset min-height on mobile to prevent excessive scrolling if content is short */
+                min-height: auto;
+            }
+            #network-container {
+                /* Define a specific viewport height for the visualization on mobile */
+                height: 70vh;
+            }
+            #node-details {
+                /* Allow details panel to size naturally on mobile */
+                height: auto;
+                display: block;
+            }
+        }
 
-    /* --- Dynamic Highlighting/Dimming States (Focus/Fade) --- */
-    /* When active, fade elements significantly */
-    .network-faded .node circle,
-    .network-faded .node-label,
-    .network-faded .link {
-        opacity: 0.05;
-    }
+        /* --- D3 Element Styles --- */
+        .link {
+            stroke-opacity: 0.5;
+            transition: stroke-opacity 0.3s, stroke-width 0.3s, opacity 0.3s;
+        }
+        .node circle {
+            stroke: var(--background-dark);
+            stroke-width: 2px;
+            transition: filter 0.3s ease, r 0.3s ease, opacity 0.3s;
+            cursor: pointer;
+        }
 
-    /* Bring highlighted elements forward with a glow effect */
-    .node.highlighted circle {
-        opacity: 1;
-        /* Brighten and add a cyan glow */
-        filter: brightness(1.4) drop-shadow(0 0 8px var(--primary-cyan));
-    }
+        .node-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            fill: var(--text-secondary);
+            pointer-events: none;
+            text-anchor: middle;
+            transition: fill 0.3s, font-weight 0.3s, opacity 0.3s, font-size 0.3s;
+            /* Add shadow for readability on dark background */
+            text-shadow: 0 0 5px var(--background-dark), 0 0 3px var(--background-dark), 0 0 1px var(--background-dark);
+        }
 
-    .node.highlighted .node-label {
-        opacity: 1;
-        fill: white;
-        font-weight: bold;
-        font-size: 14px;
-    }
+        /* --- Dynamic Highlighting/Dimming States (Focus/Fade) --- */
+        /* When active, fade elements significantly */
+        .network-faded .node circle,
+        .network-faded .node-label,
+        .network-faded .link {
+            opacity: 0.05;
+        }
 
-    .link.highlighted {
-        opacity: 1;
-        stroke-opacity: 1;
-        stroke-width: 3px;
-    }
+        /* Bring highlighted elements forward with a glow effect */
+        .node.highlighted circle {
+            opacity: 1;
+            /* Brighten and add a cyan glow */
+            filter: brightness(1.4) drop-shadow(0 0 8px var(--primary-cyan));
+        }
 
-    /* --- Sidebar/Details Styling --- */
-    #node-details {
-        background-color: var(--background-light);
-        border: 1px solid var(--border-color);
-        border-radius: 0.5rem;
-        padding: 1.5rem;
-        /* Height/Overflow is now controlled above in the Layout section */
-    }
+        .node.highlighted .node-label {
+            opacity: 1;
+            fill: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
 
-    /* --- Filter Checkbox Styling --- */
-    .filter-checkbox {
-        accent-color: var(--primary-cyan);
-        cursor: pointer;
-        width: 1rem;
-        height: 1rem;
-    }
-    .filter-label {
-        cursor: pointer;
-        transition: color 0.2s;
-    }
-    .filter-label:hover {
-        color: white;
-    }
+        .link.highlighted {
+            opacity: 1;
+            stroke-opacity: 1;
+            stroke-width: 3px;
+        }
 
-    /* --- MODAL STYLES (Mirroring Atlas.html) --- */
-    #report-modal { transition: opacity 0.3s ease-out; }
-    #report-modal.is-visible { opacity: 1; pointer-events: auto; }
-    #report-modal.is-visible .modal-transform { transform: scale(1); }
-    .modal-transform { 
-        transition: transform 0.3s ease-out; 
-        transform: scale(0.95); 
-        will-change: transform;
-        background-color: var(--background-light);
-        border: 1px solid var(--border-color);
-    }
-    .modal-content-area { max-height: 70vh; overflow-y: auto; }
-    
-    /* Scrollbar Styling (Applied to modal and sidebar scroll container) */
-    .modal-content-area::-webkit-scrollbar,
-    #details-scroll-container::-webkit-scrollbar { width: 8px; }
-    .modal-content-area::-webkit-scrollbar-track,
-    #details-scroll-container::-webkit-scrollbar-track { background: #1f2937; }
-    .modal-content-area::-webkit-scrollbar-thumb,
-    #details-scroll-container::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
-    .modal-content-area::-webkit-scrollbar-thumb:hover,
-    #details-scroll-container::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+        /* --- Sidebar/Details Styling --- */
+        #node-details {
+            background-color: var(--background-light);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
 
-     /* DYNAMIC CONTENT STYLES (for modal content) */
-     #modal-content h3 {
-        font-family: 'Lora', serif;
-        font-size: 1.5rem;
-        color: var(--text-primary);
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid var(--primary-cyan);
-    }
-    #modal-content h4 {
-        font-family: 'Lora', serif;
-        font-size: 1.25rem;
-        color: var(--primary-cyan);
-        margin-bottom: 0.5rem;
-        margin-top: 1.5rem;
-    }
-    #modal-content p {
-        margin-bottom: 1rem;
-    }
-    #modal-content strong {
-        color: white;
-    }
-    #modal-content ul {
-        list-style-position: inside;
-        list-style-type: disc;
-        margin-bottom: 1rem;
-        padding-left: 0.5rem;
-    }
-    #modal-content blockquote {
-        border-left: 4px solid var(--primary-cyan);
-        padding-left: 1rem;
-        margin: 1rem 0;
-        font-style: italic;
-        color: var(--text-secondary);
-    }
-    #modal-content cite {
-        display: block;
-        margin-top: 0.5rem;
-        font-style: normal;
-        font-size: 0.875rem;
-    }
-</style>
-{%- endset -%}
+        /* --- Filter Checkbox Styling --- */
+        .filter-checkbox {
+            accent-color: var(--primary-cyan);
+            cursor: pointer;
+            width: 1rem;
+            height: 1rem;
+        }
+        .filter-label {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .filter-label:hover {
+            color: white;
+        }
 
-{%- set scripts -%}
-    <script>
-      // Inline the data from Eleventy's global data (_data/sfof_network.json).
-      // We use the Nunjucks 'dump' filter to serialize the data to JSON, 
-      // and 'safe' to prevent HTML escaping.
-      window.networkData = {{ sfof_network | dump | safe }};
-    </script>
-    
-    {# CRITICAL: Load the initialization script that consumes window.networkData #}
-    <script src="/assets/js/network.js" defer></script>
-{%- endset -%}
+        /* --- MODAL STYLES (Mirroring Atlas.html) --- */
+        #report-modal { transition: opacity 0.3s ease-out; }
+        #report-modal.is-visible { opacity: 1; pointer-events: auto; }
+        #report-modal.is-visible .modal-transform { transform: scale(1); }
+        .modal-transform {
+            transition: transform 0.3s ease-out;
+            transform: scale(0.95);
+            will-change: transform;
+            background-color: var(--background-light);
+            border: 1px solid var(--border-color);
+        }
+        .modal-content-area { max-height: 70vh; overflow-y: auto; }
 
+        /* Scrollbar Styling (Applied to modal and sidebar scroll container) */
+        .modal-content-area::-webkit-scrollbar,
+        #details-scroll-container::-webkit-scrollbar { width: 8px; }
+        .modal-content-area::-webkit-scrollbar-track,
+        #details-scroll-container::-webkit-scrollbar-track { background: #1f2937; }
+        .modal-content-area::-webkit-scrollbar-thumb,
+        #details-scroll-container::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        .modal-content-area::-webkit-scrollbar-thumb:hover,
+        #details-scroll-container::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+
+        /* DYNAMIC CONTENT STYLES (for modal content) */
+        #modal-content h3 {
+            font-family: 'Lora', serif;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--primary-cyan);
+        }
+        #modal-content h4 {
+            font-family: 'Lora', serif;
+            font-size: 1.25rem;
+            color: var(--primary-cyan);
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        #modal-content p {
+            margin-bottom: 1rem;
+        }
+        #modal-content strong {
+            color: white;
+        }
+        #modal-content ul {
+            list-style-position: inside;
+            list-style-type: disc;
+            margin-bottom: 1rem;
+            padding-left: 0.5rem;
+        }
+        #modal-content blockquote {
+            border-left: 4px solid var(--primary-cyan);
+            padding-left: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+        #modal-content cite {
+            display: block;
+            margin-top: 0.5rem;
+            font-style: normal;
+            font-size: 0.875rem;
+        }
+    </style>
+{% endblock %}
+
+{# -------------------------------------------------------------------------- #}
+{# CONTENT Block (Main HTML Body)                                             #}
+{# -------------------------------------------------------------------------- #}
+
+{# Wrap the main page content in the 'content' block #}
+{% block content %}
 <section class="text-center px-6 pt-32 pb-24 hero-bg">
     <div class="max-w-5xl mx-auto relative z-10">
         <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Network of Influence</h1>
@@ -244,12 +244,12 @@ title: SFOF Network
 </section>
 
 <section class="container mx-auto px-6 py-16">
-    
+
     <div id="filter-container" class="mb-8 flex flex-wrap gap-6 items-center justify-center p-4 bg-gray-900/50 border border-gray-800 rounded-lg">
     </div>
 
     <div class="visualization-grid">
-        
+
         <div id="network-container">
         </div>
 
@@ -274,3 +274,22 @@ title: SFOF Network
         </div>
     </div>
 </div>
+{% endblock %}
+
+{# -------------------------------------------------------------------------- #}
+{# SCRIPTS Block (Footer Scripts and Data Inlining)                           #}
+{# -------------------------------------------------------------------------- #}
+
+{# Inject data inlining and visualization script into the scripts block #}
+{% block scripts %}
+    {{ super() }}
+    <script>
+      // Inline the data from Eleventy's global data (_data/sfof_network.json).
+      // We use the Nunjucks 'dump' filter to serialize the data to JSON,
+      // and 'safe' to prevent HTML escaping.
+      window.networkData = {{ sfof_network | dump | safe }};
+    </script>
+
+    {# CRITICAL: Load the initialization script that consumes window.networkData #}
+    <script src="/assets/js/network.js" defer></script>
+{% endblock %}
