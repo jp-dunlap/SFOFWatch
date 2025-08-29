@@ -1,5 +1,5 @@
 ---
-layout: /_includes/base_dark.njk
+layout: base_dark.njk
 title: SFOF Network
 ---
 
@@ -195,8 +195,9 @@ title: SFOF Network
       // to safely convert the data object to a JSON string.
       window.networkData = {{ sfof_network | jsonify }};
     </script>
-    {# Load the visualization logic #}
-    <script src="/assets/js/network-vis.js" defer></script>
+    {# network-vis.js is removed as logic is now consolidated in network.js #}
+    {# <script src="/assets/js/network-vis.js" defer></script> #}
+    
     {# CRITICAL: Load the initialization script that consumes window.networkData #}
     <script src="/assets/js/network.js" defer></script>
 {%- endcapture -%}
