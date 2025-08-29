@@ -211,7 +211,7 @@
             </div>
         </section>
 
-<section class="container mx-auto px-6 py-16">
+        <section class="container mx-auto px-6 py-16">
             <div id="map-container"></div>
             <div id="legend-container" class="flex justify-center items-center flex-wrap gap-6 mt-8"></div>
         </section>
@@ -363,29 +363,47 @@
                 .text((d, i) => legendLabels[i])
                 .attr("class", "text-gray-300 text-sm");
 
-
+            // ===== START: CORRECTED MODAL FUNCTION =====
             function showModal(stateName) {
-                const reportPath = `reports/${stateName.toLowerCase().replace(/\s+/g, '-')}.html`;
+                const stateSlug = stateName.toLowerCase().replace(/\s+/g, '-');
+                const reportPath = `/reports/${stateSlug}/`;
+
+                // Set loading state
+                modalTitle.textContent = `State Dossier: ${stateName}`;
+                modalContent.innerHTML = '<p class="text-center text-gray-400">Loading report...</p>';
+                modal.classList.add('is-visible');
+                mainContent.style.filter = 'blur(4px)';
 
                 fetch(reportPath)
                     .then(response => {
-                        if (!response.ok) { throw new Error('Report not found'); }
+                        if (!response.ok) {
+                            throw new Error(`Report not found for ${stateName}. Status: ${response.status}`);
+                        }
                         return response.text();
                     })
                     .then(html => {
-                        modalTitle.textContent = `State Dossier: ${stateName}`;
-                        modalContent.innerHTML = html;
-                        modal.classList.add('is-visible');
-                        mainContent.style.filter = 'blur(4px)'; // Apply blur to main content
+                        // Parse the fetched HTML string into a document object
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        
+                        // Find the specific content div within the parsed document
+                        // This relies on the class being present in `_includes/report.njk`
+                        const reportContent = doc.querySelector('.report-content');
+
+                        if (reportContent) {
+                            // Inject only the inner HTML of the desired element
+                            modalContent.innerHTML = reportContent.innerHTML;
+                        } else {
+                            // Handle cases where the report content isn't found in the fetched page
+                            modalContent.innerHTML = `<p class="text-gray-400">Could not parse the report content for ${stateName}. The report might be malformed or missing the '.report-content' class.</p>`;
+                        }
                     })
                     .catch(error => {
                         console.error("Error fetching report:", error);
-                        modalTitle.textContent = `State Dossier: ${stateName}`;
                         modalContent.innerHTML = `<p class="text-gray-400">No detailed report is available for this state at this time. It has been identified as a member state, but the full dossier has not yet been compiled.</p>`;
-                        modal.classList.add('is-visible');
-                        mainContent.style.filter = 'blur(4px)'; // Apply blur to main content
                     });
             }
+            // ===== END: CORRECTED MODAL FUNCTION =====
 
             function hideModal() {
                 modal.classList.remove('is-visible');
