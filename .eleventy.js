@@ -51,7 +51,7 @@ module.exports = function(eleventyConfig) {
       input: ".",
       includes: "_includes",
       // This line is the fix: It tells Eleventy to look for layouts
-      // directly in the `_includes` folder instead of `_includes/layouts`.
+      // directly in the `_includes` folder.
       layouts: "_includes",
       output: "_site",
     },
@@ -61,3 +61,4 @@ module.exports = function(eleventyConfig) {
     htmlTemplateEngine: "njk",
   };
 };
+
