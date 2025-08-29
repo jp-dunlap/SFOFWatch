@@ -4,11 +4,11 @@
   "description": "SFOFWatch.org is an open-source intelligence project that maps the network of influence driving the State Financial Officers Foundation (SFOF) and its associated political agenda.",
   "main": ".eleventy.js",
   "scripts": {
-    "start": "eleventy --serve",
-    "build:data": "node assets/js/network.js",
-    "build": "npm-run-all build:data eleventy",
-    "build:ci": "eleventy"
-  },
+  "start": "npx @11ty/eleventy --serve --quiet",
+  "build": "npm-run-all build:data eleventy",
+  "build:data": "node netlify/functions/update-legislation.js",
+  "eleventy": "npx @11ty/eleventy"
+},
   "keywords": [
     "SFOF",
     "State Financial Officers Foundation",
