@@ -1,6 +1,6 @@
 # The build command and publish directory
 [build]
-  command = "npx @11ty/eleventy"
+  command = "npm run build"
   publish = "_site"
 
 # Functions configuration
