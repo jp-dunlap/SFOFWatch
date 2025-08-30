@@ -1,283 +1,154 @@
 ---
+layout: base.njk
 title: SFOF Network
-# The layout is defined by the {% extends %} tag below, not the 'layout' key.
 ---
-{# Use Nunjucks 'extends' to define the layout and enable block inheritance #}
-{% extends "_includes/base_dark.njk" %}
+<style>
+  #network-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    height: 75vh;
+  }
+  #network-visualization {
+    border: 1px solid #4a5568;
+    border-radius: 0.5rem;
+    height: 100%;
+  }
+  #node-details-panel {
+    background-color: #2d3748;
+    border: 1px solid #4a5568;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    height: 100%;
+    overflow-y: auto;
+  }
+  #node-details-panel h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #e2e8f0;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #4fd1c5;
+    padding-bottom: 0.5rem;
+  }
+  #node-details-panel p {
+    color: #a0aec0;
+    margin-bottom: 0.75rem;
+  }
+  #node-details-panel .report-link {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #4fd1c5;
+    color: #1a202c;
+    border-radius: 0.25rem;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.2s;
+  }
+  #node-details-panel .report-link:hover {
+    background-color: #2c7a7b;
+  }
+  #controls-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #2d3748;
+    border: 1px solid #4a5568;
+    border-radius: 0.5rem;
+  }
+  .search-wrapper input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background-color: #1a202c;
+    border: 1px solid #4a5568;
+    color: #e2e8f0;
+    border-radius: 0.25rem;
+  }
+  #filter-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  #filter-wrapper label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #a0aec0;
+  }
+  #filter-wrapper input {
+    margin-right: 0.5rem;
+  }
+  #network-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #2d3748;
+    border: 1px solid #4a5568;
+    border-radius: 0.5rem;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #e2e8f0;
+  }
+  .legend-swatch {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  @media (max-width: 768px) {
+    #network-container {
+      grid-template-columns: 1fr;
+      height: auto;
+    }
+    #network-visualization {
+      height: 50vh;
+    }
+  }
+</style>
 
-{# -------------------------------------------------------------------------- #}
-{# HEAD Block (D3.js and Styles)                                              #}
-{# -------------------------------------------------------------------------- #}
+<h1>SFOF Network</h1>
 
-{# Inject D3 library and page-specific styles into the head block #}
-{% block head %}
-    {# Call super() to include content from the parent block if necessary #}
-    {{ super() }}
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-
-    {# Styles specific to the network visualization #}
-    <style>
-        /* --- Hero Background Styling --- */
-        .hero-bg {
-            background-color: var(--background-dark);
-            background-image:
-                radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
-                radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* --- Layout --- */
-        .visualization-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            min-height: 85vh;
-        }
-
-        @media (min-width: 1024px) {
-            .visualization-grid {
-                grid-template-columns: 3fr 1fr; /* 75% viz, 25% sidebar */
-            }
-        }
-
-        /* --- Visualization Container Styling --- */
-        #network-container {
-            background-color: var(--background-light);
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-            height: 100%;
-        }
-
-        #node-details {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        #details-scroll-container {
-            overflow-y: auto;
-            flex-grow: 1;
-        }
-
-        @media (max-width: 1023px) {
-            .visualization-grid {
-                min-height: auto;
-            }
-            #network-container {
-                height: 70vh;
-            }
-            #node-details {
-                height: auto;
-                display: block;
-            }
-        }
-
-        /* --- D3 Element Styles --- */
-        .link {
-            stroke-opacity: 0.5;
-            transition: stroke-opacity 0.3s, stroke-width 0.3s, opacity 0.3s;
-        }
-        .node circle {
-            stroke: var(--background-dark);
-            stroke-width: 2px;
-            transition: filter 0.3s ease, r 0.3s ease, opacity 0.3s;
-            cursor: pointer;
-        }
-
-        .node-label {
-            font-family: 'Inter', sans-serif;
-            font-size: 11px;
-            fill: var(--text-secondary);
-            pointer-events: none;
-            text-anchor: middle;
-            transition: fill 0.3s, font-weight 0.3s, opacity 0.3s, font-size 0.3s;
-            text-shadow: 0 0 5px var(--background-dark), 0 0 3px var(--background-dark), 0 0 1px var(--background-dark);
-        }
-
-        /* --- Dynamic Highlighting/Dimming States --- */
-        .network-faded .node:not(.highlighted) circle,
-        .network-faded .node:not(.highlighted) .node-label,
-        .network-faded .link:not(.highlighted) {
-            opacity: 0.05;
-        }
-
-        .node.highlighted circle {
-            opacity: 1;
-            filter: brightness(1.4) drop-shadow(0 0 8px var(--primary-cyan));
-        }
-
-        .node.highlighted .node-label {
-            opacity: 1;
-            fill: white;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .link.highlighted {
-            opacity: 1;
-            stroke-opacity: 1;
-            stroke-width: 3px;
-        }
-
-        /* --- Sidebar/Details Styling --- */
-        #node-details {
-            background-color: var(--background-light);
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-        }
-
-        /* --- Filter Checkbox Styling --- */
-        .filter-checkbox {
-            accent-color: var(--primary-cyan);
-            cursor: pointer;
-            width: 1rem;
-            height: 1rem;
-        }
-        .filter-label {
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        .filter-label:hover {
-            color: white;
-        }
-
-        /* --- MODAL STYLES --- */
-        #report-modal { transition: opacity 0.3s ease-out; }
-        #report-modal.is-visible { opacity: 1; pointer-events: auto; }
-        #report-modal.is-visible .modal-transform { transform: scale(1); }
-        .modal-transform {
-            transition: transform 0.3s ease-out;
-            transform: scale(0.95);
-            will-change: transform;
-            background-color: var(--background-light);
-            border: 1px solid var(--border-color);
-        }
-        .modal-content-area { max-height: 70vh; overflow-y: auto; }
-
-        /* Scrollbar Styling */
-        .modal-content-area::-webkit-scrollbar,
-        #details-scroll-container::-webkit-scrollbar { width: 8px; }
-        .modal-content-area::-webkit-scrollbar-track,
-        #details-scroll-container::-webkit-scrollbar-track { background: #1f2937; }
-        .modal-content-area::-webkit-scrollbar-thumb,
-        #details-scroll-container::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
-        .modal-content-area::-webkit-scrollbar-thumb:hover,
-        #details-scroll-container::-webkit-scrollbar-thumb:hover { background: #6b7280; }
-
-        /* DYNAMIC CONTENT STYLES (for modal content) */
-        #modal-content h3 {
-            font-family: 'Lora', serif;
-            font-size: 1.5rem;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--primary-cyan);
-        }
-        #modal-content h4 {
-            font-family: 'Lora', serif;
-            font-size: 1.25rem;
-            color: var(--primary-cyan);
-            margin-bottom: 0.5rem;
-            margin-top: 1.5rem;
-        }
-        #modal-content p {
-            margin-bottom: 1rem;
-        }
-        #modal-content strong {
-            color: white;
-        }
-        #modal-content ul {
-            list-style-position: inside;
-            list-style-type: disc;
-            margin-bottom: 1rem;
-            padding-left: 0.5rem;
-        }
-        #modal-content blockquote {
-            border-left: 4px solid var(--primary-cyan);
-            padding-left: 1rem;
-            margin: 1rem 0;
-            font-style: italic;
-            color: var(--text-secondary);
-        }
-        #modal-content cite {
-            display: block;
-            margin-top: 0.5rem;
-            font-style: normal;
-            font-size: 0.875rem;
-        }
-    </style>
-{% endblock %}
-
-{# -------------------------------------------------------------------------- #}
-{# CONTENT Block (Main HTML Body)                                             #}
-{# -------------------------------------------------------------------------- #}
-
-{% block content %}
-<section class="text-center px-6 pt-32 pb-24 hero-bg">
-    <div class="max-w-5xl mx-auto relative z-10">
-        <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Network of Influence</h1>
-        <p class="text-lg md:text-xl text-gray-400 max-w-4xl mx-auto">
-            SFOF is the central node in a sophisticated network of funders, political groups, and corporate partners. This interactive map visualizes these connections. Click any node for details.
-        </p>
-    </div>
-</section>
-
-<section class="container mx-auto px-6 py-16">
-
-    <div id="filter-container" class="mb-8 flex flex-wrap gap-6 items-center justify-center p-4 bg-gray-900/50 border border-gray-800 rounded-lg">
-        <!-- Filters will be generated by the script -->
-    </div>
-
-    <div class="visualization-grid">
-        <div id="network-container">
-            <!-- D3 visualization will be rendered here -->
-        </div>
-
-        <div id="node-details">
-             <div id="details-scroll-container">
-                <div id="details-content">
-                     <p class="text-secondary fst-italic">Click a node to view connections and highlight the network. Zoom and drag to explore. Click the background to reset.</p>
-                </div>
-             </div>
-        </div>
-    </div>
-
-</section>
-
-<!-- Modal for Dossier Reports -->
-<div id="report-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none">
-    <div id="modal-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
-    <div class="relative rounded-lg shadow-2xl w-full max-w-4xl modal-transform">
-        <div class="px-6 py-4 border-b flex justify-between items-center" style="border-color: var(--border-color);">
-            <h2 id="modal-title" class="text-2xl font-lora text-white"></h2>
-            <button id="close-modal-btn" class="text-gray-400 hover:text-white transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-        </div>
-        <div id="modal-content" class="p-6 md:p-8 modal-content-area text-gray-300">
-            <!-- Content is loaded here via fetch -->
-        </div>
-    </div>
+<div id="controls-container">
+  <div class="search-wrapper">
+    <input type="text" id="network-search" placeholder="Search for a node..."/>
+  </div>
+  <div id="filter-wrapper">
+    <label><input type="checkbox" class="filter-checkbox" value="political_group" checked> Political Group</label>
+    <label><input type="checkbox" class="filter-checkbox" value="foundation" checked> Foundation</label>
+    <label><input type="checkbox" class="filter-checkbox" value="dark_money_fund" checked> Dark Money Fund</label>
+    <label><input type="checkbox" class="filter-checkbox" value="corporation" checked> Corporation</label>
+    <label><input type="checkbox" class="filter-checkbox" value="person" checked> Person</label>
+    <label><input type="checkbox" class="filter-checkbox" value="state_officer" checked> State Officer</label>
+  </div>
 </div>
-{% endblock %}
 
-{# -------------------------------------------------------------------------- #}
-{# SCRIPTS Block (Footer Scripts and Data Inlining)                           #}
-{# -------------------------------------------------------------------------- #}
+<div id="network-legend">
+  <div class="legend-item"><span class="legend-swatch" style="background-color: #3b82f6;"></span>Political Group</div>
+  <div class="legend-item"><span class="legend-swatch" style="background-color: #f97316;"></span>Foundation</div>
+  <div class="legend-item"><span class="legend-swatch" style="background-color: #8b5cf6;"></span>Dark Money Fund</div>
+  <div class="legend-item"><span class="legend-swatch" style="background-color: #14b8a6;"></span>Corporation</div>
+  <div class="legend-item"><span class="legend-swatch" style="background-color: #22c55e;"></span>Person</div>
+  <div class="legend-item"><span class="legend-swatch" style="background-color: #ef4444;"></span>State Officer</div>
+</div>
 
-{% block scripts %}
-    {{ super() }}
-    <script>
-      // Inline the data from Eleventy's global data (_data/sfof_network.json).
-      // This makes the data immediately available to our visualization script.
-      window.networkData = {{ sfof_network | dump | safe }};
-    </script>
+<div id="network-container">
+  <div id="network-visualization"></div>
+  <div id="node-details-panel">
+    <h3>Node Details</h3>
+    <p>Click on a node in the network to see more information here.</p>
+  </div>
+</div>
 
-    {# CORRECTED: Load the main visualization script directly. #}
-    <script src="/assets/js/network-vis.js" type="module"></script>
-{% endblock %}
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<script src="/assets/js/network-vis.js"></script>
