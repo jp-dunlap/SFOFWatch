@@ -3,25 +3,15 @@ layout: base.njk
 title: SFOF Network
 ---
 <style>
-  #network-container {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 1.5rem;
-    height: 75vh;
-  }
+  /* Keep styles for vis.js elements which are dynamically generated */
   #network-visualization {
-    border: 1px solid #4a5568;
-    border-radius: 0.5rem;
+    border: 1px solid #4a5568; /* border-gray-600 */
+    border-radius: 0.5rem; /* rounded-lg */
     height: 100%;
+    background-color: #1a202c; /* bg-gray-900 */
   }
-  #node-details-panel {
-    background-color: #2d3748;
-    border: 1px solid #4a5568;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    height: 100%;
-    overflow-y: auto;
-  }
+
+  /* Custom styles for the details panel content */
   #node-details-panel h3 {
     font-size: 1.5rem;
     font-weight: bold;
@@ -48,56 +38,6 @@ title: SFOF Network
   #node-details-panel .report-link:hover {
     background-color: #2c7a7b;
   }
-  #controls-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background-color: #2d3748;
-    border: 1px solid #4a5568;
-    border-radius: 0.5rem;
-  }
-  .search-wrapper input {
-    width: 100%;
-    padding: 0.5rem 1rem;
-    background-color: #1a202c;
-    border: 1px solid #4a5568;
-    color: #e2e8f0;
-    border-radius: 0.25rem;
-  }
-  #filter-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.5rem;
-  }
-  #filter-wrapper label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    color: #a0aec0;
-  }
-  #filter-wrapper input {
-    margin-right: 0.5rem;
-  }
-  #network-legend {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background-color: #2d3748;
-    border: 1px solid #4a5568;
-    border-radius: 0.5rem;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    font-size: 0.875rem;
-    color: #e2e8f0;
-  }
   .legend-swatch {
     display: inline-block;
     width: 1rem;
@@ -106,45 +46,41 @@ title: SFOF Network
     margin-right: 0.5rem;
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
-  @media (max-width: 768px) {
-    #network-container {
-      grid-template-columns: 1fr;
-      height: auto;
-    }
-    #network-visualization {
-      height: 50vh;
-    }
-  }
 </style>
 
-<h1>SFOF Network</h1>
+<h1 class="text-3xl font-bold text-white mb-4">SFOF Network</h1>
+<p class="text-gray-400 mb-6">Click on a node to explore connections. Use the controls below to filter and search the network.</p>
 
-<div id="controls-container">
-  <div class="search-wrapper">
-    <input type="text" id="network-search" placeholder="Search for a node..."/>
+
+<!-- Search and Filter Controls using Tailwind CSS -->
+<div class="p-4 mb-6 bg-gray-800 border border-gray-700 rounded-lg flex flex-col gap-4">
+  <div>
+    <input type="text" id="network-search" placeholder="Search for a node..." class="w-full p-2 bg-gray-900 border border-gray-600 text-gray-200 rounded focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"/>
   </div>
-  <div id="filter-wrapper">
-    <label><input type="checkbox" class="filter-checkbox" value="political_group" checked> Political Group</label>
-    <label><input type="checkbox" class="filter-checkbox" value="foundation" checked> Foundation</label>
-    <label><input type="checkbox" class="filter-checkbox" value="dark_money_fund" checked> Dark Money Fund</label>
-    <label><input type="checkbox" class="filter-checkbox" value="corporation" checked> Corporation</label>
-    <label><input type="checkbox" class="filter-checkbox" value="person" checked> Person</label>
-    <label><input type="checkbox" class="filter-checkbox" value="state_officer" checked> State Officer</label>
+  <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+    <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="political_group" checked> Political Group</label>
+    <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="foundation" checked> Foundation</label>
+    <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="dark_money_fund" checked> Dark Money Fund</label>
+    <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="corporation" checked> Corporation</label>
+    <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="person" checked> Person</label>
+    <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="state_officer" checked> State Officer</label>
   </div>
 </div>
 
-<div id="network-legend">
-  <div class="legend-item"><span class="legend-swatch" style="background-color: #3b82f6;"></span>Political Group</div>
-  <div class="legend-item"><span class="legend-swatch" style="background-color: #f97316;"></span>Foundation</div>
-  <div class="legend-item"><span class="legend-swatch" style="background-color: #8b5cf6;"></span>Dark Money Fund</div>
-  <div class="legend-item"><span class="legend-swatch" style="background-color: #14b8a6;"></span>Corporation</div>
-  <div class="legend-item"><span class="legend-swatch" style="background-color: #22c55e;"></span>Person</div>
-  <div class="legend-item"><span class="legend-swatch" style="background-color: #ef4444;"></span>State Officer</div>
+<!-- Legend using Tailwind CSS -->
+<div class="p-4 mb-6 bg-gray-800 border border-gray-700 rounded-lg flex flex-wrap justify-center gap-x-6 gap-y-2">
+  <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #3b82f6;"></span>Political Group</div>
+  <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #f97316;"></span>Foundation</div>
+  <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #8b5cf6;"></span>Dark Money Fund</div>
+  <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #14b8a6;"></span>Corporation</div>
+  <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #22c55e;"></span>Person</div>
+  <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #ef4444;"></span>State Officer</div>
 </div>
 
-<div id="network-container">
-  <div id="network-visualization"></div>
-  <div id="node-details-panel">
+<!-- Main Layout Grid using Tailwind CSS -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[75vh]">
+  <div id="network-visualization" class="md:col-span-2 h-[50vh] md:h-full"></div>
+  <div id="node-details-panel" class="bg-gray-800 border border-gray-700 rounded-lg p-6 overflow-y-auto">
     <h3>Node Details</h3>
     <p>Click on a node in the network to see more information here.</p>
   </div>
