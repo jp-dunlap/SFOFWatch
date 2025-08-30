@@ -48,42 +48,40 @@ title: SFOF Network
   }
 </style>
 
-<h1 class="text-3xl font-bold text-white mb-4">SFOF Network</h1>
-<p class="text-gray-400 mb-6">Click on a node to explore connections. Use the controls below to filter and search the network.</p>
+<div class="flex flex-col h-full">
+    <h1 class="text-3xl font-bold text-white mb-4">SFOF Network</h1>
+    <p class="text-gray-400 mb-6">Click on a node to explore connections. Use the controls below to filter and search the network.</p>
 
+    <div class="p-4 mb-6 bg-gray-800 border border-gray-700 rounded-lg flex flex-col gap-4">
+      <div>
+        <input type="text" id="network-search" placeholder="Search for a node..." class="w-full p-2 bg-gray-900 border border-gray-600 text-gray-200 rounded focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"/>
+      </div>
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+        <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="political_group" checked> Political Group</label>
+        <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="foundation" checked> Foundation</label>
+        <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="dark_money_fund" checked> Dark Money Fund</label>
+        <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="corporation" checked> Corporation</label>
+        <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="person" checked> Person</label>
+        <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="state_officer" checked> State Officer</label>
+      </div>
+    </div>
 
-<!-- Search and Filter Controls using Tailwind CSS -->
-<div class="p-4 mb-6 bg-gray-800 border border-gray-700 rounded-lg flex flex-col gap-4">
-  <div>
-    <input type="text" id="network-search" placeholder="Search for a node..." class="w-full p-2 bg-gray-900 border border-gray-600 text-gray-200 rounded focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"/>
-  </div>
-  <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
-    <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="political_group" checked> Political Group</label>
-    <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="foundation" checked> Foundation</label>
-    <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="dark_money_fund" checked> Dark Money Fund</label>
-    <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="corporation" checked> Corporation</label>
-    <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="person" checked> Person</label>
-    <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="state_officer" checked> State Officer</label>
-  </div>
-</div>
+    <div class="p-4 mb-6 bg-gray-800 border border-gray-700 rounded-lg flex flex-wrap justify-center gap-x-6 gap-y-2">
+      <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #3b82f6;"></span>Political Group</div>
+      <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #f97316;"></span>Foundation</div>
+      <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #8b5cf6;"></span>Dark Money Fund</div>
+      <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #14b8a6;"></span>Corporation</div>
+      <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #22c55e;"></span>Person</div>
+      <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #ef4444;"></span>State Officer</div>
+    </div>
 
-<!-- Legend using Tailwind CSS -->
-<div class="p-4 mb-6 bg-gray-800 border border-gray-700 rounded-lg flex flex-wrap justify-center gap-x-6 gap-y-2">
-  <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #3b82f6;"></span>Political Group</div>
-  <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #f97316;"></span>Foundation</div>
-  <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #8b5cf6;"></span>Dark Money Fund</div>
-  <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #14b8a6;"></span>Corporation</div>
-  <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #22c55e;"></span>Person</div>
-  <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #ef4444;"></span>State Officer</div>
-</div>
-
-<!-- Main Layout Grid using Tailwind CSS -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[75vh]">
-  <div id="network-visualization" class="md:col-span-2 h-[50vh] md:h-full"></div>
-  <div id="node-details-panel" class="bg-gray-800 border border-gray-700 rounded-lg p-6 overflow-y-auto">
-    <h3>Node Details</h3>
-    <p>Click on a node in the network to see more information here.</p>
-  </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-grow">
+      <div id="network-visualization" class="md:col-span-2 h-full"></div>
+      <div id="node-details-panel" class="bg-gray-800 border border-gray-700 rounded-lg p-6 overflow-y-auto">
+        <h3>Node Details</h3>
+        <p>Click on a node in the network to see more information here.</p>
+      </div>
+    </div>
 </div>
 
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
