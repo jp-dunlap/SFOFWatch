@@ -9,6 +9,12 @@ module.exports = function (eleventyConfig) {
     return DateTime.fromJSDate(dateObj).toLocaleString(DateTime.DATE_MED);
   });
 
+  // FIX: Add the 'jsonify' filter required by network.html
+  // This allows data to be safely converted to a JSON string.
+  eleventyConfig.addFilter("jsonify", (data) => {
+    return JSON.stringify(data);
+  });
+
   // Create a collection of reports
   eleventyConfig.addCollection("reports", function (collectionApi) {
     return collectionApi.getFilteredByGlob("reports/*.md");
