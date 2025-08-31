@@ -29,8 +29,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const adjacency = new Map();
   nodes.forEach(node => adjacency.set(node.id, new Set()));
   edges.forEach(link => {
-    adjacency.get(link.source).add(link.target);
-    adjacency.get(link.target).add(link.source);
+    // Ensure the link connects valid nodes before adding to adjacency map
+    if (adjacency.has(link.source) && adjacency.has(link.target)) {
+      adjacency.get(link.source).add(link.target);
+      adjacency.get(link.target).add(link.source);
+    }
   });
 
   // --- Scales & Visuals ---
@@ -60,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
     .style('padding', '5px 10px')
     .style('border-radius', '5px')
     .style('opacity', 0)
-    .style('pointer-events', 'none'); // Important so it doesn't block other mouse events
+    .style('pointer-events', 'none');
 
   // --- Initial Render Function ---
   function initializeDisplay() {
@@ -75,18 +78,15 @@ document.addEventListener('DOMContentLoaded', function () {
       .data(nodes, d => d.id)
       .join(enter => {
         const gNode = enter.append('g').attr('class', 'node');
-
         gNode.append('circle')
           .attr('r', d => radiusScale(d.influence || 5))
           .attr('fill', d => colorScale(d.type));
-
         gNode.append('text')
           .text(d => d.name)
           .attr('x', d => radiusScale(d.influence || 5) + 5)
           .attr('y', 3)
           .attr('font-size', '12px')
           .attr('fill', '#ccc');
-        
         return gNode;
       })
       .on('click', handleClick)
@@ -95,38 +95,34 @@ document.addEventListener('DOMContentLoaded', function () {
       .call(drag(simulation));
 
     detailsPanel.innerHTML = '<p class="text-gray-400 italic">Click a node to see its direct connections.</p>';
-    // --- DYNAMIC FILTER GENERATION (Add this to initializeDisplay) ---
-const filterContainer = d3.select('#filter-container');
-filterContainer.html(''); // Clear any existing content
 
-const nodeTypes = [...new Set(nodes.map(n => n.type))];
-const edgeTypes = [...new Set(edges.map(e => e.type))];
+    // --- DYNAMIC FILTER GENERATION ---
+    const filterContainer = d3.select('#filter-container');
+    filterContainer.html(''); 
+    const nodeTypes = [...new Set(nodes.map(n => n.type))];
+    const edgeTypes = [...new Set(edges.map(e => e.type))];
 
-// --- Search Input ---
-filterContainer.append('div')
-    .attr('class', 'search-wrapper')
-    .html('<input type="text" id="search-input" placeholder="Search nodes..." class="bg-gray-700 text-white rounded px-3 py-1 text-sm">');
+    filterContainer.append('div')
+        .attr('class', 'search-wrapper')
+        .html('<input type="text" id="search-input" placeholder="Search nodes..." class="bg-gray-700 text-white rounded px-3 py-1 text-sm">');
 
-// --- Node Type Filters ---
-const nodeFilterGroup = filterContainer.append('div').attr('class', 'filter-group');
-nodeFilterGroup.append('h4').attr('class', 'filter-title').text('Node Types');
-nodeTypes.forEach(type => {
-    const label = nodeFilterGroup.append('label').attr('class', 'filter-label');
-    label.append('input').attr('type', 'checkbox').attr('class', 'node-filter').attr('value', type).property('checked', true);
-    label.append('span').text(formatText(type)).style('color', colorScale(type));
-});
+    const nodeFilterGroup = filterContainer.append('div').attr('class', 'filter-group');
+    nodeFilterGroup.append('h4').attr('class', 'filter-title').text('Node Types');
+    nodeTypes.forEach(type => {
+        const label = nodeFilterGroup.append('label').attr('class', 'filter-label');
+        label.append('input').attr('type', 'checkbox').attr('class', 'node-filter').attr('value', type).property('checked', true);
+        label.append('span').text(formatText(type)).style('color', colorScale(type));
+    });
 
-// --- Edge Type Filters ---
-const edgeFilterGroup = filterContainer.append('div').attr('class', 'filter-group');
-edgeFilterGroup.append('h4').attr('class', 'filter-title').text('Connection Types');
-edgeTypes.forEach(type => {
-    const label = edgeFilterGroup.append('label').attr('class', 'filter-label');
-    label.append('input').attr('type', 'checkbox').attr('class', 'edge-filter').attr('value', type).property('checked', true);
-    label.append('span').text(formatText(type));
-});
+    const edgeFilterGroup = filterContainer.append('div').attr('class', 'filter-group');
+    edgeFilterGroup.append('h4').attr('class', 'filter-title').text('Connection Types');
+    edgeTypes.forEach(type => {
+        const label = edgeFilterGroup.append('label').attr('class', 'filter-label');
+        label.append('input').attr('type', 'checkbox').attr('class', 'edge-filter').attr('value', type).property('checked', true);
+        label.append('span').text(formatText(type));
+    });
 
-// --- Attach Event Listeners ---
-filterContainer.selectAll('input').on('change', updateNetwork);
+    filterContainer.selectAll('input').on('input', updateNetwork);
   }
 
   // --- Simulation Ticker ---
@@ -144,15 +140,11 @@ filterContainer.selectAll('input').on('change', updateNetwork);
   // --- Interactivity Handlers ---
   function handleClick(event, d) {
     event.stopPropagation();
-    
     const neighbors = adjacency.get(d.id);
-
-    // Highlight logic
     node.classed('highlighted', n => n.id === d.id || neighbors.has(n.id));
     link.classed('highlighted', l => l.source.id === d.id || l.target.id === d.id);
     svg.classed('network-faded', true);
     
-    // Details panel update
     const connections = edges.filter(l => l.source.id === d.id || l.target.id === d.id);
     detailsPanel.innerHTML = `
       <h3 class="text-xl font-bold text-cyan-400 mb-2">${d.name}</h3>
@@ -187,6 +179,53 @@ filterContainer.selectAll('input').on('change', updateNetwork);
   }
 
   svg.on('click', resetView);
+  
+  // --- Core Filtering Logic ---
+  function updateNetwork() {
+    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    
+    const activeNodeTypes = new Set();
+    d3.selectAll('.node-filter:checked').each(function() {
+        activeNodeTypes.add(this.value);
+    });
+
+    const activeEdgeTypes = new Set();
+    d3.selectAll('.edge-filter:checked').each(function() {
+        activeEdgeTypes.add(this.value);
+    });
+
+    const visibleNodes = new Set();
+    node.each(function(d) {
+        const isTypeMatch = activeNodeTypes.has(d.type);
+        const isSearchMatch = searchTerm === '' || 
+                              d.name.toLowerCase().includes(searchTerm) || 
+                              (d.description && d.description.toLowerCase().includes(searchTerm));
+        
+        if (isTypeMatch && isSearchMatch) {
+            d3.select(this).classed('hidden', false);
+            visibleNodes.add(d.id);
+        } else {
+            d3.select(this).classed('hidden', true);
+        }
+    });
+
+    link.each(function(d) {
+        const isTypeMatch = activeEdgeTypes.has(d.type);
+        const sourceVisible = visibleNodes.has(d.source.id);
+        const targetVisible = visibleNodes.has(d.target.id);
+
+        if (isTypeMatch && sourceVisible && targetVisible) {
+            d3.select(this).classed('hidden', false);
+        } else {
+            d3.select(this).classed('hidden', true);
+        }
+    });
+    
+    // If no search term and all filters are on, it's a reset state
+    if (searchTerm === '' && (activeNodeTypes.size === new Set(nodes.map(n => n.type)).size) && (activeEdgeTypes.size === new Set(edges.map(e => e.type)).size)) {
+       resetView();
+    }
+  }
 
   function formatText(text) {
       return (text || '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
@@ -221,3 +260,4 @@ filterContainer.selectAll('input').on('change', updateNetwork);
 
   initializeDisplay();
 });
+
