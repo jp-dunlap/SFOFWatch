@@ -1,5 +1,4 @@
 ---
-layout: report.njk
 ---
 ### I. The Architecture of Influence
 
