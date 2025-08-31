@@ -11,7 +11,17 @@ document.addEventListener('DOMContentLoaded', function () {
     return;
   }
 
-  const { nodes, edges } = window.networkData;
+  let { nodes, edges } = window.networkData;
+
+  // --- Data Pre-processing ---
+  const nodeMap = new Map(nodes.map(node => [node.id, node]));
+  
+  // Replace string IDs with node object references and filter invalid edges
+  edges = edges.filter(edge => nodeMap.has(edge.source) && nodeMap.has(edge.target));
+  edges.forEach(edge => {
+    edge.source = nodeMap.get(edge.source);
+    edge.target = nodeMap.get(edge.target);
+  });
 
   // --- Core Setup ---
   const container = document.getElementById('network-container');
@@ -29,11 +39,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const adjacency = new Map();
   nodes.forEach(node => adjacency.set(node.id, new Set()));
   edges.forEach(link => {
-    // Ensure the link connects valid nodes before adding to adjacency map
-    if (adjacency.has(link.source) && adjacency.has(link.target)) {
-      adjacency.get(link.source).add(link.target);
-      adjacency.get(link.target).add(link.source);
-    }
+    adjacency.get(link.source.id).add(link.target.id);
+    adjacency.get(link.target.id).add(link.source.id);
   });
 
   // --- Scales & Visuals ---
@@ -43,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // --- Force Simulation ---
   const simulation = d3.forceSimulation(nodes)
-    .force('link', d3.forceLink(edges).id(d => d.id).distance(120).strength(0.8))
+    .force('link', d3.forceLink(edges).distance(120).strength(0.8)) // .id() is no longer needed
     .force('charge', d3.forceManyBody().strength(-500))
     .force('center', d3.forceCenter(width / 2, height / 2))
     .force('collision', d3.forceCollide().radius(d => radiusScale(d.influence || 5) + 5))
@@ -122,7 +129,9 @@ document.addEventListener('DOMContentLoaded', function () {
         label.append('span').text(formatText(type));
     });
 
-    filterContainer.selectAll('input').on('input', updateNetwork);
+    // More robust event handling
+    filterContainer.select('#search-input').on('input', updateNetwork);
+    filterContainer.selectAll('input[type=checkbox]').on('change', updateNetwork);
   }
 
   // --- Simulation Ticker ---
@@ -221,7 +230,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     
-    // If no search term and all filters are on, it's a reset state
     if (searchTerm === '' && (activeNodeTypes.size === new Set(nodes.map(n => n.type)).size) && (activeEdgeTypes.size === new Set(edges.map(e => e.type)).size)) {
        resetView();
     }
@@ -260,4 +268,3 @@ document.addEventListener('DOMContentLoaded', function () {
 
   initializeDisplay();
 });
-
