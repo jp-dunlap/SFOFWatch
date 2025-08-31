@@ -1,3 +1,3 @@
 {
-  "permalink": "/reports/{{ page.fileSlug }}/index.html"
+  "layout": "report.njk"
 }
