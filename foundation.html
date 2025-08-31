@@ -8,74 +8,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Link to the external stylesheet -->
     <link rel="stylesheet" href="/assets/css/main.css">
     <style>
-        :root {
-            --background-dark: #0a0a0a;
-            --background-light: #111827;
-            --primary-cyan: #22d3ee;
-            --text-primary: #EAEAEA;
-            --text-secondary: #9ca3af;
-            --border-color: #374151;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: var(--background-dark);
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-        }
-
-        h1, h2, h3, .font-lora {
-            font-family: 'Lora', serif;
-        }
-
-        .hero-bg {
-            background-color: var(--background-dark);
-            background-image:
-                radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
-                radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-bg::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"><path fill="%23111827" fill-opacity="0.1" d="M0 0h40v40H0zM40 40h40v40H40z"></path></svg>');
-            z-index: 0;
-        }
-
-        .content-card {
-            background-color: var(--background-light);
-            border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-
-        .content-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary-cyan);
-            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.1);
-        }
-
-        /* Scroll animation styles */
+        /* Minimal styles to prevent layout shift before main.css loads */
         .reveal {
-            position: relative;
             opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
         }
     </style>
 </head>
@@ -103,9 +41,9 @@
     <main>
         <section class="text-center px-6 pt-32 pb-24 hero-bg">
             <div class="max-w-4xl mx-auto relative z-10">
-                <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Strategic Landscape</h1>
+                <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Foundation</h1>
                 <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
-                    The 2025 legislative session reveals a sophisticated and coordinated effort to restrict ESG factors in investment decisions, utilizing model legislation to redefine fiduciary duty, shield industries, and disrupt shareholder engagement.
+                    Established in 2012, SFOF has evolved from a niche professional group into the strategic nerve center of the national anti-ESG campaign, powered by a sophisticated organizational structure and a surge in ideological funding.
                 </p>
             </div>
         </section>
@@ -113,79 +51,132 @@
         <section class="container mx-auto px-6 py-16 md:py-24 space-y-24">
 
             <div class="reveal">
-                <h2 class="text-4xl font-lora font-semibold text-center mb-4">Legislative Patterns & Tactics</h2>
-                <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">The legislation analyzed exhibits clear signs of a coordinated playbook, characterized by the replication of specific bills across states and the consistent use of specific legal arguments and rhetorical framing.</p>
-                <div class="max-w-4xl mx-auto content-card rounded-lg p-8">
-                    <h3 class="text-2xl font-lora font-semibold text-cyan-400 mb-3">Model Legislation: The "Farmer Protection Act"</h3>
-                    <p class="text-gray-400 leading-relaxed">
-                        The most prominent indicator of a coordinated effort is the rapid deployment of the "Farmer Protection Act." This model legislation, appearing in states like Arkansas (SB409), West Virginia (HB3045), and North Carolina (H62), represents a strategic evolution. While earlier anti-ESG efforts focused heavily on defending the fossil fuel industry, the pivot to agriculture broadens the political coalition by leveraging a politically sympathetic sector to prohibit "discrimination" based on environmental criteria.
-                    </p>
-                </div>
-            </div>
-
-            <div class="reveal">
-                 <h2 class="text-4xl font-lora font-semibold text-center mb-4">Core Legislative Strategies</h2>
-                 <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">The strategies fall into three primary categories, each with significant potential consequences for public finance, market efficiency, and the private sector.</p>
-                 <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="content-card rounded-lg p-8">
-                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-3">1. Redefining Fiduciary Duty</h3>
-                        <p class="text-gray-400 leading-relaxed">Mandating that investment decisions be based solely on "pecuniary" factors to legally prohibit the consideration of material ESG risks like climate change.</p>
-                         <p class="mt-4 text-sm text-gray-500"><strong>Example:</strong> Wyoming's HB0080 ("Stop ESG-State funds fiduciary duty act").</p>
-                    </div>
-                    <div class="content-card rounded-lg p-8">
-                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-3">2. Industry Protection Frameworks</h3>
-                        <p class="text-gray-400 leading-relaxed">Leveraging state economic power to coerce private market behavior by creating "blacklists" of financial firms that are deemed to be "boycotting" favored industries.</p>
-                        <p class="mt-4 text-sm text-gray-500"><strong>Example:</strong> Minnesota's HF2806, requiring divestment from firms that "boycott" mining or energy.</p>
-                    </div>
-                    <div class="content-card rounded-lg p-8">
-                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-3">3. Targeting Shareholder Mechanisms</h3>
-                        <p class="text-gray-400 leading-relaxed">Disrupting corporate governance by imposing burdensome regulations on proxy advisory firms that advise institutional investors on ESG-related shareholder resolutions.</p>
-                        <p class="mt-4 text-sm text-gray-500"><strong>Example:</strong> Texas's SB2337 ("Protecting Shareholders Act").</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="reveal">
-                <h2 class="text-4xl font-lora font-semibold text-center mb-4">Emerging Trends in 2025</h2>
-                <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">The anti-ESG movement is dynamic, with new tactics emerging in the current legislative session.</p>
-                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="content-card rounded-lg p-8">
-                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Confronting Global Regulation</h3>
-                        <p class="text-gray-400">Bills like New Hampshire's HCR9 explicitly push back against international standards like the EU's CSDDD, opening a new global front in the conflict.</p>
-                    </div>
-                    <div class="content-card rounded-lg p-8">
-                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Rhetorical Escalation</h3>
-                        <p class="text-gray-400">Increasingly linking ESG to the concept of a "Social Credit Score" (e.g., Minnesota's SF851) to frame it as a threat to individual liberty and broaden opposition.</p>
-                    </div>
-                    <div class="content-card rounded-lg p-8">
-                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Proactive Litigation Support</h3>
-                        <p class="text-gray-400">States are moving beyond legislation to actively fund and support lawsuits challenging federal regulations or private-sector ESG initiatives (e.g., Wyoming's SJ0011).</p>
-                    </div>
-                </div>
-            </div>
-
-             <div class="reveal">
-                <h2 class="text-4xl font-lora font-semibold text-center mb-4">Constitutional & Legal Challenges</h2>
-                <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">These legislative efforts face substantial legal hurdles, and significant litigation is expected across several key areas.</p>
+                <h2 class="text-4xl font-lora font-semibold text-center mb-4">Organizational Architecture</h2>
+                <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">A dual-entity strategy separates public education from political action.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div class="content-card rounded-lg p-8">
-                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">The First Amendment</h3>
-                        <p class="text-gray-400">Anti-boycott laws are particularly vulnerable, as a company's investment decisions can be viewed as protected speech. Penalizing companies for their viewpoints may constitute unconstitutional viewpoint discrimination or compelled speech.</p>
+                        <div class="flex items-start mb-4">
+                            <div class="p-3 bg-cyan-400/10 rounded-full mr-4 flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                            </div>
+                            <div class="flex-grow">
+                                <picture>
+                                    <source srcset="/assets/sfof-logo.webp" type="image/webp">
+                                    <source srcset="/assets/sfof-logo.png" type="image/png">
+                                    <img src="/assets/sfof-logo.png" alt="SFOF Foundation Logo" class="logo mb-2 w-full max-w-[200px] h-auto">
+                                </picture>
+                                <h3 class="text-2xl font-lora font-semibold text-cyan-400">The Foundation (501c3)</h3>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 leading-relaxed">
+                            The public-facing, tax-exempt entity. It leverages its "educational" status to host conferences, publish research, and receive large, tax-deductible grants, building the network's credibility.
+                        </p>
+                        <div class="mt-6 pt-6 border-t border-gray-700 space-y-2">
+                            <p><strong class="text-white">Function:</strong> "Soft Power" - Networking & Fundraising</p>
+                            <p><strong class="text-white">Limitation:</strong> Prohibited from substantial lobbying.</p>
+                        </div>
                     </div>
                     <div class="content-card rounded-lg p-8">
-                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">The Dormant Commerce Clause</h3>
-                        <p class="text-gray-400">Forcing national firms to navigate a patchwork of conflicting state regulations impedes the efficient flow of capital across state lines, making these laws susceptible to challenges for unduly burdening interstate commerce.</p>
-                    </div>
-                    <div class="content-card rounded-lg p-8">
-                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Federal Preemption</h3>
-                        <p class="text-gray-400">State statutes may be preempted in areas heavily regulated by federal law. Any encroachment on private retirement plans would face strong ERISA preemption, and attempts to dictate lending may conflict with federal banking regulations.</p>
-                    </div>
-                    <div class="content-card rounded-lg p-8">
-                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Vagueness and Due Process</h3>
-                        <p class="text-gray-400">Ambiguous definitions for terms like "social factor" or "boycott" may lead to arbitrary enforcement, raising concerns under the Due Process Clause of the Fourteenth Amendment.</p>
+                       <div class="flex items-start mb-4">
+                            <div class="p-3 bg-cyan-400/10 rounded-full mr-4 flex-shrink-0">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+                            </div>
+                            <div class="flex-grow">
+                                <picture>
+                                    <source srcset="/assets/sfof-action-logo.webp" type="image/webp">
+                                    <source srcset="/assets/sfof-action-logo.png" type="image/png">
+                                    <img src="/assets/sfof-action-logo.png" alt="SFOF Action Logo" class="logo mb-2 w-full max-w-[200px] h-auto">
+                                </picture>
+                                <h3 class="text-2xl font-lora font-semibold text-cyan-400">SFOF Action (501c4)</h3>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 leading-relaxed">
+                           Launched in May 2024, this "social welfare" organization is the network's political action arm, created to engage in the direct lobbying and partisan combat the 501(c)(3) is legally barred from.
+                        </p>
+                        <div class="mt-6 pt-6 border-t border-gray-700 space-y-2">
+                            <p><strong class="text-white">Function:</strong> "Hard Power" - Direct Lobbying & Electioneering</p>
+                            <p><strong class="text-white">Advantage:</strong> Can engage in unlimited lobbying.</p>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="reveal">
+                <h2 class="text-4xl font-lora font-semibold text-center mb-4">Mission Evolution</h2>
+                   <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">A strategic pivot from fiscal policy to the "war on woke capitalism" proved to be a highly successful growth strategy.</p>
+                <div class="max-w-4xl mx-auto content-card rounded-lg p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h4 class="text-xl font-lora font-semibold text-gray-500 mb-2">Phase I (2012-2019)</h4>
+                            <p class="text-gray-500 mb-3">The Formative Years</p>
+                            <ul class="list-disc list-inside text-gray-400 space-y-2">
+                                <li>State Debt Management</li>
+                                <li>Municipal Borrowing Costs</li>
+                                <li>Financial Literacy</li>
+                            </ul>
+                        </div>
+                        <div class="md:border-l border-gray-700 md:pl-8">
+                            <h4 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Phase II (2020-Present)</h4>
+                            <p class="text-gray-500 mb-3">The Anti-ESG Crusade</p>
+                            <ul class="list-disc list-inside text-gray-400 space-y-2">
+                                <li>Opposing "Woke Capitalism"</li>
+                                <li>Coordinating Fossil Fuel Boycotts</li>
+                                <li>Drafting Anti-ESG Model Bills</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mt-8 pt-8 border-t border-gray-700 text-center">
+                        <p class="text-lg text-white">This pivot resulted in a revenue increase of</p>
+                        <p class="text-6xl font-bold text-cyan-400 my-2" data-target="178" data-suffix="%">0%</p>
+                        <p class="text-gray-400">between 2019 and 2023.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <h2 class="text-4xl font-lora font-semibold text-center mb-4">The Funding Network</h2>
+                <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">Operations are sustained by a mix of large foundation grants and corporate "pay-to-play" sponsorships.</p>
+                <div class="max-w-4xl mx-auto space-y-8">
+                    <div class="content-card rounded-lg p-8">
+                        <h3 class="text-2xl font-lora font-semibold text-white mb-6">Foundation Grant Nexus</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full text-left">
+                                <thead class="border-b border-gray-700">
+                                    <tr>
+                                        <th class="py-3 pr-4 text-cyan-400 font-semibold">Granting Foundation</th>
+                                        <th class="py-3 text-white font-semibold">Total Known Contribution (2021-2023)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-gray-800">
+                                        <td class="py-3 pr-4">Bradley Foundation</td>
+                                        <td class="py-3 font-mono text-lg">$750,000</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-800">
+                                        <td class="py-3 pr-4">DonorsTrust & Bradley Impact Fund</td>
+                                        <td class="py-3 font-mono text-lg">$677,813</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-800">
+                                        <td class="py-3 pr-4">Consumers' Research</td>
+                                        <td class="py-3 font-mono text-lg">$617,500</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 pr-4">Sarah Scaife Foundation</td>
+                                        <td class="py-3 font-mono text-lg">$245,000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="content-card rounded-lg p-8">
+                        <h3 class="text-2xl font-lora font-semibold text-white mb-4">Corporate "Pay-to-Play" Sponsorship</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            SFOF offers tiered corporate sponsorships that explicitly include private meetings with public officials who manage trillions in state funds. This positions SFOF as a broker between corporate interests and powerful state decision-makers. Known sponsors like <strong class="text-white">Mastercard, Visa, and J.P. Morgan</strong> create a contradiction between their public ESG commitments and their financial support for the nation's leading anti-ESG group.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
         </section>
     </main>
 
@@ -220,7 +211,7 @@
                     </div>
                 </form>
             </div>
-            </div>
+        </div>
     </footer>
 
     <script>
