@@ -32,7 +32,15 @@ title: SFOF Network
   .node circle {
     stroke: #e2e8f0;
     stroke-width: 1.5px;
-    transition: transform 0.2s ease-in-out, filter 0.2s ease-in-out;
+    transition: transform 0.2s ease-in-out, filter 0.2s ease-in-out, opacity 0.3s ease-in-out;
+  }
+
+  .node text {
+    fill: #cbd5e0;
+    font-size: 10px;
+    pointer-events: none; /* Text should not block mouse events on the circle */
+    text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+    transition: opacity 0.3s ease-in-out;
   }
 
   .node:hover circle {
@@ -45,16 +53,9 @@ title: SFOF Network
     stroke-width: 3px;
   }
   
-  .node text {
-    fill: #cbd5e0;
-    font-size: 10px;
-    pointer-events: none; /* Text should not block mouse events on the circle */
-    text-shadow: 0 1px 3px rgba(0,0,0,0.7);
-  }
-
   .link {
     stroke-opacity: 0.6;
-    transition: stroke-opacity 0.2s ease-in-out;
+    transition: stroke-opacity 0.3s ease-in-out;
   }
 
   /* Highlighting and Fading styles */
@@ -64,6 +65,10 @@ title: SFOF Network
 
   .network-faded .link:not(.highlighted) {
     stroke-opacity: 0.1;
+  }
+  
+  .node.hidden, .link.hidden {
+      display: none;
   }
 
   /* Custom styles for the details panel content */
@@ -82,10 +87,10 @@ title: SFOF Network
   
   /* Filter and Legend Styles */
   #filter-container {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
   }
   .filter-group {
       display: flex;
@@ -107,15 +112,11 @@ title: SFOF Network
       color: #cbd5e0; /* text-gray-300 */
       transition: color 0.2s;
   }
-  .filter-label:hover {
+   .filter-label:hover {
     color: #ffffff;
   }
   .filter-label input {
       margin-right: 0.4rem;
-  }
-  
-  .node.hidden, .link.hidden {
-      display: none;
   }
 
   /* Loading Spinner */
@@ -143,33 +144,24 @@ title: SFOF Network
     <h1 class="text-3xl font-bold text-white mb-4">SFOF Network Analysis</h1>
     <p class="text-gray-400 mb-6">This interactive map visualizes the network of influence surrounding SFOF. Click nodes to explore connections and use the filters to isolate relationships.</p>
 
-    <!-- Container for dynamically generated filters and legend -->
     <div id="filter-container" class="p-4 mb-6 bg-gray-800 border border-gray-700 rounded-lg flex flex-wrap items-center justify-start gap-x-4 gap-y-3">
-        <!-- D3.js will populate this section -->
-    </div>
+        </div>
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-grow" style="height: 70vh;">
-      <!-- Main visualization container -->
       <div id="network-container" class="md:col-span-2 h-full">
         <div class="loader"></div>
-        <!-- D3.js will attach the SVG here -->
-      </div>
-      <!-- Details panel -->
+        </div>
       <div id="node-details" class="h-full">
-        <!-- D3.js will populate this section -->
-      </div>
+        </div>
     </div>
 </div>
 
-<!-- Data Injection -->
 <script>
   // Eleventy injects the data from _data/sfof_network.json into this global variable.
-  window.networkData = {{ sfof_network | dump | safe }};
+  // The `jsonify` filter correctly serializes the data as a JSON string.
+  window.networkData = {{ sfof_network | jsonify | safe }};
 </script>
 
-<!-- Visualization Libraries -->
 <script src="https://d3js.org/d3.v7.min.js"></script>
 
-<!-- Main Application Script -->
 <script src="/assets/js/network.js"></script>
-
