@@ -1,4 +1,5 @@
 {
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "metadata": {
     "last_updated": "2025-08-28",
     "description": "A comprehensive, research-backed dataset representing the network of influence surrounding the State Financial Officers Foundation (SFOF). Now includes 'influence' for nodes and 'strength' for edges."
