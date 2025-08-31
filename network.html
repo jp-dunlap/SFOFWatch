@@ -3,39 +3,6 @@ layout: base_dark.njk
 title: SFOF Network
 ---
 <style>
-// --- DYNAMIC FILTER GENERATION (Add this to initializeDisplay) ---
-const filterContainer = d3.select('#filter-container');
-filterContainer.html(''); // Clear any existing content
-
-const nodeTypes = [...new Set(nodes.map(n => n.type))];
-const edgeTypes = [...new Set(edges.map(e => e.type))];
-
-// --- Search Input ---
-filterContainer.append('div')
-    .attr('class', 'search-wrapper')
-    .html('<input type="text" id="search-input" placeholder="Search nodes..." class="bg-gray-700 text-white rounded px-3 py-1 text-sm">');
-
-// --- Node Type Filters ---
-const nodeFilterGroup = filterContainer.append('div').attr('class', 'filter-group');
-nodeFilterGroup.append('h4').attr('class', 'filter-title').text('Node Types');
-nodeTypes.forEach(type => {
-    const label = nodeFilterGroup.append('label').attr('class', 'filter-label');
-    label.append('input').attr('type', 'checkbox').attr('class', 'node-filter').attr('value', type).property('checked', true);
-    label.append('span').text(formatText(type)).style('color', colorScale(type));
-});
-
-// --- Edge Type Filters ---
-const edgeFilterGroup = filterContainer.append('div').attr('class', 'filter-group');
-edgeFilterGroup.append('h4').attr('class', 'filter-title').text('Connection Types');
-edgeTypes.forEach(type => {
-    const label = edgeFilterGroup.append('label').attr('class', 'filter-label');
-    label.append('input').attr('type', 'checkbox').attr('class', 'edge-filter').attr('value', type).property('checked', true);
-    label.append('span').text(formatText(type));
-});
-
-// --- Attach Event Listeners ---
-filterContainer.selectAll('input').on('change', updateNetwork);
-  
   /* General container styles */
   #network-container {
     border: 1px solid #4a5568; /* border-gray-600 */
@@ -65,7 +32,15 @@ filterContainer.selectAll('input').on('change', updateNetwork);
   .node circle {
     stroke: #e2e8f0;
     stroke-width: 1.5px;
-    transition: transform 0.2s ease-in-out, filter 0.2s ease-in-out;
+    transition: transform 0.2s ease-in-out, filter 0.2s ease-in-out, opacity 0.3s ease-in-out;
+  }
+
+  .node text {
+    fill: #cbd5e0;
+    font-size: 10px;
+    pointer-events: none; /* Text should not block mouse events on the circle */
+    text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+    transition: opacity 0.3s ease-in-out;
   }
 
   .node:hover circle {
@@ -78,16 +53,9 @@ filterContainer.selectAll('input').on('change', updateNetwork);
     stroke-width: 3px;
   }
   
-  .node text {
-    fill: #cbd5e0;
-    font-size: 10px;
-    pointer-events: none; /* Text should not block mouse events on the circle */
-    text-shadow: 0 1px 3px rgba(0,0,0,0.7);
-  }
-
   .link {
     stroke-opacity: 0.6;
-    transition: stroke-opacity 0.2s ease-in-out;
+    transition: stroke-opacity 0.3s ease-in-out;
   }
 
   /* Highlighting and Fading styles */
@@ -112,13 +80,43 @@ filterContainer.selectAll('input').on('change', updateNetwork);
     list-style-type: none;
     padding: 0;
   }
-  
-  .filter-label {
-    transition: color 0.2s;
+
+  /* Filter and Legend Styles */
+  #filter-container {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
   }
-  .filter-label:hover {
+  .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+  }
+  .filter-title {
+      font-weight: bold;
+      color: #a0aec0; /* text-gray-400 */
+      font-size: 0.9rem;
+      margin-right: 0.5rem;
+  }
+  .filter-label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: #cbd5e0; /* text-gray-300 */
+      transition: color 0.2s;
+  }
+   .filter-label:hover {
     color: #ffffff;
   }
+  .filter-label input {
+      margin-right: 0.4rem;
+  }
+  .node.hidden, .link.hidden {
+      display: none;
+  }
+
 
   /* Loading Spinner */
   .loader {
@@ -148,6 +146,7 @@ filterContainer.selectAll('input').on('change', updateNetwork);
     <!-- Container for dynamically generated filters and legend -->
     <div id="filter-container" class="p-4 mb-6 bg-gray-800 border border-gray-700 rounded-lg flex flex-wrap items-center justify-start gap-x-4 gap-y-3">
         <!-- D3.js will populate this section -->
+        <div class="loader"></div>
     </div>
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-grow" style="height: 70vh;">
