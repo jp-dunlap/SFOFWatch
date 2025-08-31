@@ -1,5 +1,4 @@
 ---
-layout: report.njk
 ---
 ### I. A Model of Institutional Resistance
 
