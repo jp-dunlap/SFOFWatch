@@ -7,8 +7,7 @@
     "start": "npx @11ty/eleventy --serve --quiet",
     "build": "npm-run-all build:data eleventy",
     "build:data": "node netlify/functions/update-legislation.js",
-    "eleventy": "npx @11ty/eleventy",
-    "postinstall": "npm audit fix --force"
+    "eleventy": "npx @11ty/eleventy"
   },
   "keywords": [
     "SFOF",
