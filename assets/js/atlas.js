@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .text("A choropleth map of the United States showing SFOF influence on a state-by-state basis.");
     const projection = d3.geoAlbersUsa().scale(1300).translate([487.5, 305]);
     const path = d3.geoPath().projection(projection);
-
+    
     const colorScale = d3.scaleQuantize()
         .domain([0, 3])
         .range(["#374151", "#22d3ee", "#0ea5e9", "#0891b2"]);
@@ -118,9 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const stateSlug = stateName.toLowerCase().replace(/\s+/g, '-');
         
         // --- CORRECTION ---
-        // The original path was `/reports/${stateSlug}/`, which is incorrect.
-        // The path has been changed to include the .html extension.
-        const reportPath = `/reports/${stateSlug}.html`;
+        // Reverting to the original path which correctly points to the directory.
+        // The server will automatically serve the index.html file inside it.
+        const reportPath = `/reports/${stateSlug}/`;
 
         modalTitle.textContent = `State Dossier: ${stateName}`;
         modalContent.innerHTML = '<p class="text-center text-gray-400">Loading report...</p>';
