@@ -1,43 +1,29 @@
-const htmlmin = require("html-minifier-terser");
+const { DateTime } = require("luxon");
 
-module.exports = function(eleventyConfig) {
-  const md = require("markdown-it")({ html: true });
-  eleventyConfig.setLibrary("md", md);
+module.exports = function (eleventyConfig) {
+  eleventyConfig.addPassthroughCopy("assets");
+  eleventyConfig.addPassthroughCopy("admin");
 
-  // Add a custom Nunjucks filter to convert data to JSON
-  eleventyConfig.addNunjucksFilter("jsonify", function (value) {
-    return JSON.stringify(value);
+  // Add a filter to format dates
+  eleventyConfig.addFilter("postDate", (dateObj) => {
+    return DateTime.fromJSDate(dateObj).toLocaleString(DateTime.DATE_MED);
   });
 
-  // Passthrough Copies for static assets
-  eleventyConfig.addPassthroughCopy({
-    "assets": "assets",
-    "network-reports": "network-reports",
-    "admin": "admin",
-    "pagefind": "pagefind"
-  });
-
-  // Minify HTML output
-  eleventyConfig.addTransform("htmlmin", (content, outputPath) => {
-    if (outputPath && outputPath.endsWith(".html")) {
-      return htmlmin.minify(content, {
-        useShortDoctype: true,
-        removeComments: true,
-        collapseWhitespace: true,
-      });
-    }
-    return content;
+  // Create a collection of reports
+  eleventyConfig.addCollection("reports", function (collectionApi) {
+    return collectionApi.getFilteredByGlob("reports/*.md");
   });
 
   return {
     dir: {
       input: ".",
       includes: "_includes",
-      layouts: "_includes",
       output: "_site",
+      data: "_data",
     },
-    templateFormats: ["md", "njk", "html"],
-    markdownTemplateEngine: "njk",
+    templateFormats: ["html", "md", "njk"],
     htmlTemplateEngine: "njk",
+    markdownTemplateEngine: "njk",
+    // passthroughFileCopy: true, // This line has been removed
   };
 };
