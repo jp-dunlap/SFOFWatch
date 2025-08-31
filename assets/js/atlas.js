@@ -73,18 +73,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainContent = document.querySelector('main');
 
     // --- D3 MAP SETUP ---
-const svg = d3.select("#map-container").append("svg")
-    .attr("role", "img")
-    .attr("aria-labelledby", "map-title")
-    .attr("viewBox", `0 0 975 610`)
-    .attr("width", "100%")
-    .attr("height", "auto");
+    const svg = d3.select("#map-container").append("svg")
+        .attr("role", "img")
+        .attr("aria-labelledby", "map-title")
+        .attr("viewBox", `0 0 975 610`)
+        .attr("width", "100%")
+        .attr("height", "auto");
 
-svg.append("title")
-    .attr("id", "map-title")
-    .text("A choropleth map of the United States showing SFOF influence on a state-by-state basis.");    const projection = d3.geoAlbersUsa().scale(1300).translate([487.5, 305]);
+    svg.append("title")
+        .attr("id", "map-title")
+        .text("A choropleth map of the United States showing SFOF influence on a state-by-state basis.");
+    const projection = d3.geoAlbersUsa().scale(1300).translate([487.5, 305]);
     const path = d3.geoPath().projection(projection);
-    
+
     const colorScale = d3.scaleQuantize()
         .domain([0, 3])
         .range(["#374151", "#22d3ee", "#0ea5e9", "#0891b2"]);
@@ -115,7 +116,11 @@ svg.append("title")
     // --- MODAL FUNCTIONS ---
     function showModal(stateName) {
         const stateSlug = stateName.toLowerCase().replace(/\s+/g, '-');
-        const reportPath = `/reports/${stateSlug}/`;
+        
+        // --- CORRECTION ---
+        // The original path was `/reports/${stateSlug}/`, which is incorrect.
+        // The path has been changed to include the .html extension.
+        const reportPath = `/reports/${stateSlug}.html`;
 
         modalTitle.textContent = `State Dossier: ${stateName}`;
         modalContent.innerHTML = '<p class="text-center text-gray-400">Loading report...</p>';
