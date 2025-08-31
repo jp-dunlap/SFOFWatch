@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFOF Watch | The Playbook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <style>
+        :root {
+            --background-dark: #0a0a0a;
+            --background-light: #111827;
+            --primary-cyan: #22d3ee;
+            --text-primary: #EAEAEA;
+            --text-secondary: #9ca3af;
+            --border-color: #374151;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1, h2, h3, .font-lora {
+            font-family: 'Lora', serif;
+        }
+
+        .hero-bg {
+            background-color: var(--background-dark);
+            background-image:
+                radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
+                radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"><path fill="%23111827" fill-opacity="0.1" d="M0 0h40v40H0zM40 40h40v40H40z"></path></svg>');
+            z-index: 0;
+        }
+
+        .content-card {
+            background-color: var(--background-light);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-cyan);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.1);
+        }
+
+        .reveal {
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased" style="background-color: #0a0a0a;">
+
+    <header class="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="/foundation" class="hover:text-cyan-400 transition-colors">The Foundation</a>
+                <a href="/network" class="hover:text-cyan-400 transition-colors">The Network</a>
+                <a href="/playbook" class="text-cyan-400 font-bold">The Playbook</a>
+                <a href="/atlas" class="hover:text-cyan-400 transition-colors">The Atlas</a>
+                <a href="/data" class="hover:text-cyan-400 transition-colors">Data & Methodology</a>
+                <form action="/search" method="get" class="relative">
+                    <input type="search" name="q" placeholder="Search..." class="bg-gray-800 border border-gray-700 rounded-full py-1 px-4 text-sm text-white focus:outline-none focus:border-cyan-400" />
+                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </button>
+                </form>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="text-center px-6 pt-32 pb-24 hero-bg">
+            <div class="max-w-4xl mx-auto relative z-10">
+                <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Anti-ESG Playbook</h1>
+                <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+                    A coordinated legislative movement is strategically utilizing model legislation to redefine fiduciary duty, shield specific industries, and disrupt shareholder engagement. This is how it works.
+                </p>
+            </div>
+        </section>
+
+        <section class="container mx-auto px-6 py-16 md:py-24 space-y-24">
+
+            <div class="reveal">
+                <h2 class="text-4xl font-lora font-semibold text-center mb-4">Core Legislative Strategies</h2>
+                <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">Analysis of legislation across multiple states reveals a coordinated playbook executed through three primary strategies, each with significant consequences for public finance, market efficiency, and the private sector.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="content-card rounded-lg p-8 flex flex-col">
+                        <h3 class="text-2xl font-lora font-semibold text-cyan-400 mb-3">1. Redefining Fiduciary Duty</h3>
+                        <p class="text-gray-400 leading-relaxed flex-grow">This core tactic legally narrows fiduciary duty to mandate that investment decisions be based solely on "pecuniary" factors. It challenges the prevailing view that ESG factors (like climate risk) constitute material financial risks.</p>
+                        <div class="mt-4 pt-4 border-t border-gray-700">
+                            <p class="text-white text-sm"><strong>Implication:</strong> May harm long-term pension performance and increase taxpayer liability by forcing fiduciaries to ignore critical financial data.</p>
+                            <p class="text-xs text-gray-500 mt-2"><strong>Model Bill:</strong> WY HB0080 ("Stop ESG-State funds fiduciary duty act")</p>
+                        </div>
+                    </div>
+                    <div class="content-card rounded-lg p-8 flex flex-col">
+                        <h3 class="text-2xl font-lora font-semibold text-cyan-400 mb-3">2. Industry Protection Frameworks</h3>
+                        <p class="text-gray-400 leading-relaxed flex-grow">This strategy leverages state economic power (pensions, contracts) to coerce private market behavior by reframing risk assessments as "boycotts" and creating "blacklists" of financial firms with policies unfriendly to favored industries.</p>
+                        <div class="mt-4 pt-4 border-t border-gray-700">
+                            <p class="text-white text-sm"><strong>Implication:</strong> Reduced competition among financial service providers has been shown to increase borrowing costs for state and local projects.</p>
+                             <p class="text-xs text-gray-500 mt-2"><strong>Model Bill:</strong> MN HF2806 (Requires divestment from "boycotts" of mining, energy, agriculture)</p>
+                        </div>
+                    </div>
+                    <div class="content-card rounded-lg p-8 flex flex-col">
+                        <h3 class="text-2xl font-lora font-semibold text-cyan-400 mb-3">3. Targeting Shareholder Mechanisms</h3>
+                        <p class="text-gray-400 leading-relaxed flex-grow">A sophisticated tactic that disrupts corporate governance by imposing burdensome regulations on proxy advisory firms (like ISS and Glass Lewis) that advise institutional investors, aiming to suppress ESG-related shareholder resolutions.</p>
+                        <div class="mt-4 pt-4 border-t border-gray-700">
+                             <p class="text-white text-sm"><strong>Implication:</strong> Weakens corporate accountability by restricting the independence of proxy advisors, potentially entrenching management against shareholder concerns.</p>
+                             <p class="text-xs text-gray-500 mt-2"><strong>Model Bill:</strong> TX SB2337 ("Protecting Shareholders Act")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <h2 class="text-4xl font-lora font-semibold text-center mb-4">Emerging Trends in 2025</h2>
+                <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">The anti-ESG movement is constantly evolving. New tactics observed in the 2025 legislative session include confronting global standards, escalating rhetoric, and proactively supporting litigation.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="content-card rounded-lg p-8">
+                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Confronting International Regulation</h3>
+                        <p class="text-gray-400">Bills like New Hampshire's HCR9 explicitly push back against global sustainability standards (e.g., the EU's CSDDD), opening a new, global front in the legislative conflict.</p>
+                    </div>
+                    <div class="content-card rounded-lg p-8">
+                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Rhetorical Escalation</h3>
+                        <p class="text-gray-400">Bills are increasingly linking ESG to the concept of a "Social Credit Score" (e.g., Minnesota's SF851), a potent tactic designed to frame it as a threat to individual liberty.</p>
+                    </div>
+                    <div class="content-card rounded-lg p-8">
+                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Proactive Litigation Support</h3>
+                        <p class="text-gray-400">States are moving beyond passing laws to actively funding and supporting lawsuits that challenge federal regulations or private-sector ESG initiatives (e.g., Wyoming's SJ0011).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <h2 class="text-4xl font-lora font-semibold text-center mb-4">The Endgame: The "Fiduciary Trap"</h2>
+                <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">The ultimate goal is to create a new legal reality where prudent, long-term risk management is re-framed as a fiduciary liability, creating a chilling effect on the consideration of climate and other systemic financial risks.</p>
+                <div class="max-w-4xl mx-auto content-card rounded-lg p-8">
+                    <div class="flex items-center mb-4">
+                        <div class="p-3 bg-cyan-400/10 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2h8a2 2 0 002-2v-1a2 2 0 012-2h1.945M7.724 7.724a1 1 0 011.414 0l3.536 3.536a1 1 0 010 1.414l-3.536 3.536a1 1 0 01-1.414-1.414L9.414 12l-1.69-1.69a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                        </div>
+                        <h3 class="text-2xl font-lora font-semibold text-cyan-400">Inverting Legal Liability</h3>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed">
+                        The traditional "prudent person" rule requires a fiduciary to consider all material financial risks. The new "pecuniary factors only" laws flip this standard on its head. Under these statutes, the very act of considering a climate-related risk can be legally framed as pursuing a prohibited "social" or "political" goal.
+                    </p>
+                    <p class="text-gray-400 leading-relaxed mt-4">
+                        A fiduciary is thus trapped: ignore a material financial risk and breach their traditional duty of care, or consider that risk and face potential litigation for violating the new state law. This engineered legal uncertainty is designed to paralyze asset managers and produce a chilling effect on responsible investment.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-gray-800 py-12 px-6 mt-16">
+        <div class="container mx-auto text-center text-gray-500">
+            <p>&copy; 2025 SFOFWatch.org. This is an open-source intelligence project.</p>
+            <p class="mt-2">Content is provided for research and informational purposes under the AGPL-3.0 license.</p>
+            <div class="mt-4">
+                <a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="text-cyan-400 hover:underline">Contribute on GitHub</a>
+            </div>
+            <div class="max-w-xl mx-auto mt-12 text-left">
+                <h3 class="text-2xl font-lora font-semibold text-center mb-3 text-cyan-400">Contact the Project</h3>
+                <p class="text-gray-400 mb-6 text-center">
+                    Have a tip, correction, or question? All submissions are secure and confidential.
+                </p>
+                <form name="contact" method="POST" data-netlify="true">
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="name">Name (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="text" name="name" id="name" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="email">Email (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="email" name="email" id="email" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="message">Message</label>
+                        <textarea class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" name="message" id="message" rows="4" required></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button class="inline-block bg-cyan-400 text-black font-bold px-8 py-3 rounded-lg hover:bg-cyan-300 transition-colors" type="submit">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            revealElements.forEach(el => {
+                revealObserver.observe(el);
+            });
+        });
+    </script>
+
+</body>
+</html>
+
