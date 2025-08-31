@@ -1,44 +1,38 @@
-const markdownIt = require("markdown-it");
 const htmlmin = require("html-minifier-terser");
 
 module.exports = function(eleventyConfig) {
-  // Initialize markdown-it with HTML support
-  const md = new markdownIt({
-    html: true,
-  });
+  const md = require("markdown-it")({ html: true });
   eleventyConfig.setLibrary("md", md);
 
-  // --- Passthrough Copies ---
-  eleventyConfig.addPassthroughCopy("_data");
-  eleventyConfig.addPassthroughCopy("assets");
-  eleventyConfig.addPassthroughCopy("network-reports");
-  eleventyConfig.addPassthroughCopy("admin");
-  eleventyConfig.addPassthroughCopy("pagefind");
+  // Add a custom Nunjucks filter to convert data to JSON
+  eleventyConfig.addNunjucksFilter("jsonify", function (value) {
+    return JSON.stringify(value);
+  });
 
-  // Minify HTML
-  eleventyConfig.addTransform("htmlmin", function(content) {
-    if (this.outputPath && this.outputPath.endsWith(".html")) {
-      try {
-        let minified = htmlmin.minify(content, {
-          useShortDoctype: true,
-          removeComments: true,
-          collapseWhitespace: true
-        });
-        return minified;
-      } catch (error) {
-        console.error(`Error minifying HTML file: ${this.outputPath}`, error);
-        return content;
-      }
+  // Passthrough Copies for static assets
+  eleventyConfig.addPassthroughCopy({
+    "assets": "assets",
+    "network-reports": "network-reports",
+    "admin": "admin",
+    "pagefind": "pagefind"
+  });
+
+  // Minify HTML output
+  eleventyConfig.addTransform("htmlmin", (content, outputPath) => {
+    if (outputPath && outputPath.endsWith(".html")) {
+      return htmlmin.minify(content, {
+        useShortDoctype: true,
+        removeComments: true,
+        collapseWhitespace: true,
+      });
     }
     return content;
   });
 
-  // Define the project structure
   return {
     dir: {
       input: ".",
       includes: "_includes",
-      // This is the critical line that fixes the build.
       layouts: "_includes",
       output: "_site",
     },
@@ -47,4 +41,3 @@ module.exports = function(eleventyConfig) {
     htmlTemplateEngine: "njk",
   };
 };
-
