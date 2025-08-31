@@ -10,71 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/main.css">
     <style>
-        :root {
-            --background-dark: #0a0a0a;
-            --background-light: #111827;
-            --primary-cyan: #22d3ee;
-            --text-primary: #EAEAEA;
-            --text-secondary: #9ca3af;
-            --border-color: #374151;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: var(--background-dark);
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-        }
-
-        h1, h2, h3, .font-lora {
-            font-family: 'Lora', serif;
-        }
-
-        .hero-bg {
-            background-color: var(--background-dark);
-            background-image:
-                radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
-                radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-bg::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"><path fill="%23111827" fill-opacity="0.1" d="M0 0h40v40H0zM40 40h40v40H40z"></path></svg>');
-            z-index: 0;
-        }
-
-        .content-card {
-            background-color: var(--background-light);
-            border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-
-        .content-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary-cyan);
-            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.1);
-        }
-
+        /* Minimal styles to prevent layout shift before main.css loads */
         .reveal {
-            position: relative;
             opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
         }
     </style>
 </head>
@@ -82,9 +20,9 @@
 
     <header class="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-gray-800">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="/" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
+           <a href="/" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
             <nav class="hidden md:flex items-center space-x-8">
-                <a href="/foundation" class="hover:text-cyan-400 transition-colors">The Foundation</a>
+               <a href="/foundation" class="hover:text-cyan-400 transition-colors">The Foundation</a>
                 <a href="/network" class="hover:text-cyan-400 transition-colors">The Network</a>
                 <a href="/playbook" class="text-cyan-400 font-bold">The Playbook</a>
                 <a href="/atlas" class="hover:text-cyan-400 transition-colors">The Atlas</a>
@@ -102,9 +40,9 @@
     <main>
         <section class="text-center px-6 pt-32 pb-24 hero-bg">
             <div class="max-w-4xl mx-auto relative z-10">
-                <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Anti-ESG Playbook</h1>
+                <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Playbook</h1>
                 <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
-                    A coordinated legislative movement is strategically utilizing model legislation to redefine fiduciary duty, shield specific industries, and disrupt shareholder engagement. This is how it works.
+                    The SFOF network executes a sophisticated, multi-stage campaign. This "inside-outside" game combines public pressure with direct legislative and administrative action to systematically reshape state financial policy.
                 </p>
             </div>
         </section>
@@ -112,59 +50,90 @@
         <section class="container mx-auto px-6 py-16 md:py-24 space-y-24">
 
             <div class="reveal">
-                <h2 class="text-4xl font-lora font-semibold text-center mb-4">Core Legislative Strategies</h2>
-                <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">Analysis of legislation across multiple states reveals a coordinated playbook executed through three primary strategies, each with significant consequences for public finance, market efficiency, and the private sector.</p>
-
-                <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="content-card rounded-lg p-8 flex flex-col">
-                        <h3 class="text-2xl font-lora font-semibold text-cyan-400 mb-3">1. Redefining Fiduciary Duty</h3>
-                        <p class="text-gray-400 leading-relaxed flex-grow">This core tactic legally narrows fiduciary duty to mandate that investment decisions be based solely on "pecuniary" factors. It challenges the prevailing view that ESG factors (like climate risk) constitute material financial risks.</p>
-                        <div class="mt-4 pt-4 border-t border-gray-700">
-                            <p class="text-white text-sm"><strong>Implication:</strong> May harm long-term pension performance and increase taxpayer liability by forcing fiduciaries to ignore critical financial data.</p>
-                            <p class="text-xs text-gray-500 mt-2"><strong>Model Bill:</strong> WY HB0080 ("Stop ESG-State funds fiduciary duty act")</p>
+                <h2 class="text-4xl font-lora font-semibold text-center mb-4">Phase I: The "Outside Game"</h2>
+                <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">Manufacturing public and corporate pressure to create a pretext for government intervention.</p>
+                <div class="max-w-4xl mx-auto content-card rounded-lg p-8">
+                    <div class="flex items-center mb-4">
+                        <div class="p-3 bg-cyan-400/10 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                         </div>
+                        <h3 class="text-2xl font-lora font-semibold text-cyan-400">Play #1: The War by Letter</h3>
                     </div>
-                    <div class="content-card rounded-lg p-8 flex flex-col">
-                        <h3 class="text-2xl font-lora font-semibold text-cyan-400 mb-3">2. Industry Protection Frameworks</h3>
-                        <p class="text-gray-400 leading-relaxed flex-grow">This strategy leverages state economic power (pensions, contracts) to coerce private market behavior by reframing risk assessments as "boycotts" and creating "blacklists" of financial firms with policies unfriendly to favored industries.</p>
-                        <div class="mt-4 pt-4 border-t border-gray-700">
-                            <p class="text-white text-sm"><strong>Implication:</strong> Reduced competition among financial service providers has been shown to increase borrowing costs for state and local projects.</p>
-                             <p class="text-xs text-gray-500 mt-2"><strong>Model Bill:</strong> MN HF2806 (Requires divestment from "boycotts" of mining, energy, agriculture)</p>
-                        </div>
-                    </div>
-                    <div class="content-card rounded-lg p-8 flex flex-col">
-                        <h3 class="text-2xl font-lora font-semibold text-cyan-400 mb-3">3. Targeting Shareholder Mechanisms</h3>
-                        <p class="text-gray-400 leading-relaxed flex-grow">A sophisticated tactic that disrupts corporate governance by imposing burdensome regulations on proxy advisory firms (like ISS and Glass Lewis) that advise institutional investors, aiming to suppress ESG-related shareholder resolutions.</p>
-                        <div class="mt-4 pt-4 border-t border-gray-700">
-                             <p class="text-white text-sm"><strong>Implication:</strong> Weakens corporate accountability by restricting the independence of proxy advisors, potentially entrenching management against shareholder concerns.</p>
-                             <p class="text-xs text-gray-500 mt-2"><strong>Model Bill:</strong> TX SB2337 ("Protecting Shareholders Act")</p>
-                        </div>
+                    <p class="text-gray-400 leading-relaxed">
+                        The network's primary tool for applying external pressure is the coordinated, multi-state letter campaign. SFOF members and allied Attorneys General use official government letterhead to publicly threaten and shame corporate targets, creating negative media attention and signaling a unified political front.
+                    </p>
+                    <div class="mt-6 pt-6 border-t border-gray-700">
+                        <h4 class="font-semibold text-white mb-3">Key Targets & Tactics:</h4>
+                        <ul class="list-disc list-inside text-gray-400 space-y-2">
+                            <li><strong class="text-white">Threatening the Banking Industry:</strong> A foundational letter warned the entire U.S. banking industry of "collective action" for "boycotting" fossil fuel industries.</li>
+                            <li><strong class="text-white">Attacking Market Gatekeepers:</strong> A letter to S&P Global demanded the withdrawal of its ESG credit indicators, threatening antitrust investigations.</li>
+                            <li><strong class="text-white">Targeting Asset Managers:</strong> A letter accused BlackRock of "mixed motives," establishing the legal narrative for future lawsuits and divestments.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
 
             <div class="reveal">
-                <h2 class="text-4xl font-lora font-semibold text-center mb-4">Emerging Trends in 2025</h2>
-                <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">The anti-ESG movement is constantly evolving. New tactics observed in the 2025 legislative session include confronting global standards, escalating rhetoric, and proactively supporting litigation.</p>
+                <h2 class="text-4xl font-lora font-semibold text-center mb-4">Phase II: The "Inside Game"</h2>
+                <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">Weaponizing the levers of state power to translate manufactured pressure into binding policy.</p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="content-card rounded-lg p-8">
+                        <div class="flex items-center mb-4">
+                            <div class="p-3 bg-cyan-400/10 rounded-full mr-4">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                            </div>
+                            <h3 class="text-2xl font-lora font-semibold text-cyan-400">Play #2: Legislative Capture</h3>
+                        </div>
+                        <p class="text-gray-400 leading-relaxed mb-6">
+                            The network uses a legislative pipeline to pass model bills drafted by ALEC and The Heritage Foundation, often with nearly identical language across multiple states.
+                        </p>
+                        <h4 class="font-semibold text-white mb-2">Track 1: Anti-Boycott Laws (ALEC)</h4>
+                       <p class="text-gray-400 mb-4">Prohibits state contracts with companies that "boycott" favored industries. Enacted in states like <strong class="text-white"><a href="/atlas" class="underline hover:text-cyan-300">Texas</a></strong> and <strong class="text-white"><a href="/atlas" class="underline hover:text-cyan-300">Alabama</a></strong>.</p>
+
+                        <h4 class="font-semibold text-white mb-2">Track 2: Redefining Fiduciary Duty (Heritage)</h4>
+                       <p class="text-gray-400">Legally redefines fiduciary duty to require "only pecuniary factors." Enacted in <strong class="text-white"><a href="/atlas" class="underline hover:text-cyan-300">Florida</a></strong> and <strong class="text-white"><a href="/atlas" class="underline hover:text-cyan-300">Kentucky</a></strong>.</p>
+                    </div>
+                    <div class="content-card rounded-lg p-8">
+                        <div class="flex items-center mb-4">
+                            <div class="p-3 bg-cyan-400/10 rounded-full mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                            </div>
+                            <h3 class="text-2xl font-lora font-semibold text-cyan-400">Play #3: Administrative Action</h3>
+                        </div>
+                        <p class="text-gray-400 leading-relaxed mb-6">
+                            SFOF members use the direct authority of their offices to punish firms and seize control of corporate governance.
+                        </p>
+                        <h4 class="font-semibold text-white mb-2">Punitive Divestments</h4>
+                       <p class="text-gray-400 mb-4">High-profile divestments from BlackRock in <strong class="text-white"><a href="/atlas" class="underline hover:text-cyan-300">Florida</a> ($2B)</strong> and <strong class="text-white"><a href="/atlas" class="underline hover:text-cyan-300">Missouri</a> ($500M)</strong> sent a warning to the asset management industry.</p>
+
+                        <h4 class="font-semibold text-white mb-2">Seizing the Proxy Vote</h4>
+                       <p class="text-gray-400">Stripping proxy voting authority from external managers (pioneered in <strong class="text-white"><a href="/atlas" class="underline hover:text-cyan-300">Missouri</a></strong>) and hiring ideologically-aligned proxy advisors (seen in <strong class="text-white"><a href="/atlas" class="underline hover:text-cyan-300">Kansas</a></strong> and <strong class="text-white"><a href="/atlas" class="underline hover:text-cyan-300">Arkansas</a></strong>).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <h2 class="text-4xl font-lora font-semibold text-center mb-4">Emerging Trends</h2>
+                <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">The anti-ESG movement is dynamic, with new tactics emerging in the 2025 session.</p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="content-card rounded-lg p-8">
                         <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Confronting International Regulation</h3>
-                        <p class="text-gray-400">Bills like New Hampshire's HCR9 explicitly push back against global sustainability standards (e.g., the EU's CSDDD), opening a new, global front in the legislative conflict.</p>
+                        <p class="text-gray-400">A notable new development is the explicit pushback against global sustainability standards. New Hampshire's HCR9 urges the U.S. to reject compliance with the European Union's Corporate Sustainability Due Diligence Directive (CSDDD).</p>
                     </div>
                     <div class="content-card rounded-lg p-8">
                         <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Rhetorical Escalation</h3>
-                        <p class="text-gray-400">Bills are increasingly linking ESG to the concept of a "Social Credit Score" (e.g., Minnesota's SF851), a potent tactic designed to frame it as a threat to individual liberty.</p>
+                        <p class="text-gray-400">Bills are increasingly linking voluntary ESG principles to the concept of a "Social Credit Score." Minnesota's SF851 explicitly includes this language, a potent tactic designed to frame ESG as a threat to individual liberty.</p>
                     </div>
                     <div class="content-card rounded-lg p-8">
                         <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Proactive Litigation Support</h3>
-                        <p class="text-gray-400">States are moving beyond passing laws to actively funding and supporting lawsuits that challenge federal regulations or private-sector ESG initiatives (e.g., Wyoming's SJ0011).</p>
+                        <p class="text-gray-400">Wyoming's SJ0011, "Supporting anti-ESG litigation," indicates a shift towards a more aggressive legal posture, suggesting states may actively fund lawsuits challenging federal regulations or private-sector ESG initiatives.</p>
                     </div>
                 </div>
             </div>
-
+            
             <div class="reveal">
                 <h2 class="text-4xl font-lora font-semibold text-center mb-4">The Endgame: The "Fiduciary Trap"</h2>
-                <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">The ultimate goal is to create a new legal reality where prudent, long-term risk management is re-framed as a fiduciary liability, creating a chilling effect on the consideration of climate and other systemic financial risks.</p>
+                <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">The ultimate goal is to create a new legal reality where prudent risk management becomes a fiduciary liability.</p>
                 <div class="max-w-4xl mx-auto content-card rounded-lg p-8">
                     <div class="flex items-center mb-4">
                         <div class="p-3 bg-cyan-400/10 rounded-full mr-4">
@@ -173,13 +142,14 @@
                         <h3 class="text-2xl font-lora font-semibold text-cyan-400">Inverting Legal Liability</h3>
                     </div>
                     <p class="text-gray-400 leading-relaxed">
-                        The traditional "prudent person" rule requires a fiduciary to consider all material financial risks. The new "pecuniary factors only" laws flip this standard on its head. Under these statutes, the very act of considering a climate-related risk can be legally framed as pursuing a prohibited "social" or "political" goal.
+                       The traditional "prudent person" rule requires a fiduciary to consider all material financial risks, including long-term threats like climate change. The new "pecuniary factors only" laws, as enacted in states like <strong class="text-white"><a href="/atlas" class="underline hover:text-cyan-300">South Carolina</a></strong> and <strong class="text-white"><a href="/atlas" class="underline hover:text-cyan-300">Indiana</a></strong>, flip this standard on its head.
                     </p>
                     <p class="text-gray-400 leading-relaxed mt-4">
-                        A fiduciary is thus trapped: ignore a material financial risk and breach their traditional duty of care, or consider that risk and face potential litigation for violating the new state law. This engineered legal uncertainty is designed to paralyze asset managers and produce a chilling effect on responsible investment.
+                        Under these new laws, the very act of considering a climate-related risk can be legally framed as pursuing a prohibited "political" or "environmental" goal. A fiduciary is thus trapped: ignore a material financial risk and breach their traditional duty of care, or consider that risk and face potential litigation for violating the new state law. This engineered legal uncertainty is designed to produce a chilling effect.
                     </p>
                 </div>
             </div>
+
         </section>
     </main>
 
@@ -190,6 +160,7 @@
             <div class="mt-4">
                 <a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="text-cyan-400 hover:underline">Contribute on GitHub</a>
             </div>
+
             <div class="max-w-xl mx-auto mt-12 text-left">
                 <h3 class="text-2xl font-lora font-semibold text-center mb-3 text-cyan-400">Contact the Project</h3>
                 <p class="text-gray-400 mb-6 text-center">
@@ -213,11 +184,12 @@
                     </div>
                 </form>
             </div>
-        </div>
+            </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Scroll Reveal Animation
             const revealElements = document.querySelectorAll('.reveal');
             const revealObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -235,4 +207,3 @@
 
 </body>
 </html>
-
