@@ -1,5 +1,4 @@
 ---
-layout: report.njk
 ---
 ### I. The SFOF-Kansas Nexus: An Architecture of Influence
 
