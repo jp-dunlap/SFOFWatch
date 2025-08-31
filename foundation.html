@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFOF Watch | The Foundation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <style>
+        :root {
+            --background-dark: #0a0a0a;
+            --background-light: #111827;
+            --primary-cyan: #22d3ee;
+            --text-primary: #EAEAEA;
+            --text-secondary: #9ca3af;
+            --border-color: #374151;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1, h2, h3, .font-lora {
+            font-family: 'Lora', serif;
+        }
+
+        .hero-bg {
+            background-color: var(--background-dark);
+            background-image:
+                radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
+                radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"><path fill="%23111827" fill-opacity="0.1" d="M0 0h40v40H0zM40 40h40v40H40z"></path></svg>');
+            z-index: 0;
+        }
+
+        .content-card {
+            background-color: var(--background-light);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-cyan);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.1);
+        }
+
+        /* Scroll animation styles */
+        .reveal {
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased" style="background-color: #0a0a0a;">
+
+    <header class="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-semibold font-lora tracking-wider">SFOF<span class="text-cyan-400">Watch</span></a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="/foundation" class="text-cyan-400 font-bold">The Foundation</a>
+                <a href="/network" class="hover:text-cyan-400 transition-colors">The Network</a>
+                <a href="/playbook" class="hover:text-cyan-400 transition-colors">The Playbook</a>
+                <a href="/atlas" class="hover:text-cyan-400 transition-colors">The Atlas</a>
+                <a href="/data" class="hover:text-cyan-400 transition-colors">Data & Methodology</a>
+                <form action="/search" method="get" class="relative">
+                    <input type="search" name="q" placeholder="Search..." class="bg-gray-800 border border-gray-700 rounded-full py-1 px-4 text-sm text-white focus:outline-none focus:border-cyan-400" />
+                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </button>
+                </form>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="text-center px-6 pt-32 pb-24 hero-bg">
+            <div class="max-w-4xl mx-auto relative z-10">
+                <h1 class="text-5xl md:text-6xl font-bold font-lora leading-tight mb-4">The Strategic Landscape</h1>
+                <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+                    The 2025 legislative session reveals a sophisticated and coordinated effort to restrict ESG factors in investment decisions, utilizing model legislation to redefine fiduciary duty, shield industries, and disrupt shareholder engagement.
+                </p>
+            </div>
+        </section>
+
+        <section class="container mx-auto px-6 py-16 md:py-24 space-y-24">
+
+            <div class="reveal">
+                <h2 class="text-4xl font-lora font-semibold text-center mb-4">Legislative Patterns & Tactics</h2>
+                <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">The legislation analyzed exhibits clear signs of a coordinated playbook, characterized by the replication of specific bills across states and the consistent use of specific legal arguments and rhetorical framing.</p>
+                <div class="max-w-4xl mx-auto content-card rounded-lg p-8">
+                    <h3 class="text-2xl font-lora font-semibold text-cyan-400 mb-3">Model Legislation: The "Farmer Protection Act"</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        The most prominent indicator of a coordinated effort is the rapid deployment of the "Farmer Protection Act." This model legislation, appearing in states like Arkansas (SB409), West Virginia (HB3045), and North Carolina (H62), represents a strategic evolution. While earlier anti-ESG efforts focused heavily on defending the fossil fuel industry, the pivot to agriculture broadens the political coalition by leveraging a politically sympathetic sector to prohibit "discrimination" based on environmental criteria.
+                    </p>
+                </div>
+            </div>
+
+            <div class="reveal">
+                 <h2 class="text-4xl font-lora font-semibold text-center mb-4">Core Legislative Strategies</h2>
+                 <p class="text-center text-lg text-gray-400 max-w-3xl mx-auto mb-12">The strategies fall into three primary categories, each with significant potential consequences for public finance, market efficiency, and the private sector.</p>
+                 <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="content-card rounded-lg p-8">
+                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-3">1. Redefining Fiduciary Duty</h3>
+                        <p class="text-gray-400 leading-relaxed">Mandating that investment decisions be based solely on "pecuniary" factors to legally prohibit the consideration of material ESG risks like climate change.</p>
+                         <p class="mt-4 text-sm text-gray-500"><strong>Example:</strong> Wyoming's HB0080 ("Stop ESG-State funds fiduciary duty act").</p>
+                    </div>
+                    <div class="content-card rounded-lg p-8">
+                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-3">2. Industry Protection Frameworks</h3>
+                        <p class="text-gray-400 leading-relaxed">Leveraging state economic power to coerce private market behavior by creating "blacklists" of financial firms that are deemed to be "boycotting" favored industries.</p>
+                        <p class="mt-4 text-sm text-gray-500"><strong>Example:</strong> Minnesota's HF2806, requiring divestment from firms that "boycott" mining or energy.</p>
+                    </div>
+                    <div class="content-card rounded-lg p-8">
+                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-3">3. Targeting Shareholder Mechanisms</h3>
+                        <p class="text-gray-400 leading-relaxed">Disrupting corporate governance by imposing burdensome regulations on proxy advisory firms that advise institutional investors on ESG-related shareholder resolutions.</p>
+                        <p class="mt-4 text-sm text-gray-500"><strong>Example:</strong> Texas's SB2337 ("Protecting Shareholders Act").</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <h2 class="text-4xl font-lora font-semibold text-center mb-4">Emerging Trends in 2025</h2>
+                <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">The anti-ESG movement is dynamic, with new tactics emerging in the current legislative session.</p>
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="content-card rounded-lg p-8">
+                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Confronting Global Regulation</h3>
+                        <p class="text-gray-400">Bills like New Hampshire's HCR9 explicitly push back against international standards like the EU's CSDDD, opening a new global front in the conflict.</p>
+                    </div>
+                    <div class="content-card rounded-lg p-8">
+                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Rhetorical Escalation</h3>
+                        <p class="text-gray-400">Increasingly linking ESG to the concept of a "Social Credit Score" (e.g., Minnesota's SF851) to frame it as a threat to individual liberty and broaden opposition.</p>
+                    </div>
+                    <div class="content-card rounded-lg p-8">
+                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Proactive Litigation Support</h3>
+                        <p class="text-gray-400">States are moving beyond legislation to actively fund and support lawsuits challenging federal regulations or private-sector ESG initiatives (e.g., Wyoming's SJ0011).</p>
+                    </div>
+                </div>
+            </div>
+
+             <div class="reveal">
+                <h2 class="text-4xl font-lora font-semibold text-center mb-4">Constitutional & Legal Challenges</h2>
+                <p class="text-center text-lg text-gray-400 max-w-2xl mx-auto mb-12">These legislative efforts face substantial legal hurdles, and significant litigation is expected across several key areas.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="content-card rounded-lg p-8">
+                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">The First Amendment</h3>
+                        <p class="text-gray-400">Anti-boycott laws are particularly vulnerable, as a company's investment decisions can be viewed as protected speech. Penalizing companies for their viewpoints may constitute unconstitutional viewpoint discrimination or compelled speech.</p>
+                    </div>
+                    <div class="content-card rounded-lg p-8">
+                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">The Dormant Commerce Clause</h3>
+                        <p class="text-gray-400">Forcing national firms to navigate a patchwork of conflicting state regulations impedes the efficient flow of capital across state lines, making these laws susceptible to challenges for unduly burdening interstate commerce.</p>
+                    </div>
+                    <div class="content-card rounded-lg p-8">
+                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Federal Preemption</h3>
+                        <p class="text-gray-400">State statutes may be preempted in areas heavily regulated by federal law. Any encroachment on private retirement plans would face strong ERISA preemption, and attempts to dictate lending may conflict with federal banking regulations.</p>
+                    </div>
+                    <div class="content-card rounded-lg p-8">
+                        <h3 class="text-xl font-lora font-semibold text-cyan-400 mb-2">Vagueness and Due Process</h3>
+                        <p class="text-gray-400">Ambiguous definitions for terms like "social factor" or "boycott" may lead to arbitrary enforcement, raising concerns under the Due Process Clause of the Fourteenth Amendment.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-gray-800 py-12 px-6 mt-16">
+        <div class="container mx-auto text-center text-gray-500">
+            <p>&copy; 2025 SFOFWatch.org. This is an open-source intelligence project.</p>
+            <p class="mt-2">Content is provided for research and informational purposes under the AGPL-3.0 license.</p>
+            <div class="mt-4">
+                <a href="https://github.com/jp-dunlap/SFOFWatch" target="_blank" class="text-cyan-400 hover:underline">Contribute on GitHub</a>
+            </div>
+
+            <div class="max-w-xl mx-auto mt-12 text-left">
+                <h3 class="text-2xl font-lora font-semibold text-center mb-3 text-cyan-400">Contact the Project</h3>
+                <p class="text-gray-400 mb-6 text-center">
+                    Have a tip, correction, or question? All submissions are secure and confidential.
+                </p>
+                <form name="contact" method="POST" data-netlify="true">
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="name">Name (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="text" name="name" id="name" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="email">Email (Optional)</label>
+                        <input class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" type="email" name="email" id="email" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2" for="message">Message</label>
+                        <textarea class="w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-400" name="message" id="message" rows="4" required></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button class="inline-block bg-cyan-400 text-black font-bold px-8 py-3 rounded-lg hover:bg-cyan-300 transition-colors" type="submit">Send Message</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Scroll Reveal Animation
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            revealElements.forEach(el => {
+                revealObserver.observe(el);
+            });
+
+            // Animated Number Counter
+            const counters = document.querySelectorAll('[data-target]');
+            const speed = 100;
+
+            const startCounter = (counter) => {
+                const target = +counter.getAttribute('data-target');
+                const prefix = counter.getAttribute('data-prefix') || '';
+                const suffix = counter.getAttribute('data-suffix') || '';
+
+                const updateCount = () => {
+                    const count = +counter.innerText.replace(/[\$,%]/g, '');
+                    const increment = target / speed;
+
+                    if (count < target) {
+                        const newCount = Math.ceil(count + increment);
+                        counter.innerText = prefix + newCount.toLocaleString() + suffix;
+                        setTimeout(updateCount, 15);
+                    } else {
+                        counter.innerText = prefix + target.toLocaleString() + suffix;
+                    }
+                };
+                updateCount();
+            };
+
+            const counterObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        startCounter(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            counters.forEach(counter => {
+                counterObserver.observe(counter);
+            });
+        });
+    </script>
+
+</body>
+</html>
+
