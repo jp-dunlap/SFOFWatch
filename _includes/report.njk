@@ -1,5 +1,12 @@
-<div data-cms-content class="report-content">
-  <div class="space-y-8 text-gray-300 text-left text-base leading-relaxed">
-    {{ content | safe }}
+---
+layout: "base_dark.njk"
+---
+
+<main class="bg-gray-900 text-white">
+  <div class="container mx-auto px-6 py-12 md:py-20">
+    <article class="prose prose-invert lg:prose-xl max-w-4xl mx-auto">
+      <h1>{{ title }}</h1>
+      {{ content | safe }}
+    </article>
   </div>
-</div>
+</main>
