@@ -3,86 +3,142 @@ layout: base_dark.njk
 title: SFOF Network
 ---
 <style>
-  /* Keep styles for vis.js elements which are dynamically generated */
-  #network-visualization {
+  /* General container styles */
+  #network-container {
     border: 1px solid #4a5568; /* border-gray-600 */
     border-radius: 0.5rem; /* rounded-lg */
-    height: 100%;
     background-color: #1a202c; /* bg-gray-900 */
+    position: relative; /* For loader positioning */
+    overflow: hidden; /* Prevents SVG overflow */
+    min-height: 70vh; /* Ensure it has a good minimum height */
+  }
+  
+  #network-container svg {
+    display: block; /* Removes bottom space */
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+  }
+
+  #network-container svg:active {
+    cursor: grabbing;
+  }
+
+  /* Styling for the dynamically generated D3 elements */
+  .node {
+    cursor: pointer;
+  }
+
+  .node circle {
+    stroke: #e2e8f0;
+    stroke-width: 1.5px;
+    transition: transform 0.2s ease-in-out, filter 0.2s ease-in-out;
+  }
+
+  .node:hover circle {
+      transform: scale(1.2);
+      filter: brightness(1.5);
+  }
+
+  .node.highlighted circle {
+    stroke: #ffffff;
+    stroke-width: 3px;
+  }
+  
+  .node text {
+    fill: #cbd5e0;
+    font-size: 10px;
+    pointer-events: none; /* Text should not block mouse events on the circle */
+    text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+  }
+
+  .link {
+    stroke-opacity: 0.6;
+    transition: stroke-opacity 0.2s ease-in-out;
+  }
+
+  /* Highlighting and Fading styles */
+  .network-faded .node:not(.highlighted) {
+    opacity: 0.2;
+  }
+
+  .network-faded .link:not(.highlighted) {
+    stroke-opacity: 0.1;
   }
 
   /* Custom styles for the details panel content */
-  #node-details-panel h3 {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #e2e8f0;
-    margin-bottom: 1rem;
-    border-bottom: 2px solid #4fd1c5;
-    padding-bottom: 0.5rem;
+  #node-details {
+    background-color: #1f2937; /* bg-gray-800 */
+    border: 1px solid #374151; /* border-gray-700 */
+    border-radius: 0.5rem; /* rounded-lg */
+    padding: 1.5rem;
+    overflow-y: auto;
   }
-  #node-details-panel p {
-    color: #a0aec0;
-    margin-bottom: 0.75rem;
+
+  #details-scroll-container ul {
+    list-style-type: none;
+    padding: 0;
   }
-  #node-details-panel .report-link {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: #4fd1c5;
-    color: #1a202c;
-    border-radius: 0.25rem;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.2s;
+  
+  .filter-label {
+    transition: color 0.2s;
   }
-  #node-details-panel .report-link:hover {
-    background-color: #2c7a7b;
+  .filter-label:hover {
+    color: #ffffff;
   }
-  .legend-swatch {
-    display: inline-block;
-    width: 1rem;
-    height: 1rem;
+
+  /* Loading Spinner */
+  .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 8px solid #374151; /* border-gray-700 */
+    border-top: 8px solid #22d3ee; /* cyan-400 */
     border-radius: 50%;
-    margin-right: 0.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    transform: translate(-50%, -50%);
   }
+
+  @keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
 </style>
 
 <div class="flex flex-col h-full">
-    <h1 class="text-3xl font-bold text-white mb-4">SFOF Network</h1>
-    <p class="text-gray-400 mb-6">Click on a node to explore connections. Use the controls below to filter and search the network.</p>
+    <h1 class="text-3xl font-bold text-white mb-4">SFOF Network Analysis</h1>
+    <p class="text-gray-400 mb-6">This interactive map visualizes the network of influence surrounding SFOF. Click nodes to explore connections and use the filters to isolate relationships.</p>
 
-    <div class="p-4 mb-6 bg-gray-800 border border-gray-700 rounded-lg flex flex-col gap-4">
-      <div>
-        <input type="text" id="network-search" placeholder="Search for a node..." class="w-full p-2 bg-gray-900 border border-gray-600 text-gray-200 rounded focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"/>
-      </div>
-      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
-        <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="political_group" checked> Political Group</label>
-        <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="foundation" checked> Foundation</label>
-        <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="dark_money_fund" checked> Dark Money Fund</label>
-        <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="corporation" checked> Corporation</label>
-        <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="person" checked> Person</label>
-        <label class="flex items-center cursor-pointer text-gray-300 hover:text-white"><input type="checkbox" class="filter-checkbox mr-2 h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-600 focus:ring-cyan-500" value="state_officer" checked> State Officer</label>
-      </div>
+    <!-- Container for dynamically generated filters and legend -->
+    <div id="filter-container" class="p-4 mb-6 bg-gray-800 border border-gray-700 rounded-lg flex flex-wrap items-center justify-start gap-x-4 gap-y-3">
+        <!-- D3.js will populate this section -->
     </div>
-
-    <div class="p-4 mb-6 bg-gray-800 border border-gray-700 rounded-lg flex flex-wrap justify-center gap-x-6 gap-y-2">
-      <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #3b82f6;"></span>Political Group</div>
-      <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #f97316;"></span>Foundation</div>
-      <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #8b5cf6;"></span>Dark Money Fund</div>
-      <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #14b8a6;"></span>Corporation</div>
-      <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #22c55e;"></span>Person</div>
-      <div class="flex items-center text-sm text-gray-200"><span class="legend-swatch" style="background-color: #ef4444;"></span>State Officer</div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-grow">
-      <div id="network-visualization" class="md:col-span-2 h-full"></div>
-      <div id="node-details-panel" class="bg-gray-800 border border-gray-700 rounded-lg p-6 overflow-y-auto">
-        <h3>Node Details</h3>
-        <p>Click on a node in the network to see more information here.</p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-grow" style="height: 70vh;">
+      <!-- Main visualization container -->
+      <div id="network-container" class="md:col-span-2 h-full">
+        <div class="loader"></div>
+        <!-- D3.js will attach the SVG here -->
+      </div>
+      <!-- Details panel -->
+      <div id="node-details" class="h-full">
+        <!-- D3.js will populate this section -->
       </div>
     </div>
 </div>
 
-<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-<script src="/assets/js/network-vis.js"></script>
+<!-- Data Injection -->
+<script>
+  // Eleventy injects the data from _data/sfof_network.json into this global variable.
+  // This makes it immediately available to our D3 script without a separate fetch call.
+  window.networkData = {{ sfof_network | dump | safe }};
+</script>
+
+<!-- Visualization Libraries -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<!-- Main Application Script -->
+<script src="/assets/js/network.js"></script>
