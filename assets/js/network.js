@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // --- Force Simulation ---
   const simulation = d3.forceSimulation(nodes)
-    .force('link', d3.forceLink(edges).distance(120).strength(0.8)) // .id() is no longer needed
+    .force('link', d3.forceLink(edges).distance(120).strength(0.8))
     .force('charge', d3.forceManyBody().strength(-500))
     .force('center', d3.forceCenter(width / 2, height / 2))
     .force('collision', d3.forceCollide().radius(d => radiusScale(d.influence || 5) + 5))
