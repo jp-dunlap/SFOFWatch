@@ -1,0 +1,86 @@
+:root {
+    --background-dark: #0a0a0a;
+    --background-light: #111827;
+    --primary-cyan: #22d3ee;
+    --text-primary: #EAEAEA;
+    --text-secondary: #9ca3af;
+    --border-color: #374151;
+}
+html { scroll-behavior: smooth; }
+body {
+    background-color: var(--background-dark);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+}
+h1, h2, h3, .font-lora { font-family: 'Lora', serif; }
+.hero-bg {
+    background-color: var(--background-dark);
+    background-image: 
+        radial-gradient(circle at 25% 30%, rgba(22, 44, 78, 0.4), transparent 40%),
+        radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.1), transparent 40%);
+    position: relative;
+    overflow: hidden;
+}
+.hero-bg::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"><path fill="%23111827" fill-opacity="0.1" d="M0 0h40v40H0zM40 40h40v40H40z"></path></svg>');
+    z-index: 0;
+}
+.cta-button {
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+}
+.cta-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 25px rgba(34, 211, 238, 0.5);
+}
+.info-card {
+    background-color: var(--background-light);
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.info-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary-cyan);
+    box-shadow: 0 10px 30px rgba(34, 211, 238, 0.1);
+}
+.info-card .card-icon { transition: transform 0.3s ease; }
+.info-card:hover .card-icon { transform: scale(1.1); }
+.reveal {
+    position: relative;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+.stat-card {
+     background-color: rgba(17, 24, 39, 0.5);
+     border: 1px solid var(--border-color);
+     backdrop-filter: blur(10px);
+}
+.share-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    color: var(--text-secondary);
+}
+.share-button:hover {
+    border-color: var(--primary-cyan);
+    color: var(--primary-cyan);
+    transform: translateY(-2px);
+}
+.share-button svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.5rem;
+}
