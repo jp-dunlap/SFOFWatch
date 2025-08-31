@@ -95,6 +95,38 @@ document.addEventListener('DOMContentLoaded', function () {
       .call(drag(simulation));
 
     detailsPanel.innerHTML = '<p class="text-gray-400 italic">Click a node to see its direct connections.</p>';
+    // --- DYNAMIC FILTER GENERATION (Add this to initializeDisplay) ---
+const filterContainer = d3.select('#filter-container');
+filterContainer.html(''); // Clear any existing content
+
+const nodeTypes = [...new Set(nodes.map(n => n.type))];
+const edgeTypes = [...new Set(edges.map(e => e.type))];
+
+// --- Search Input ---
+filterContainer.append('div')
+    .attr('class', 'search-wrapper')
+    .html('<input type="text" id="search-input" placeholder="Search nodes..." class="bg-gray-700 text-white rounded px-3 py-1 text-sm">');
+
+// --- Node Type Filters ---
+const nodeFilterGroup = filterContainer.append('div').attr('class', 'filter-group');
+nodeFilterGroup.append('h4').attr('class', 'filter-title').text('Node Types');
+nodeTypes.forEach(type => {
+    const label = nodeFilterGroup.append('label').attr('class', 'filter-label');
+    label.append('input').attr('type', 'checkbox').attr('class', 'node-filter').attr('value', type).property('checked', true);
+    label.append('span').text(formatText(type)).style('color', colorScale(type));
+});
+
+// --- Edge Type Filters ---
+const edgeFilterGroup = filterContainer.append('div').attr('class', 'filter-group');
+edgeFilterGroup.append('h4').attr('class', 'filter-title').text('Connection Types');
+edgeTypes.forEach(type => {
+    const label = edgeFilterGroup.append('label').attr('class', 'filter-label');
+    label.append('input').attr('type', 'checkbox').attr('class', 'edge-filter').attr('value', type).property('checked', true);
+    label.append('span').text(formatText(type));
+});
+
+// --- Attach Event Listeners ---
+filterContainer.selectAll('input').on('change', updateNetwork);
   }
 
   // --- Simulation Ticker ---
