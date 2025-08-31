@@ -73,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainContent = document.querySelector('main');
 
     // --- D3 MAP SETUP ---
-// --- D3 MAP SETUP ---
 const svg = d3.select("#map-container").append("svg")
     .attr("role", "img")
     .attr("aria-labelledby", "map-title")
