@@ -7,7 +7,8 @@
     "start": "npx @11ty/eleventy --serve --quiet",
     "build": "npm-run-all build:data eleventy",
     "build:data": "node netlify/functions/update-legislation.js",
-    "eleventy": "npx @11ty/eleventy"
+    "eleventy": "npx @11ty/eleventy",
+    "db:migrate": "node-pg-migrate"
   },
   "keywords": [
     "SFOF",
@@ -25,7 +26,9 @@
     "dotenv": "^16.4.5",
     "html-minifier-terser": "^7.2.0",
     "markdown-it": "^14.1.0",
-    "netlify-cli": "^17.22.1"
+    "netlify-cli": "^17.22.1",
+    "node-pg-migrate": "^7.5.2",
+    "pg": "^8.12.0"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5"
