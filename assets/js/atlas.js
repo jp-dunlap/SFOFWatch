@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModalBtn = document.getElementById('close-modal-btn');
     const modalOverlay = document.getElementById('modal-overlay');
     const mainContent = document.querySelector('main');
-    
+
     const colorScale = d3.scaleQuantize()
         .domain([0, 3])
         .range(["#374151", "#22d3ee", "#0ea5e9", "#0891b2"]);
@@ -93,13 +93,13 @@ document.addEventListener('DOMContentLoaded', () => {
         .attr("class", "text-gray-300 text-sm");
 
     /**
-     * Fetches a raw markdown report for a state, renders it to HTML, and displays it in a modal.
+     * Fetches the HTML report for a state, extracts its content, and displays it in a modal.
      * @param {string} stateName - The name of the state to show the report for.
      */
     function showModal(stateName) {
         const stateSlug = stateName.toLowerCase().replace(/\s+/g, '-');
-        // Fetch the raw markdown file from the /reports_raw/ directory.
-        const reportPath = `/reports_raw/${stateSlug}.md`;
+        // Correct path to the generated HTML report page.
+        const reportPath = `/reports/${stateSlug}/`;
 
         // Set loading state
         modalTitle.textContent = `State Dossier: ${stateName}`;
@@ -114,18 +114,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 return response.text();
             })
-            .then(rawMarkdown => {
-                // Use the global renderMarkdown function to convert the markdown to HTML.
-                // This function is expected to be available from markdown-renderer.js.
-                if (typeof renderMarkdown === 'function') {
-                    modalContent.innerHTML = renderMarkdown(rawMarkdown);
+            .then(html => {
+                // The markdown-renderer.js is no longer needed for this functionality.
+                // We parse the fetched HTML and extract the content from the article.
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const article = doc.querySelector('.prose');
+
+                if (article) {
+                    modalContent.innerHTML = article.innerHTML;
                 } else {
-                    console.error("`renderMarkdown` function not found. Make sure markdown-renderer.js is loaded.");
-                    modalContent.innerHTML = `<p class="text-red-400">Error: Markdown renderer is not available.</p>`;
+                    throw new Error(`Could not find report content for ${stateName}.`);
                 }
             })
             .catch(error => {
-                console.error("Error fetching report:", error);
+                console.error("Error fetching or parsing report:", error);
                 modalContent.innerHTML = `<p class="text-gray-400">No detailed report is available for this state at this time. It has been identified as a member state, but the full dossier has not yet been compiled.</p>`;
             });
     }
@@ -137,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     closeModalBtn.addEventListener('click', hideModal);
     modalOverlay.addEventListener('click', hideModal);
-    
+
     document.addEventListener('keydown', (event) => {
         if (event.key === "Escape") {
             hideModal();
