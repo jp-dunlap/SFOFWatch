@@ -93,13 +93,13 @@ document.addEventListener('DOMContentLoaded', () => {
         .attr("class", "text-gray-300 text-sm");
 
     /**
-     * Fetches the HTML report for a state, extracts its content, and displays it in a modal.
+     * Fetches the raw markdown report for a state, renders it to HTML, and displays it in a modal.
      * @param {string} stateName - The name of the state to show the report for.
      */
     function showModal(stateName) {
         const stateSlug = stateName.toLowerCase().replace(/\s+/g, '-');
-        // Correct path to the generated HTML report page.
-        const reportPath = `/reports/${stateSlug}/`;
+        // Correct path to the raw markdown file.
+        const reportPath = `/reports_raw/${stateSlug}.md`;
 
         // Set loading state
         modalTitle.textContent = `State Dossier: ${stateName}`;
@@ -114,17 +114,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 return response.text();
             })
-            .then(html => {
-                // The markdown-renderer.js is no longer needed for this functionality.
-                // We parse the fetched HTML and extract the content from the article.
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const article = doc.querySelector('.prose');
-
-                if (article) {
-                    modalContent.innerHTML = article.innerHTML;
+            .then(markdown => {
+                // Render the fetched markdown to HTML.
+                // This assumes a markdown-it instance is available on the window object,
+                // likely loaded via `markdown-renderer.js`.
+                if (window.markdownit) {
+                    const md = window.markdownit();
+                    modalContent.innerHTML = md.render(markdown);
                 } else {
-                    throw new Error(`Could not find report content for ${stateName}.`);
+                    console.error("Markdown renderer (markdown-it) not found.");
+                    modalContent.innerHTML = `<p class="text-red-400">Error: Could not render the report.</p>`;
                 }
             })
             .catch(error => {
@@ -198,3 +197,4 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = `<p class="text-center text-red-400">Could not load map data.</p>`;
     });
 });
+
