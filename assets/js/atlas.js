@@ -1,14 +1,4 @@
-/**
- * This script initializes an interactive choropleth map of the United States
- * using D3.js. It visualizes SFOF influence on a state-by-state basis and
- * allows users to click on a state to view a detailed report in a modal.
- *
- * Data Sources:
- * - sfofInfluenceData (inline object): Contains scores and report availability for each state.
- * - US Atlas TopoJSON: Fetched externally to provide geographical boundaries for each US state.
- */
 document.addEventListener('DOMContentLoaded', () => {
-    // --- DATA ---
     const sfofInfluenceData = {
         "Alabama": { score: 3, actors: 3, laws: 1, hasReport: true },
         "Alaska": { score: 1, actors: 1, laws: 0, hasReport: true },
@@ -62,41 +52,30 @@ document.addEventListener('DOMContentLoaded', () => {
         "Wyoming": { score: 2, actors: 1, laws: 1, hasReport: true }
     };
 
-    // --- DOM ELEMENT SELECTION ---
-    const mapContainer = document.getElementById('map-container');
+    const container = document.getElementById('map-container');
+    const svg = d3.select("#map-container").append("svg").attr("viewBox", `0 0 975 610`).attr("width", "100%").attr("height", "auto");
+    const projection = d3.geoAlbersUsa().scale(1300).translate([487.5, 305]);
+    const path = d3.geoPath().projection(projection);
     const tooltip = d3.select("#tooltip");
+
     const modal = document.getElementById('report-modal');
     const modalTitle = document.getElementById('modal-title');
     const modalContent = document.getElementById('modal-content');
     const closeModalBtn = document.getElementById('close-modal-btn');
     const modalOverlay = document.getElementById('modal-overlay');
     const mainContent = document.querySelector('main');
-
-    // --- D3 MAP SETUP ---
-    const svg = d3.select("#map-container").append("svg")
-        .attr("role", "img")
-        .attr("aria-labelledby", "map-title")
-        .attr("viewBox", `0 0 975 610`)
-        .attr("width", "100%")
-        .attr("height", "auto");
-
-    svg.append("title")
-        .attr("id", "map-title")
-        .text("A choropleth map of the United States showing SFOF influence on a state-by-state basis.");
-    const projection = d3.geoAlbersUsa().scale(1300).translate([487.5, 305]);
-    const path = d3.geoPath().projection(projection);
     
     const colorScale = d3.scaleQuantize()
         .domain([0, 3])
         .range(["#374151", "#22d3ee", "#0ea5e9", "#0891b2"]);
 
-    // --- LEGEND SETUP ---
     const legendLabels = {
         0: "No known SFOF affiliation",
         1: "SFOF member state",
         2: "SFOF member state with key actors or anti-ESG laws",
         3: "SFOF member state with multiple key actors and anti-ESG laws"
     };
+
     const legendContainer = d3.select("#legend-container");
     const legend = legendContainer.selectAll(".legend")
         .data(colorScale.range())
@@ -113,15 +92,16 @@ document.addEventListener('DOMContentLoaded', () => {
         .text((d, i) => legendLabels[i])
         .attr("class", "text-gray-300 text-sm");
 
-    // --- MODAL FUNCTIONS ---
+    /**
+     * Fetches a raw markdown report for a state, renders it to HTML, and displays it in a modal.
+     * @param {string} stateName - The name of the state to show the report for.
+     */
     function showModal(stateName) {
         const stateSlug = stateName.toLowerCase().replace(/\s+/g, '-');
-        
-        // --- CORRECTION ---
-        // Reverting to the original path which correctly points to the directory.
-        // The server will automatically serve the index.html file inside it.
-        const reportPath = `/reports/${stateSlug}/`;
+        // Fetch the raw markdown file from the /reports_raw/ directory.
+        const reportPath = `/reports_raw/${stateSlug}.md`;
 
+        // Set loading state
         modalTitle.textContent = `State Dossier: ${stateName}`;
         modalContent.innerHTML = '<p class="text-center text-gray-400">Loading report...</p>';
         modal.classList.add('is-visible');
@@ -134,15 +114,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 return response.text();
             })
-            .then(html => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const reportContent = doc.querySelector('.report-content');
-
-                if (reportContent) {
-                    modalContent.innerHTML = reportContent.innerHTML;
+            .then(rawMarkdown => {
+                // Use the global renderMarkdown function to convert the markdown to HTML.
+                // This function is expected to be available from markdown-renderer.js.
+                if (typeof renderMarkdown === 'function') {
+                    modalContent.innerHTML = renderMarkdown(rawMarkdown);
                 } else {
-                    modalContent.innerHTML = `<p class="text-gray-400">Could not parse the report content for ${stateName}. The report might be malformed.</p>`;
+                    console.error("`renderMarkdown` function not found. Make sure markdown-renderer.js is loaded.");
+                    modalContent.innerHTML = `<p class="text-red-400">Error: Markdown renderer is not available.</p>`;
                 }
             })
             .catch(error => {
@@ -153,19 +132,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function hideModal() {
         modal.classList.remove('is-visible');
-        mainContent.style.filter = 'none';
+        mainContent.style.filter = 'none'; // Remove blur from main content
     }
 
-    // --- EVENT LISTENERS ---
     closeModalBtn.addEventListener('click', hideModal);
     modalOverlay.addEventListener('click', hideModal);
+    
     document.addEventListener('keydown', (event) => {
         if (event.key === "Escape") {
             hideModal();
         }
     });
 
-    // --- MAP RENDERING ---
     d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json").then(us => {
         const states = topojson.feature(us, us.objects.states);
         svg.append("g")
@@ -214,6 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }).catch(error => {
         console.error("Error loading map data:", error);
-        mapContainer.innerHTML = `<p class="text-center text-red-400">Could not load map data.</p>`;
+        container.innerHTML = `<p class="text-center text-red-400">Could not load map data.</p>`;
     });
 });
