@@ -1,3 +1,5 @@
 {
-  "layout": "report.njk"
+  "layout": "report.njk",
+  "tags": "reports",
+  "permalink": "/reports/{{ page.fileSlug }}/index.html"
 }
