@@ -9,9 +9,7 @@ module.exports = function (eleventyConfig) {
   // available for client-side JavaScript (e.g., for the atlas map).
   eleventyConfig.addPassthroughCopy("_data");
 
-  // Copy raw markdown files from the reports directory for client-side fetching.
-  // The contents of `reports/` will be copied to `_site/reports_raw/`.
-  eleventyConfig.addPassthroughCopy({ "reports": "reports_raw" });
+  // The conflicting addPassthroughCopy for "reports" was removed here.
 
   // Add a filter to format dates.
   eleventyConfig.addFilter("postDate", (dateObj) => {
@@ -46,4 +44,3 @@ module.exports = function (eleventyConfig) {
     markdownTemplateEngine: "njk",
   };
 };
-
