@@ -4,6 +4,10 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("assets");
   eleventyConfig.addPassthroughCopy("admin");
 
+  // Copy raw markdown files from the reports directory for client-side fetching.
+  // The contents of `reports/` will be copied to `_site/reports_raw/`.
+  eleventyConfig.addPassthroughCopy({ "reports": "reports_raw" });
+
   // Add a filter to format dates
   eleventyConfig.addFilter("postDate", (dateObj) => {
     return DateTime.fromJSDate(dateObj).toLocaleString(DateTime.DATE_MED);
